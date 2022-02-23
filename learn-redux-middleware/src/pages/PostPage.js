@@ -5,8 +5,6 @@ const PostPage = () => {
 
     const {id} = useParams();
 
-    console.log(id);
-
     return <PostContainer postId={parseInt(id, 10)}/>;
 }
 

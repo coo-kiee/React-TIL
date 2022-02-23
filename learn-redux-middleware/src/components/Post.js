@@ -1,5 +1,5 @@
 const Post = ({post}) => {
-    console.log(post);
+    
     const {title, body} = post;
     return (
         <div>

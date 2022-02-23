@@ -2,17 +2,17 @@ const sleep = n => new Promise(resolve => setTimeout(resolve, n));
 
 const posts = [
     {
-        id:1,
+        id:0,
         title:'redux-middleware',
         body:'redux-middleware-body'
     },
     {
-        id:2,
+        id:1,
         title:'redux-thunk',
         body:'redux-thunk'
     },
     {
-        id:3,
+        id:2,
         title:'redux-saga',
         body:'redux-saga'
     }
