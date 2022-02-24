@@ -7,7 +7,7 @@ import Routers from './routes';
 function App() {
   return (
     <>
-      {/* <CounterContainer /> */}
+      <CounterContainer />
       <Routers />
     </>
   );

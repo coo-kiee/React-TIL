@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import Counter from "../components/Counter";
-import { decrease, decreaseAsync, increase, increaseAsync } from "../modules/counter";
+// import { decrease, decreaseAsync, increase, increaseAsync } from "../modules/counter";
+import { increaseAsync, decreaseAsync } from "../modules/counterSaga";
 
 const CounterContainer = () => {
     const number = useSelector(state => state.counter);
