@@ -6,7 +6,7 @@
 - npm i redux-devtools-extension //createStore 파라미터에 composeWithDevTools() 추가
 
 Action : 객체, type을 필수로 가짐, type에 따라 실행 로직 제어   
-※ 액션이름 앞에 파일 이름을 넣는다. (ex. const INCREASE = "COUNT/INCREASE" - 상수로 정의)
+**※ 액션이름 앞에 파일 이름을 넣는다. (ex. const INCREASE = "COUNT/INCREASE" - 상수로 정의)**
 
 Action 생성함수 : 함수, action 객체를 생성하는 함수
 
@@ -19,7 +19,7 @@ Redux Flow : Action 생성함수 실행 > Dispatch(action) 실행 > Reducer 실�
 Redux Module 구성(JS 파일) : 액션 타입, 액션 생성함수, 리듀서 - Ducks 패턴
 
 rootReducer(Path: reducerModules/index.js) : 여러개의 리듀서 병합 - combineReducers 함수 사용   
-※ 하나의 어플리케이션은 리듀서 1개 스토어 1개로 구성한다.
+**※ 하나의 어플리케이션은 리듀서 1개 스토어 1개로 구성한다.**
 
 Store : 리듀서를 담기 위한 저장공간
 
@@ -54,7 +54,7 @@ redux-thunk : 리덕스 미들웨어로 함수를 디스패치 할 수 있다, �
 **JavaScript 화살표 함수 주의사항**   
 화살표 함수 - JavaScript | MDN에 따르면 화살표 함수의 경우 괄호()로 감싸진 부분이 return 된다(return문을 작성하지 않아도 return 됨).   
 반면에 중괄호{}로 감싸진 다음과 같은 함수는 return문이 없다면 return 값을 반환하지 않는다.   
-출처: https://velog.io/@bigbrothershin/JavaScript-%ED%99%94%EC%82%B4%ED%91%9C-%ED%95%A8%EC%88%98-%EC%82%AC%EC%9A%A9-%EC%8B%9C-%EC%99%80-%EC%82%AC%EC%9A%A9%EC%83%81-%EC%A3%BC%EC%9D%98%ED%95%A0-%EC%A0%90
+**출처**: https://velog.io/@bigbrothershin/JavaScript-%ED%99%94%EC%82%B4%ED%91%9C-%ED%95%A8%EC%88%98-%EC%82%AC%EC%9A%A9-%EC%8B%9C-%EC%99%80-%EC%82%AC%EC%9A%A9%EC%83%81-%EC%A3%BC%EC%9D%98%ED%95%A0-%EC%A0%90
 
 프로젝트 Custum : state값 posts로 통일
 
@@ -67,7 +67,7 @@ Generator 문법 : ES6부터 생긴 문법으로 함수가 결과값을 여러�
 
 Redux-Saga Flow : Dispatch(SagaAction) 실행 > 서비스 로직 & Action 생성함수 실행 > Dispatch(action) 실행 > Reducer 실행(Store -> View)
 
-**에로사항** : react-router-dom v6을 사용해서 useHistory 대신 useNavigate를 사용해 구현하면서 Router에 useHistory를 Props로 주는게 아닌 컴포넌트에서 액션에 useNavigate를 담아서 Thunk와 Saga에서 사용했다.
+**애로사항** : react-router-dom v6을 사용해서 useHistory 대신 useNavigate를 사용해 구현하면서 Router에 useHistory를 Props로 주는게 아닌 컴포넌트에서 액션에 useNavigate를 담아서 Thunk와 Saga에서 사용했다.
 
 # SWC란?
 ## swc-test
