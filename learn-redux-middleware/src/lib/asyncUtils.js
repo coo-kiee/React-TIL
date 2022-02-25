@@ -1,3 +1,5 @@
+import { call, put } from "redux-saga/effects";
+
 export const createPromiseThunk = (type,  promiseCreater) => {
     const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
 
@@ -115,3 +117,29 @@ export const handleAsyncActionsById = (type, key, keepData = false) => {
         }
     };
 };
+
+// 프로미스를 기다렸다가 결과를 디스패치하는 사가
+export const createPromiseSaga = (type, promiseCreater) => {
+    const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
+    return function* saga(action) {
+        try {
+            const payload = yield call(promiseCreater, action.payload);
+            yield put({type: SUCCESS, payload});
+        } catch(e) {
+            yield put({type:ERROR, error:true, payload:e});
+        };
+    };
+}
+
+export const createPromiseSagaById = (type, promiseCreater) => {
+    const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
+    return function* saga(action) {
+        const id = action.meta;
+        try {
+            const payload = yield call(promiseCreater, action.payload);
+            yield put({ type:SUCCESS, payload, meta:id});
+        } catch(e) {
+            yield put({ type:ERROR, error:e, meta:id});
+        }
+    };
+}

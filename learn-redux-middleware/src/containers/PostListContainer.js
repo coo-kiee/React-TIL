@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 
 import PostList from "../components/PostList";
-import { getPosts } from "../modules/posts";
+import { getPosts } from "../modules/postsSaga";
 
 const PostListContainer = () => {
 

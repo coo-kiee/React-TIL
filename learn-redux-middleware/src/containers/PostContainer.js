@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Post from "../components/Post";
 import { getPost } from "../modules/posts";
+import { goToHome } from "../modules/postsSaga";
 
 const PostContainer = ({postId}) => {
 
@@ -11,6 +13,7 @@ const PostContainer = ({postId}) => {
         error: null
       };
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         
@@ -22,7 +25,12 @@ const PostContainer = ({postId}) => {
     if (error) return <div>에러 발생!</div>;
     if (!data) return null;
 
-    return <Post post={data} />;
+    return (
+        <>
+            <button onClick={() => dispatch(goToHome(navigate))}>홈으로 이동</button>
+            <Post post={data} />;
+        </>
+    )
     
 }
 

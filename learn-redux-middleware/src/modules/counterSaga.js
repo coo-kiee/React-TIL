@@ -25,7 +25,7 @@ function* decreaseSaga() {
     yield put(decrease()); 
   }
 
-export function* counterSaga() {
+export function* watchCounter() {
     yield takeEvery(INCREASE_ASYNC, increaseSaga); // 모든 INCREASE_ASYNC 액션을 처리
     yield takeLatest(DECREASE_ASYNC, decreaseSaga); // 가장 마지막으로 디스패치된 DECREASE_ASYNC 액션만을 처리
 }
