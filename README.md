@@ -90,4 +90,6 @@ CORS 문제가 발생하는 예시를 먼저 정리하면,
 
 이를 해결하기 위해서는 서버쪽에서 결과 응답을 보내줄 때 Header에 Access-Control-Allow-Origin 값을 '*'로 설정해주거나, localhost:8080로 변경해야한다.
 
-다른 해결방법으로는 Webpack Dev Server를 이용하는 방법이 있지만 process.env 빌드 환경변수를 사용하여 분기 로직을 작성해야 한다.
+다른 해결방법으로는 Webpack Dev Server를 이용하는 방법이 있지만 process.env 빌드 환경변수를 사용하여 분기 로직을 작성해야 한다.   
+**출처**: https://evan-moon.github.io/2020/05/21/about-cors/
+
