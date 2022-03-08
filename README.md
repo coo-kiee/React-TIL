@@ -107,19 +107,18 @@ Recoil은 페이스북(현 메타)에서 개발한 React를 위한 상태관리 
 - 서버사이드 렌더링을 아직 지원하지 않는다
 - 래퍼런스가 적다.
 
-
 # Mobx
+**출처**:https://jforj.tistory.com/154
 Mobx는 React의 상태관리를 위한 라이브러리다.
+최근 decorator 문법은 deprecated 되었다.
+decorator가 포함되지 않은 패키지를 다운 받으려면 mobx-react 대신 mobx-react-lite를 설치한다.
 
-create-react-app(CRA)은 react로 프로젝트를 진행하는데 많은 도움을 주지만, 안타깝게도 CRA는 mobx 프로젝트를 진행하는데 필요한 decorator 문법을 default로 지원하지 않는다.   
-decorator는 mobx를 사용하게 되면 보게 될 문법으로, @observable, @observer처럼 ‘@’를 사용한 문법의 형태를 가진다.   
-이를 사용하기 위해서는 두가지 방법이 있다.
+- npm i mobx-react-lite
 
-- npm run eject
-- react-app-rewired
+#### 장점
+- Redux보다 쉽고 간편한 코드로 구현할 수 있다.
+#### 단점
+- 미들 웨어를 사용할 수 없어 디버깅이 불편하다
 
-#### npm run eject
- cra에서 제공하지 않는 기능을 유저가 임의대로 설정할 때 많이 사용하는 방법
-**※ eject이후에는 eject이전으로 프로젝트를 되돌릴 수 없다**
-
-- npm add babel-preset-mobx
+#### 옵셔널 체이닝
+?. - 앞의 평가 대상이 undefined나 null이면 평가를 멈추고 undefined를 반환 // ?.는 존재하지 않아도 괜찮은 대상에만 사용해야 합니다.
