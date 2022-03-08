@@ -2,7 +2,7 @@ import { selector, selectorFamily } from 'recoil';
 import { textState } from './atom';
 import axios from 'axios';
 
-export const charCountState = selector({
+  export const charCountState = selector({
 
       key: 'charCountState',
       get: ({get}) => {
@@ -12,7 +12,7 @@ export const charCountState = selector({
       },
   })
 
-  export const testAPI = selectorFamily({
+  export const nowPlayingAPI = selectorFamily({
 
       key: 'API',
       get: (key) => async () => {

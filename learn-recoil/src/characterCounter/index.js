@@ -1,12 +1,12 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { textState } from '../recoil/atom';
-import { charCountState, testAPI } from '../recoil/selector';
+import { charCountState, nowPlayingAPI } from '../recoil/selector';
 
 const CharacterCounter = () => {
 
     const {REACT_APP_TMDB_KEY} = process.env;
-    
-    const apiData = useRecoilValue(testAPI(REACT_APP_TMDB_KEY));
+
+    const apiData = useRecoilValue(nowPlayingAPI(REACT_APP_TMDB_KEY));
 
     console.log(apiData);
 

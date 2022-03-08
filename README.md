@@ -19,7 +19,7 @@ Redux Flow : Action 생성함수 실행 > Dispatch(action) 실행 > Reducer 실�
 Redux Module 구성(JS 파일) : 액션 타입, 액션 생성함수, 리듀서 - Ducks 패턴
 
 rootReducer(Path: reducerModules/index.js) : 여러개의 리듀서 병합 - combineReducers 함수 사용   
-**※ 하나의 어플리케이션은 리듀서 1개 스토어 1개로 구성한다.**
+**※ 하나의 어플리케이션은 리듀서 1개 스토어 1개로 구성한다**
 
 Store : 리듀서를 담기 위한 저장공간
 
@@ -93,3 +93,33 @@ CORS 문제가 발생하는 예시를 먼저 정리하면,
 다른 해결방법으로는 Webpack Dev Server를 이용하는 방법이 있지만 process.env 빌드 환경변수를 사용하여 분기 로직을 작성해야 한다.   
 **출처**: https://evan-moon.github.io/2020/05/21/about-cors/
 
+# Recoil
+Recoil은 페이스북(현 메타)에서 개발한 React를 위한 상태관리 라이브러리다.
+- npm i recoil
+
+#### 장점
+- 코드량이 적고, 가독성이 좋다.
+- 러닝커브가 낮다.(useState와 비슷한 사용방법)
+- suspense나 에러 바운더리, 동시성모드가 지원된다.
+- 데이터패칭/캐싱 기능을 제공한다.
+#### 단점
+- 안정화 이슈가 있다.
+- 서버사이드 렌더링을 아직 지원하지 않는다
+- 래퍼런스가 적다.
+
+
+# Mobx
+Mobx는 React의 상태관리를 위한 라이브러리다.
+
+create-react-app(CRA)은 react로 프로젝트를 진행하는데 많은 도움을 주지만, 안타깝게도 CRA는 mobx 프로젝트를 진행하는데 필요한 decorator 문법을 default로 지원하지 않는다.   
+decorator는 mobx를 사용하게 되면 보게 될 문법으로, @observable, @observer처럼 ‘@’를 사용한 문법의 형태를 가진다.   
+이를 사용하기 위해서는 두가지 방법이 있다.
+
+- npm run eject
+- react-app-rewired
+
+#### npm run eject
+ cra에서 제공하지 않는 기능을 유저가 임의대로 설정할 때 많이 사용하는 방법
+**※ eject이후에는 eject이전으로 프로젝트를 되돌릴 수 없다**
+
+- npm add babel-preset-mobx
