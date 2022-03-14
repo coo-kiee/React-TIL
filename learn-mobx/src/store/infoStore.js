@@ -9,7 +9,8 @@ const InfoStore = observable({
     },
 
     // action
-    setInfo(title,context) {
+    setInfo(title, context) {
+
         this.info = {...this.info, title, context}
     },
 

@@ -15,6 +15,7 @@ const App = () => {
   }
 
   return (
+    // Observer 컴포넌트로 하위 컴포넌트를 감싸거나, 하위 컴포넌트에서 export default observer(하위 컴포넌트) 선언
     <Observer> 
       {
         () => (
