@@ -6,9 +6,11 @@
 - npm i @react-pdf/renderer
 
 ### 구현기능 :
-1. react-to-print를 이용하면 원하는 컴포넌트만 간단하게 print 가능
+1. Library 사용하지 않고 print 기능 구현
 
-2. jspdf를 사용하면 pdf 파일을 download 가능
+2. react-to-print를 이용하면 원하는 컴포넌트만 간단하게 print 가능
+
+3. jspdf를 사용하면 pdf 파일을 download 가능
 
 ### 개선사항 : 
 1. react-to-print를 사용해서 download 기능 구현

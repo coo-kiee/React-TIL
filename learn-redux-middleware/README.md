@@ -18,9 +18,8 @@ redux-thunk : 리덕스 미들웨어로 함수를 디스패치 할 수 있다, �
 **JavaScript 화살표 함수 주의사항**   
 화살표 함수 - JavaScript | MDN에 따르면 화살표 함수의 경우 괄호()로 감싸진 부분이 return 된다(return문을 작성하지 않아도 return 됨).   
 반면에 중괄호{}로 감싸진 다음과 같은 함수는 return문이 없다면 return 값을 반환하지 않는다.   
-**출처**: https://velog.io/@bigbrothershin/JavaScript-%ED%99%94%EC%82%B4%ED%91%9C-%ED%95%A8%EC%88%98-%EC%82%AC%EC%9A%A9-%EC%8B%9C-%EC%99%80-%EC%82%AC%EC%9A%A9%EC%83%81-%EC%A3%BC%EC%9D%98%ED%95%A0-%EC%A0%90
 
-프로젝트 Custum : state값 posts로 통일
+프로젝트 Custom : state값 posts로 통일
 
 #### Redux-saga
 - npm i react redux-saga

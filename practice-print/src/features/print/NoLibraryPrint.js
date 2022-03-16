@@ -41,7 +41,7 @@ const NoLibraryPrint = () => {
         
         // https://codepen.io/designify-me/pen/gMMepB
         if(!printSection) {
-            document.title = "No-Library-Print";
+            // document.title = "No-Library-Print";
             printSection = document.createElement("div");
             printSection.id = "printSection";
             printSection.style.display = "none";
