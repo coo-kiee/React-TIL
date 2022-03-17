@@ -77,7 +77,7 @@ const Xlsx = () => {
 
     const book = xlsx.utils.book_new();
 
-    // 엑셀 파일 저장
+    // 배열 배열 데이터 저장
     const saveExcel1 = (file1) => {
         const excel1 = xlsx.utils.aoa_to_sheet(file1);
         excel1["!cols"] = [
@@ -89,6 +89,7 @@ const Xlsx = () => {
         xlsx.utils.book_append_sheet(book, excel1, "excel1");
     }
     
+    // 배열 객체 데이터 저장
     const saveExcel2 = (file2) => {
         const excel2 = xlsx.utils.json_to_sheet(file2, {header:["A","B","C","D"], skipHeader:true});
         excel2["!cols"] = [
