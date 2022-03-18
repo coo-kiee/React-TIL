@@ -4,31 +4,36 @@ import UploadFilesService from "../../services/FilesUploadService";
 const FilesUpload = () => {
 
     const [fiels, setFiels] = useState({
-        selectedFiles: undefined,
-        progressInfos: [{ val: [] }],
+        selectedFiles: [],
+        progressInfos: [],
         message: [],
         fileInfos: [],
+        error: [],
     });
+    const { selectedFiles, progressInfos, message, fileInfos, error } = fiels;
     const progressInfosRef = useRef(null);
 
-    const selectFiles = (e) => {
+    console.log(fiels);
 
-        setFiels(prev => ({
+    const selectFiles = (e) => {
+        
+        setFiels( prev => ({
             ...prev,
-            selectedFiles: [...prev.selectedFiles, e.target.files],
+            selectedFiles: [...prev.selectedFiles, ...e.target.files],
+            progressInfos: [...prev.progressInfos, { val: [] }]
         }));
     };
-
+    
     const uploadFiles = async () => {
-
-        const _progressInfos = fiels.selectedFiles.map(selectedFile => ({ percentage: 0, fileName: selectedFile.name }));
+        
+        const _progressInfos = selectedFiles.map(selectedFile => ({ percentage: 0, fileName: selectedFile.name }));
         progressInfosRef.current = {
             val: _progressInfos,
         };
 
-        const uploadPromises = fiels.selectedFiles.map((selectedFile, idx) => upload(selectedFile, idx));
+        const uploadPromises = selectedFiles.map((selectedFile, idx) => upload(selectedFile, idx));
         await Promise.all(uploadPromises)
-            .then(() => UploadFilesService.getFiles())
+            .then((res) => UploadFilesService.getFiles())
             .then((fiels) => {
                 setFiels(prev => ({
                     ...prev,
@@ -48,22 +53,23 @@ const FilesUpload = () => {
                 progressInfos: _progressInfos,
             }));
         })
-        .then(() => {
+        .then((res) => {
             setFiels(prev => ({
                 ...prev,
-                message: `Uploaded the file successfully: ${selectedFile.name}`,
+                message: [...message, `Uploaded the file successfully: ${selectedFile.name}`],
             }));
         })
-        .catch(() => {
+        .catch((err) => {
             _progressInfos[idx].percentage = 0;
             setFiels(prev => ({
                 ...prev,
                 progressInfos: _progressInfos,
-                message: `Could not upload the file: ${selectedFile.name}`,
+                message: [...message, `Could not upload the file: ${selectedFile.name}`],
+                error: [...error, err.response.data],
             }));
         });
     };
-
+    
     useEffect(() => {
 
         UploadFilesService.getFiles()
@@ -75,8 +81,6 @@ const FilesUpload = () => {
             });
 
     }, []);
-
-    const { selectedFiles, progressInfos, message, fileInfos } = fiels;
 
     return ( 
         <div>
@@ -113,6 +117,13 @@ const FilesUpload = () => {
                         Upload
                     </button>
                 </div>
+                {selectedFiles &&
+                 <div className="row my-3">
+                    <ul>
+                        {selectedFiles.map( (item, i) => (<h8 key={i}>{item.name}<br/></h8>) )}
+                    </ul>
+                </div>
+                }
             </div>
             {message.length > 0 && (
                 <div className="alert alert-secondary" role="alert">
