@@ -75,3 +75,13 @@ CORS 문제가 발생하는 예시를 먼저 정리하면,
 ## Multiple-Files-Upload + Server(Node)
 
 ## Node JS 프로젝트 구조
+
+## Router Link Tag와 a Tag 차이
+
+Link Tag 에서는 External URL을 사용하지 않는다.
+
+때문에 a Tag를 사용한다.
+
+## public 폴더
+
+public 폴더에 image를 추가했을 때 css파일에서 접근하는 방식은 CRA 4.0 이상 버전부터 막혔다.
