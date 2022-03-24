@@ -1,5 +1,24 @@
 # leran-noSource
 
+## Git
+1. Bash
+SSH 커밋
+#### https://coding-factory.tistory.com/244
+env 파일 커밋
+#### https://zoosso.tistory.com/835
+Bash 커밋 히스토리 조회
+#### https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EA%B8%B0%EC%B4%88-%EC%BB%A4%EB%B0%8B-%ED%9E%88%EC%8A%A4%ED%86%A0%EB%A6%AC-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0
+
+## React FTP 배포 방법
+#### https://mesonia.tistory.com/44
+npm run build 실행 > 배포 위치에 build 폴더 내부 파일 복사 > index.html의 절대경로로 상대경로로 변경(="/ => ="./)
+**※ 업무시에 절대경로로 사용했다 > 이유?**
+
+index.html의 절대경로를 안바꾸고 사용하는 방법 - package.json: "homepage":"./" 설정
+#### https://stackoverflow.com/questions/46510538/how-upload-reactjs-project-to-ftp
+
+**※ 배포용 env에 추가 - PUBLIC_URL=/도메인**
+
 ## 폴더 구조(Directory Structure)
 
 domain/service/component/store/common/routes 형식의 구조
