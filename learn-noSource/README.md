@@ -1,4 +1,6 @@
 # leran-noSource
+도움이 되는 정보가 많은 Git
+#### https://github.com/positiveko
 
 ## Git
 1. Bash
@@ -139,6 +141,16 @@ ex. <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 참조 링크처럼 직접 구현해도 되고, 나의 경우 public폴더 index.html head Tag 하단에 import 링크를 추가했다.   
 ex. <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script> - 브라우저 환경에 맞게 자동으로 스크립트 로딩
 
+## event target vs currentTarget 차이점
+event.target은 이벤트가 위임되어 발생하는 위치를 반환하지만,
+currentTarget은 이벤트 핸들러가 부착된 위치를 반환한다.
+
+ex. <ul onClick={handleOnclick} > <li> ... <li> </ul>
+event.target => <li> Tag
+currentTarget => <ul> Tag
+
+
+
 ## 브라우저 렌더링 성능 최적화
 #### https://abcdqbbq.tistory.com/45
 
@@ -164,5 +176,9 @@ React CSS display none 사용시 발생하는 현상
 #### https://ssangq.netlify.app/posts/conditional-rendering-vs-diplay-none
 
 ## React 이미지 경로 설정
-#### https://velog.io/@rimo09/React-Create-react-app-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%97%90%EC%84%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B2%BD%EB%A1%9C%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EB%8A%94-4%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95
+
+이미지 경로 설정하는 4가지 방법 간략한 설명
 #### https://codingapple.com/forums/topic/%EB%B0%B1%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B4%80%EB%A0%A8/
+
+이미지 경로를 설정하는 4가지 방법에 대한 자세한 설명
+#### https://velog.io/@rimo09/React-Create-react-app-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%97%90%EC%84%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B2%BD%EB%A1%9C%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EB%8A%94-4%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95
