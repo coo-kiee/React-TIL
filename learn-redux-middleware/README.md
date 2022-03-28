@@ -31,10 +31,3 @@ Generator 문법 : ES6부터 생긴 문법으로 함수가 결과값을 여러�
 Redux-Saga Flow : Dispatch(SagaAction) 실행 > 서비스 로직 & Action 생성함수 실행 > Dispatch(action) 실행 > Reducer 실행(Store -> View)
 
 **애로사항** : react-router-dom v6을 사용해서 useHistory 대신 useNavigate를 사용해 구현하면서 Router에 useHistory를 Props로 주는게 아닌 컴포넌트에서 액션에 useNavigate를 담아서 Thunk와 Saga에서 사용했다.
-
-
-### Redux ToolKit
-#### http://blog.hwahae.co.kr/all/tech/tech-tech/6946/
-
-combineReducers, createStore > configureStore
-#### https://www.codecademy.com/courses/learn-redux/lessons/the-redux-toolkit/exercises/converting-the-store-to-use-configurestore
