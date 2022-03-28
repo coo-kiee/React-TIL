@@ -4,6 +4,10 @@
 
 - npm i axios
 
+## queryKey 관리
+#### https://www.zigae.com/react-query-key/
+
+
 ## React-Query가 2번 렌더링하는 이유
 
 백그라운드에서 쿼리를 자동으로 갱신하기 때문에 2번 렌더링 한다.
@@ -23,3 +27,14 @@
 
 ## Mutation
 #### https://tkdodo.eu/blog/mastering-mutations-in-react-query
+
+
+## 의문점
+features/clientState와 features/example이 마운트 된 후 console.log를 찍어보면 store에 저장 되는 속도에 차이가 있다.
+이에 대한 조치가 필요하지는 않을까?
+
+## 시도
+정적 Promise.resolve 메소드를 사용하면 react-query로 client-state를 전역관리 할 수 있지 않을까?
+#### https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve
+결론: 실패!!! - react-query store에 담는건 성공했지만 Trigger 역할을 하는 함수안에 useQuery가 담기지 않는다.(Hook의 규칙 위반)
+#### https://ko.reactjs.org/docs/hooks-rules.html

@@ -1,5 +1,4 @@
-import { useQuery } from "react-query";
-import useAxios from "../../common/hook/useAxios";
+import { useQuery, useQueryClient } from "react-query";
 import axios from 'axios';
 
 const Example = () => {
@@ -10,12 +9,17 @@ const Example = () => {
     };
 
     const { isLoading, error, data } = useQuery("example", fetcher, { retry: 0});
+    
+    // store 데이터 조회
+    const queryClient = useQueryClient();
+    console.log('Example, key: example',queryClient.getQueryData('example'));
+    console.log('Example, key: test',queryClient.getQueryData('test'));
 
     if (isLoading) return 'Loading...'
 
     if (error) return 'An error has occurred: ' + error.message
 
-    console.log(data, isLoading, error);
+    // console.log(data, isLoading, error);
 
     return (
         <div>
