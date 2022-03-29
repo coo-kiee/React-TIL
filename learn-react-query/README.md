@@ -4,6 +4,8 @@
 
 - npm i axios
 
+- npm i react-router-dom
+
 ## queryKey 관리
 #### https://www.zigae.com/react-query-key/
 
@@ -27,6 +29,7 @@
 
 ## Mutation
 #### https://tkdodo.eu/blog/mastering-mutations-in-react-query
+#### https://velog.io/@elin_me/React-Query-%EB%8F%84%EC%9E%85%EA%B8%B0
 
 
 ## 의문점

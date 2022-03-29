@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
-import ClientState from './features/clientState-fail';
-import Example from './features/example';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { Link } from 'react-router-dom';
+import Routers from './routes/Router';
 
 const queryClient = new QueryClient();
 
@@ -9,8 +9,8 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Example />
-      <ClientState />
+      <h1>React Query</h1>
+      <Routers />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
