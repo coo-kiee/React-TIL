@@ -2,7 +2,6 @@
 
 
 ## Bash
-
 먼저 실행 해볼 것!!
 **git remote update**
 
@@ -20,3 +19,6 @@ branch 가져오기
 #### https://cjh5414.github.io/get-git-remote-branch/
 does not have a commit checked out 에러 해결방법
 #### https://mmol.tistory.com/entry/%EA%B9%83%ED%97%88%EB%B8%8C-does-not-have-a-commit-checked-out-%EC%97%90%EB%9F%AC-%ED%95%B4%EA%B2%B0%EB%B0%A9%EB%B2%95
+
+## Info 및 READ ME 꾸미기
+#### https://velog.io/@seondal/Github-Readme-%EA%BE%B8%EB%AF%B8%EA%B8%B0-%EC%B4%9D%EC%A0%95%EB%A6%AC

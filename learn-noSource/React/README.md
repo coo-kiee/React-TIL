@@ -107,7 +107,8 @@ P.S. React Hydrate란? - SSR 렌더링
 의문점1: 함수형 업데이트로 state 변경 시 batching으로 인해 업데이트 된 State를 사용할 수 없는지?(함수형 업데이트에 대한 이해 부족으로 생각한 바보 같은 의문이지만 나중에 까먹을까봐 적음)
 >> 함수형 업데이트는 기존에 함수 batching 상태에서도 큐에 저장된 순서대로 state를 사용해서 항상 최신의 state를 유지하기 때문에 automatic Batching 에서도 적용된다.
 
-
+## Error 모음
+Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
 
 
 
