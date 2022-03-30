@@ -13,16 +13,16 @@
 #### https://www.zigae.com/react-query-key/
 
 ## React-Query가 2번 렌더링하는 이유
+#### https://hyesech.postype.com/post/10986706
 
 백그라운드에서 쿼리를 자동으로 갱신하기 때문에 2번 렌더링 한다.
 1. 새로운 쿼리 인스턴스가 발동/시작 될 때,
 2. 윈도우가 다시 포커싱 될때(개발자도구도 포커싱 아웃으로 인식)
 3. 네트워크가 재연결 될 때
 4. 쿼리가 refetch interval 정의에 의해 구성될 때
-#### https://hyesech.postype.com/post/10986706
 
 추가 참조
-#### https://seung00.tistory.com/56
+(https://seung00.tistory.com/56)
 
 ## Optimistic Update 낙관적 업데이트
 #### https://velog.io/@raverana96/react-query-Optimistic-Update
@@ -45,9 +45,9 @@ features/clientState와 features/example이 마운트 된 후 console.log를 찍
 
 ## 시도
 정적 Promise.resolve 메소드를 사용하면 react-query로 client-state를 전역관리 할 수 있지 않을까?
-#### https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve
+https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve
 결론: 실패!!! - react-query store에 담는건 성공했지만 Trigger 역할을 하는 함수안에 useQuery가 담기지 않는다.(Hook의 규칙 위반)
-#### https://ko.reactjs.org/docs/hooks-rules.html
+(https://ko.reactjs.org/docs/hooks-rules.html)
 
 ## Error
 ### Error: Missing queryFn   
@@ -57,5 +57,6 @@ useQuery("item", getItem(id)) - X
 
 Solution - 화살표 함수로 인자를 전달   
 ES6: useQuery("item" ,(id) => getItem(id)   
+(https://stackoverflow.com/questions/70319827/missing-queryfn-error-when-using-usequery)
 ES5: wrapperFn으로 getItem 함수를 감싸야한다. useQuery("item", wrapperFn(id, getItem)) - wrapperFn 내부에서 getItem(id) 실행!!
-#### https://stackoverflow.com/questions/70319827/missing-queryfn-error-when-using-usequery
+(http://daplus.net/javascript-javascript-%ED%95%A8%EC%88%98%EB%A5%BC-%EB%A7%A4%EA%B0%9C-%EB%B3%80%EC%88%98%EB%A1%9C-%EC%A0%84%EB%8B%AC/)
