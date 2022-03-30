@@ -80,7 +80,10 @@ css파일에 있는 @import를 styled-components로 cGs(createGlobalStyle)로 �
 ex. @import url('https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css');
 
 때문에 public 폴더에 있는 index.html에 link tag를 이용해서 import 해야한다.   
-ex. "<link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>"
+ex. 
+```
+<link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>"
+```
 
 P.S Refactor_helmet 으로 해결하는 방법 및 이슈에 대한 추가적인 설명
 #### https://choi95.tistory.com/169
@@ -95,11 +98,16 @@ Automatic Batching 이전 이슈
 함수형 업데이트   
 (https://garve32.tistory.com/39)
 
-Automatic Batching을 사용하려면   
-ReactDOM.render(<App />, document.getElementById('root')) >>>>>> ReactDOM.createRoot(<App />, document.getElementById('root')) 사용   
+Automatic Batching을 사용하려면 아래처럼 사용
+```
+ReactDOM.render(<App />, document.getElementById('root')) >>>>>> ReactDOM.createRoot(<App />, document.getElementById('root'))
+```
 (https://nyol.tistory.com/146)
 
-P.S. Hydrate: ReactDOM.hydrate(<App tab="home" />, container); > ReactDOMClient.hydrateRoot(container, <App tab="home" />);   
+P.S. Hydrate:
+```
+ReactDOM.hydrate(<App tab="home" />, container); > ReactDOMClient.hydrateRoot(container, <App tab="home" />);
+```
 (https://github.com/reactwg/react-18/discussions/5)   
 
 P.S. React Hydrate란? - SSR 렌더링   
