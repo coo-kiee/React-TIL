@@ -2,12 +2,12 @@
 
 ## 폴더 구조(Directory Structure)
 
-domain/service/component/store/common/routes 형식의 구조
-#### https://smoh.tistory.com/385
+domain/service/component/store/common/routes 형식의 구조   
+(https://smoh.tistory.com/385)
 
-Redux ToolKit을 이용한 features/common/style/app/routes 형식의 구조
-#### https://javascript.plainenglish.io/redux-toolkit-the-standard-way-to-write-redux-dcfb372202b8
-#### https://javascript.plainenglish.io/how-to-structure-your-react-redux-app-83d523851137
+Redux ToolKit을 이용한 features/common/style/app/routes 형식의 구조   
+(https://javascript.plainenglish.io/redux-toolkit-the-standard-way-to-write-redux-dcfb372202b8)   
+(https://javascript.plainenglish.io/how-to-structure-your-react-redux-app-83d523851137)
 
 ## async/await와 setState 함수
 #### https://codingapple.com/unit/react-setstate-async-problems/
@@ -57,8 +57,8 @@ a 태그는 페이지를 새로고침 한다 - React state가 초기화 된다.
 Link Tag 에서는 External URL을 사용하지 않고 a Tag를 사용한다.   
 ex. http://localhost:3000 으로 앱을 실행중인데 Link to="http://naver.com" 사용하는 경우
 
-External URL이란? - App이 작동하는 url이 아닌 다른 url 주소를 사용하는 것
-#### https://stackoverflow.com/questions/67847263/how-do-i-redirect-to-an-external-link-in-react
+External URL이란? - App이 작동하는 url이 아닌 다른 url 주소를 사용하는 것   
+(https://stackoverflow.com/questions/67847263/how-do-i-redirect-to-an-external-link-in-react)
 
 ## css파일 public 폴더 image 접근
 
@@ -71,10 +71,10 @@ ex. background: url('${process.env.PUBLIC_URL}/images/bg_main.jpg'
 styled-components 사용하는 8가지 이유 - 번역
 #### https://analogcoding.tistory.com/181
 
-@import 사용
-#### https://jungpaeng.tistory.com/70
-#### https://github.com/styled-components/styled-components/issues/2911#issuecomment-592012166
-Warning Message : Please do not use @import CSS syntax in createGlobalStyle at this time, ~
+@import 사용   
+#### Warning Message : Please do not use @import CSS syntax in createGlobalStyle at this time, ~
+(https://jungpaeng.tistory.com/70)  
+(https://github.com/styled-components/styled-components/issues/2911#issuecomment-592012166)   
 
 css파일에 있는 @import를 styled-components로 cGs(createGlobalStyle)로 만들때 @import 소스를 같이 사용하면 해시 스타일이 적용되지 않는 이슈 발생   
 ex. @import url('https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css');
@@ -88,21 +88,21 @@ P.S Refactor_helmet 으로 해결하는 방법 및 이슈에 대한 추가적인
 ## React18
 
 ### Automatic Batching
-Automatic Batching 이전 이슈
-#### https://codingapple.com/unit/react-setstate-async-problems/
+Automatic Batching 이전 이슈   
+(https://codingapple.com/unit/react-setstate-async-problems/)
 
 **함수형 업데이트와 헷갈릴 수 있기 때문에 같이 알아두자**
-함수형 업데이트
-#### https://garve32.tistory.com/39
+함수형 업데이트   
+(https://garve32.tistory.com/39)
 
 Automatic Batching을 사용하려면   
 ReactDOM.render(<App />, document.getElementById('root')) >>>>>> ReactDOM.createRoot(<App />, document.getElementById('root')) 사용
 #### https://nyol.tistory.com/146
-P.S. Hydrate: ReactDOM.hydrate(<App tab="home" />, container); > ReactDOMClient.hydrateRoot(container, <App tab="home" />);
-#### https://github.com/reactwg/react-18/discussions/5
-P.S. React Hydrate란? - SSR 렌더링
-#### https://simsimjae.tistory.com/389
-#### https://velog.io/@huurray/React-Hydration-%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC
+P.S. Hydrate: ReactDOM.hydrate(<App tab="home" />, container); > ReactDOMClient.hydrateRoot(container, <App tab="home" />);   
+(https://github.com/reactwg/react-18/discussions/5)   
+P.S. React Hydrate란? - SSR 렌더링   
+(https://simsimjae.tistory.com/389)   
+(https://velog.io/@huurray/React-Hydration-%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC)   
 
 의문점1: 함수형 업데이트로 state 변경 시 batching으로 인해 업데이트 된 State를 사용할 수 없는지?(함수형 업데이트에 대한 이해 부족으로 생각한 바보 같은 의문이지만 나중에 까먹을까봐 적음)
 >> 함수형 업데이트는 기존에 함수 batching 상태에서도 큐에 저장된 순서대로 state를 사용해서 항상 최신의 state를 유지하기 때문에 automatic Batching 에서도 적용된다.

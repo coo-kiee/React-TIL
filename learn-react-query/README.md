@@ -21,7 +21,7 @@
 3. 네트워크가 재연결 될 때
 4. 쿼리가 refetch interval 정의에 의해 구성될 때
 
-추가 참조
+추가 참조   
 (https://seung00.tistory.com/56)
 
 ## Optimistic Update 낙관적 업데이트
@@ -44,9 +44,9 @@ features/clientState와 features/example이 마운트 된 후 console.log를 찍
 이에 대한 조치가 필요하지는 않을까?
 
 ## 시도
-정적 Promise.resolve 메소드를 사용하면 react-query로 client-state를 전역관리 할 수 있지 않을까?
-https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve
-결론: 실패!!! - react-query store에 담는건 성공했지만 Trigger 역할을 하는 함수안에 useQuery가 담기지 않는다.(Hook의 규칙 위반)
+정적 Promise.resolve 메소드를 사용하면 react-query로 client-state를 전역관리 할 수 있지 않을까?   
+https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve   
+결론: 실패!!! - react-query store에 담는건 성공했지만 Trigger 역할을 하는 함수안에 useQuery가 담기지 않는다.(Hook의 규칙 위반)   
 (https://ko.reactjs.org/docs/hooks-rules.html)
 
 ## Error
@@ -57,6 +57,6 @@ useQuery("item", getItem(id)) - X
 
 Solution - 화살표 함수로 인자를 전달   
 ES6: useQuery("item" ,(id) => getItem(id)   
-(https://stackoverflow.com/questions/70319827/missing-queryfn-error-when-using-usequery)
-ES5: wrapperFn으로 getItem 함수를 감싸야한다. useQuery("item", wrapperFn(id, getItem)) - wrapperFn 내부에서 getItem(id) 실행!!
+(https://stackoverflow.com/questions/70319827/missing-queryfn-error-when-using-usequery)   
+ES5: wrapperFn으로 getItem 함수를 감싸야한다. useQuery("item", wrapperFn(id, getItem)) - wrapperFn 내부에서 getItem(id) 실행!!   
 (http://daplus.net/javascript-javascript-%ED%95%A8%EC%88%98%EB%A5%BC-%EB%A7%A4%EA%B0%9C-%EB%B3%80%EC%88%98%EB%A1%9C-%EC%A0%84%EB%8B%AC/)
