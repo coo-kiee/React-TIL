@@ -1,4 +1,5 @@
 import { QueryCache, useQuery, useQueryClient } from "react-query";
+import PrevBtn from "../../components/PrevBtn";
 
 // 실패!! - useQuery(Hook)은 handle 함수 내부에서 호출할 수 없다.
 const ClientState = () => {
@@ -25,6 +26,7 @@ const ClientState = () => {
         <div>
             <h1>{data[0].id}</h1>
             <p>{data[0].name}</p>
+            <PrevBtn />
         </div>
     );
 }

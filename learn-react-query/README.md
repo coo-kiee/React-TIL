@@ -1,14 +1,16 @@
 # React-Query
-
+#### https://www.js2uix.com/frontend/react-query-step1/
 - npm i react-query
 
 - npm i axios
 
 - npm i react-router-dom
 
+## React Query VS SWR
+#### https://tech.madup.com/react-query-vs-swr/
+
 ## queryKey 관리
 #### https://www.zigae.com/react-query-key/
-
 
 ## React-Query가 2번 렌더링하는 이유
 
@@ -31,6 +33,11 @@
 #### https://tkdodo.eu/blog/mastering-mutations-in-react-query
 #### https://velog.io/@elin_me/React-Query-%EB%8F%84%EC%9E%85%EA%B8%B0
 
+## Pagination
+#### https://react-query.tanstack.com/examples/pagination
+
+## stalteTime, cacheTime
+#### https://velog.io/@yrnana/React-Query%EC%97%90%EC%84%9C-staleTime%EA%B3%BC-cacheTime%EC%9D%98-%EC%B0%A8%EC%9D%B4
 
 ## 의문점
 features/clientState와 features/example이 마운트 된 후 console.log를 찍어보면 store에 저장 되는 속도에 차이가 있다.
@@ -41,3 +48,14 @@ features/clientState와 features/example이 마운트 된 후 console.log를 찍
 #### https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve
 결론: 실패!!! - react-query store에 담는건 성공했지만 Trigger 역할을 하는 함수안에 useQuery가 담기지 않는다.(Hook의 규칙 위반)
 #### https://ko.reactjs.org/docs/hooks-rules.html
+
+## Error
+### Error: Missing queryFn   
+Why? - 인자(argument)로 함수를 전달해야하는데 함수를 실행하기 때문이다.
+useQuery("item", getItem) - O   
+useQuery("item", getItem(id)) - X
+
+Solution - 화살표 함수로 인자를 전달   
+ES6: useQuery("item" ,(id) => getItem(id)   
+ES5: wrapperFn으로 getItem 함수를 감싸야한다. useQuery("item", wrapperFn(id, getItem)) - wrapperFn 내부에서 getItem(id) 실행!!
+#### https://stackoverflow.com/questions/70319827/missing-queryfn-error-when-using-usequery

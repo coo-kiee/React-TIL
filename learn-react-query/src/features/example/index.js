@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from "react-query";
 import axios from 'axios';
+import PrevBtn from "../../components/PrevBtn";
 
 const Example = () => {
     
@@ -8,10 +9,14 @@ const Example = () => {
         return response.data[0];
     };
 
-    const { isLoading, error, data } = useQuery("example", fetcher, { retry: 0});
+    const { isLoading, error, data } = useQuery("example", async () => await fetcher());
     
-    // store 데이터 조회
+    console.log(data);
+
+    // Client
     const queryClient = useQueryClient();
+    
+    // console.log('queryClient',queryClient);
     console.log('Example, key: example',queryClient.getQueryData('example'));
     console.log('Example, key: test',queryClient.getQueryData('test'));
 
@@ -28,6 +33,7 @@ const Example = () => {
             <strong>👀 {data.username}</strong>
             <strong>✨ {data.email}</strong>
             <strong>🍴 {data.phone}</strong>
+            <PrevBtn />
         </div>
     );
 }
