@@ -80,7 +80,7 @@ css파일에 있는 @import를 styled-components로 cGs(createGlobalStyle)로 �
 ex. @import url('https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css');
 
 때문에 public 폴더에 있는 index.html에 link tag를 이용해서 import 해야한다.   
-ex .<link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+ex. "<link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>"
 
 P.S Refactor_helmet 으로 해결하는 방법 및 이슈에 대한 추가적인 설명
 #### https://choi95.tistory.com/169
@@ -96,10 +96,12 @@ Automatic Batching 이전 이슈
 (https://garve32.tistory.com/39)
 
 Automatic Batching을 사용하려면   
-ReactDOM.render(<App />, document.getElementById('root')) >>>>>> ReactDOM.createRoot(<App />, document.getElementById('root')) 사용
-#### https://nyol.tistory.com/146
+ReactDOM.render(<App />, document.getElementById('root')) >>>>>> ReactDOM.createRoot(<App />, document.getElementById('root')) 사용   
+(https://nyol.tistory.com/146)
+
 P.S. Hydrate: ReactDOM.hydrate(<App tab="home" />, container); > ReactDOMClient.hydrateRoot(container, <App tab="home" />);   
 (https://github.com/reactwg/react-18/discussions/5)   
+
 P.S. React Hydrate란? - SSR 렌더링   
 (https://simsimjae.tistory.com/389)   
 (https://velog.io/@huurray/React-Hydration-%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC)   
@@ -123,24 +125,23 @@ Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하
 
 리플로우는 부하가 크지만 리페인트는 부하가 적다.
 
-P.S. 리플로우/리페인트 최소화 하는 방법
-#### https://12bme.tistory.com/140
+P.S. 리플로우/리페인트 최소화 하는 방법   
+(https://12bme.tistory.com/140)
 
-P.S. 렌더링 트리(Critical Rendering Tree)
-#### https://breathtaking-life.tistory.com/25
+P.S. 렌더링 트리(Critical Rendering Tree)   
+(https://breathtaking-life.tistory.com/25)
 
 ### display none
+React CSS display none 사용시 발생하는 현상  
+(https://lovemewithoutall.github.io/it/at-css-display-change-what-happen-in-react/)
 
-React CSS display none 사용시 발생하는 현상
-#### https://lovemewithoutall.github.io/it/at-css-display-change-what-happen-in-react/
-
-조건부 렌더링 vs display none
-#### https://ssangq.netlify.app/posts/conditional-rendering-vs-diplay-none
+조건부 렌더링 vs display none   
+(https://ssangq.netlify.app/posts/conditional-rendering-vs-diplay-none)
 
 ## React 이미지 경로 설정
 
-이미지 경로 설정하는 4가지 방법 간략한 설명
-#### https://codingapple.com/forums/topic/%EB%B0%B1%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B4%80%EB%A0%A8/
+### 이미지 경로 설정하는 4가지 방법 간략한 설명   
+(https://codingapple.com/forums/topic/%EB%B0%B1%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B4%80%EB%A0%A8/)
 
-이미지 경로를 설정하는 4가지 방법에 대한 자세한 설명
-#### https://velog.io/@rimo09/React-Create-react-app-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%97%90%EC%84%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B2%BD%EB%A1%9C%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EB%8A%94-4%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95
+### 이미지 경로를 설정하는 4가지 방법에 대한 자세한 설명   
+(https://velog.io/@rimo09/React-Create-react-app-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%97%90%EC%84%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B2%BD%EB%A1%9C%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EB%8A%94-4%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95)
