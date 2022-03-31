@@ -1,19 +1,22 @@
 import axios from "axios";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import PrevBtn from "../../components/PrevBtn";
 
 const Mutation = () => {
 
     const queryClient = useQueryClient();
     const [text, setText] = useState('');
+    const url = 'https://7higb.sse.codesandbox.io/api/data';
 
     const { status, data, error, isFetching } = useQuery(['todos'], async () => {
-        console.log('Get Todos')
-        const { data } = await axios.get('https://7higb.sse.codesandbox.io/api/data');
-        return data;
-    });
 
-    const addTodoMutation = useMutation( text => axios.post('https://7higb.sse.codesandbox.io/api/data', {text}), {
+        const { data: responseData } = await axios.get(url);
+        console.log('Get Todos', responseData);
+        return responseData;
+    });
+    
+    const addTodoMutation = useMutation( text => axios.post(url, {text}), {
 
         // Options: onMutate, onError, onSetteld
         onMutate: async text => {
@@ -24,6 +27,7 @@ const Mutation = () => {
             // 업데이트 하기전에 데이터 보관 - Error 발생 시 사용
             const previousValue = queryClient.getQueryData(['todos']);
             
+            // 업데이트 예정인 값 전달
             queryClient.setQueryData(['todos'], prev => ({
                 ...prev,
                 items: [...prev.items, text],
@@ -87,6 +91,7 @@ const Mutation = () => {
                     <div>{isFetching ? 'Updating in background...' : ' '}</div>
                 </>
             )}
+            <PrevBtn />
         </div>
     );
 }

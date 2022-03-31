@@ -30,8 +30,15 @@
 서버를 업데이트 하기 전에 미리 화면의 UI를 바꿔준 후, 서버와의 통신 결과에 따라 확정 롤백을 결정하는 방식
 
 ## Mutation
+#### https://react-query.tanstack.com/examples/optimistic-updates
 #### https://tkdodo.eu/blog/mastering-mutations-in-react-query
 #### https://velog.io/@elin_me/React-Query-%EB%8F%84%EC%9E%85%EA%B8%B0
+
+공식문서의 낙관적 업데이트 Mutation 예제 이용해서 Custom Mutation Hooks 만들기
+보완점 :
+1. Custom Axios Hooks 사용하면 에러 발생 원인 파악
+2. Custom Mutation Hooks 인자 리팩토링 필요
+
 
 ## Pagination
 #### https://react-query.tanstack.com/examples/pagination
@@ -46,17 +53,40 @@ features/clientState와 features/example이 마운트 된 후 console.log를 찍
 ## 시도
 정적 Promise.resolve 메소드를 사용하면 react-query로 client-state를 전역관리 할 수 있지 않을까?   
 https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve   
-결론: 실패!!! - react-query store에 담는건 성공했지만 Trigger 역할을 하는 함수안에 useQuery가 담기지 않는다.(Hook의 규칙 위반)   
+결론: 실패!!! - react-query store에 담는건 성공했지만 이벤트핸들러 안에 useQuery가 담기지 않는다.(Hook의 규칙 위반)   
 (https://ko.reactjs.org/docs/hooks-rules.html)
 
 ## Error
 ### Error: Missing queryFn   
-Why? - 인자(argument)로 함수를 전달해야하는데 함수를 실행하기 때문이다.
+이유 : - 인자(argument)로 함수를 전달해야하는데 함수를 실행하기 때문이다.
+```
 useQuery("item", getItem) - O   
 useQuery("item", getItem(id)) - X
+```
 
-Solution - 화살표 함수로 인자를 전달   
+해결방법 : 화살표 함수로 인자를 전달   
 ES6: useQuery("item" ,(id) => getItem(id)   
 (https://stackoverflow.com/questions/70319827/missing-queryfn-error-when-using-usequery)   
 ES5: wrapperFn으로 getItem 함수를 감싸야한다. useQuery("item", wrapperFn(id, getItem)) - wrapperFn 내부에서 getItem(id) 실행!!   
 (http://daplus.net/javascript-javascript-%ED%95%A8%EC%88%98%EB%A5%BC-%EB%A7%A4%EA%B0%9C-%EB%B3%80%EC%88%98%EB%A1%9C-%EC%A0%84%EB%8B%AC/)
+
+### 'useMutate' is not defined  no-undef
+Custom Hook으로 useMutate를 만들었는데 is not defined가 나왔다.
+
+이유: Custom Hooks 잘못된 선언
+```
+// 잘못된 선언
+export default useMutate = () => {};
+```
+
+해결방법 - 
+```
+// 방법 1
+export const useMutate = () => {};
+But, import 할 때 이렇게 사용 - import { useMutate } from "../../utills/useMutate");
+
+// 방법 2
+useMutate = () => {};
+export default useMutate;
+import 할 때 이렇게 사용 - import useMutate from "../../utills/useMutate");
+```

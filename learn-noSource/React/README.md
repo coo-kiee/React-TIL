@@ -139,6 +139,14 @@ setValue(prev => prev + 1); // value = 2
 const now = value; // now = 0
 ```
 
+## React Hooks 규칙
+#### https://reactjs.org/warnings/invalid-hook-call-warning.html
+1. Hooks는 컴포넌트 최상단 스코프 또는 커스텀 Hooks에 선언되어야 한다.
+2. 반복문, 조건문 혹은 중첩된 함수 내에서 Hook을 호출하면 안된다.
+3. 이벤트핸들러 내부에 선언하면 안된다.
+4. useMemo 안에 선언하면 안된다.
+5. Class 컴포넌트 내부에 선언하면 안된다.
+
 ## 브라우저 렌더링 성능 최적화
 #### https://abcdqbbq.tistory.com/45
 
