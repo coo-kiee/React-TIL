@@ -8,6 +8,7 @@ const Pagination = () => {
     const queryClient = useQueryClient();
     const [page, setPage] = useState(0);
 
+    // React-Query 공식 예제 서버에서 페이지 정보 호출
     const fetchProjects = async (page = 0) => {
         const {data} = await axios.get('https://wpndq.sse.codesandbox.io/api/projects?page=' + page);
         return data;
@@ -20,7 +21,7 @@ const Pagination = () => {
 
     console.log('data', data, isPreviousData);
 
-    // Prefetch the next page!
+    // 페이지가 마운트 되면 다음 페이지 정보 prefetch
     useEffect(() => {
 
         if (data?.hasMore) {

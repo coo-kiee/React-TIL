@@ -117,11 +117,27 @@ P.S. React Hydrate란? - SSR 렌더링
 의문점1: 함수형 업데이트로 state 변경 시 batching으로 인해 업데이트 된 State를 사용할 수 없는지?(함수형 업데이트에 대한 이해 부족으로 생각한 바보 같은 의문이지만 나중에 까먹을까봐 적음)
 >> 함수형 업데이트는 기존에 함수 batching 상태에서도 큐에 저장된 순서대로 state를 사용해서 항상 최신의 state를 유지하기 때문에 automatic Batching 에서도 적용된다.
 
-## Error 모음
-Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
+## React 이미지 경로 설정
+
+### 이미지 경로 설정하는 4가지 방법 간략한 설명   
+(https://codingapple.com/forums/topic/%EB%B0%B1%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B4%80%EB%A0%A8/)
+
+### 이미지 경로를 설정하는 4가지 방법에 대한 자세한 설명   
+(https://velog.io/@rimo09/React-Create-react-app-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%97%90%EC%84%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B2%BD%EB%A1%9C%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EB%8A%94-4%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95)
 
 
+## useState 함수형 업데이트
+#### https://velog.io/@tjdgus0528/React-Native-5x048oii
 
+함수형 업데이트를 사용하면 다음 랜더링 값을 사용할 수 있다.
+But, 해당 변수를 변경하는 setState가 아닌 다른 곳에서는 랜더링 된 값만 사용 가능하다.
+ex.
+```
+const [value, setValue] = useState(0);
+setValue(prev => prev + 1); // value = 1
+setValue(prev => prev + 1); // value = 2
+const now = value; // now = 0
+```
 
 ## 브라우저 렌더링 성능 최적화
 #### https://abcdqbbq.tistory.com/45
@@ -146,10 +162,5 @@ React CSS display none 사용시 발생하는 현상
 조건부 렌더링 vs display none   
 (https://ssangq.netlify.app/posts/conditional-rendering-vs-diplay-none)
 
-## React 이미지 경로 설정
-
-### 이미지 경로 설정하는 4가지 방법 간략한 설명   
-(https://codingapple.com/forums/topic/%EB%B0%B1%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B4%80%EB%A0%A8/)
-
-### 이미지 경로를 설정하는 4가지 방법에 대한 자세한 설명   
-(https://velog.io/@rimo09/React-Create-react-app-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%97%90%EC%84%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B2%BD%EB%A1%9C%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EB%8A%94-4%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95)
+## Error 모음
+Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐

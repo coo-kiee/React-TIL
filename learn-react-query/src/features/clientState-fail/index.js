@@ -1,4 +1,4 @@
-import { QueryCache, useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import PrevBtn from "../../components/PrevBtn";
 
 // 실패!! - useQuery(Hook)은 handle 함수 내부에서 호출할 수 없다.

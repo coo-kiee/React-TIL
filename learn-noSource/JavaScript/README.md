@@ -3,12 +3,13 @@
 ## JQuery
 기본문법   
 (https://soft91.tistory.com/9)   
+
 선택자   
 (https://www.zerocho.com/category/jQuery/post/57a9a371e4bc011500624ba3)
 
 ## 옵셔널 체이닝(optional chaining) '?.'
 #### https://ko.javascript.info/optional-chaining
-?. - 앞의 평가 대상이 undefined나 null이면 평가를 멈추고 undefined를 반환 // ?.는 존재하지 않아도 괜찮은 대상에만 사용해야 합니다.
+?. - 앞의 평가 대상이 undefined나 null이면 평가를 멈추고 undefined를 반환 // ?.는 존재하지 않아도 괜찮은 대상에만 사용해야 합니다.   
 **ES6부터 추가**
 
 ## IE에서도 사용 가능한 이미지 다운로드 - feat a Tag
@@ -19,6 +20,7 @@ P.S. 이미지 클릭하면 다운로드
 
 P.S. Blob 이해   
 (https://heropy.blog/2019/02/28/blob/)   
+
 a Tag download 속성 - IE, Edge, Safari, Opera 는 지원을 안한다   
 (https://mine-it-record.tistory.com/445)
 
