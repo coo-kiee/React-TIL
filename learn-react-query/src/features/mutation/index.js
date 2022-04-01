@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import PrevBtn from "../../components/PrevBtn";
+import useAxios from "../../utills/useAxios";
 
 const Mutation = () => {
 
@@ -11,12 +12,12 @@ const Mutation = () => {
 
     const { status, data, error, isFetching } = useQuery(['todos'], async () => {
 
-        const { data: responseData } = await axios.get(url);
+        const { data: responseData } = await useAxios.get(url);
         console.log('Get Todos', responseData);
         return responseData;
     });
     
-    const addTodoMutation = useMutation( text => axios.post(url, {text}), {
+    const addTodoMutation = useMutation( text => useAxios.post(url, {text}), {
 
         // Options: onMutate, onError, onSetteld
         onMutate: async text => {

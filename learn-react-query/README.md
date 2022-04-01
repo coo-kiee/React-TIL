@@ -36,7 +36,10 @@
 
 공식문서의 낙관적 업데이트 Mutation 예제 이용해서 Custom Mutation Hooks 만들기
 보완점 :
-1. Custom Axios Hooks 사용하면 에러 발생 원인 파악
+1. Custom Axios Hooks 사용하면 에러 발생 원인 파악 >> Config - Header에 Accept 설정
+```
+'Accept': "application/json, text/plain, */*"
+```
 2. Custom Mutation Hooks 인자 리팩토링 필요
 
 
