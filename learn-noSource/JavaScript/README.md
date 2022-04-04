@@ -33,3 +33,35 @@ a Tag 이동 기능 무력화
 
 ## ClassName()으로 Element요소를 가져올 때 유의점
 #### https://moalgong.tistory.com/25
+
+## 이미지 존재여부 확인
+#### https://www.fabiofranchino.com/log/load-an-image-with-javascript-using-await/
+image 객체를 이용해서 onload, onerror에 따라 Promise 객체 반환
+단점: 이미지를 로딩하기 때문에 많이 사용하면 성능 이슈 발생
+보완: 썸네일 이미지 사용?
+```
+// 이미지 존재여부 확인
+const findImage = (imageSrc) => {
+
+    return new Promise(resolve => {
+        const img = new Image()
+        img.src = imageSrc
+        img.onload = () => {
+            resolve({ useImage: true });
+        }
+        img.onerror = e => {
+            resolve({ useImage: false });
+        }
+    });
+};
+
+// 이미지 사용가능 여부
+const checkImage = async (calendarArr) => {
+
+    // 이미지 존재여부 병렬 호출
+    const responseArr = await Promise.all(calendarArr.map(item => DownloadService.findImage("/images/download/" + item.downloadFileDate + donwloadInfos[2].imgPath)));
+
+    const calendarData = responseArr.map( (response, idx) => ({...calendarArr[idx], useImage: response.useImage}));
+    setCalendar(prev => calendarData);
+};
+```
