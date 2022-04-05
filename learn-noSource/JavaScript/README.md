@@ -35,7 +35,10 @@ a Tag 이동 기능 무력화
 #### https://moalgong.tistory.com/25
 
 ## 이미지 존재여부 확인
+#### https://optionbox.tistory.com/175
 #### https://www.fabiofranchino.com/log/load-an-image-with-javascript-using-await/
+
+방법 1. new Image() && Promise
 image 객체를 이용해서 onload, onerror에 따라 Promise 객체 반환
 단점: 이미지를 로딩하기 때문에 많이 사용하면 성능 이슈 발생
 보완: 썸네일 이미지 사용?
@@ -65,3 +68,48 @@ const checkImage = async (calendarArr) => {
     setCalendar(prev => calendarData);
 };
 ```
+
+방법 2. Axios
+```
+// 이미지 존재여부 확인
+const findImage = (imageSrc) => {
+
+    return useAxios.get("/images/download2/" + imageSrc)
+    .then(res => ({useImage: true}))
+    .catch(e => ({useImage: false}));
+
+};
+
+// 이미지 존재여부 병렬 호출
+const response = await Promise.all(calendarInfos.map(item => DownloadService.findImage(item.thumNailSrc)));
+const calendarData = response.map( (resObj, idx) => ({...calendarInfos[idx], useImage:resObj.useImage}));  
+
+
+```
+
+방법 3. require   
+나의 경우 클라이언트 서버에 이미지 파일이 있었기 때문에 이미지 파일이 있는지만 파악하기 위해서 require를 사용했다.
+```
+// 이미지 존재여부 확인
+const findImage = (imageSrc) => {
+
+    try {
+        const test = require("../../public/images/download2/" + imageSrc);
+        console.log(test);
+        return {useImage: true};
+    } catch (e) {
+        console.log(e);
+        return {useImage: false};
+    };
+
+};
+```
+
+## 이미지 lazy 로딩 - IntersectionObserver API
+#### https://pks2974.medium.com/intersection-observer-%EA%B0%84%EB%8B%A8-%EC%A0%95%EB%A6%AC%ED%95%98%EA%B8%B0-fc24789799a3
+#### https://been.tistory.com/25?category=517363
+
+IntersectionObserver API는 많은 브라우저에서 지원하지는 않기 때문에
+Polyfill 라이브러리와 함께 사용해야한다.
+
+P.S. [커스텀훅으로 사용](https://ichi.pro/ko/reacteseo-jeomjinjeog-eulo-imijilodeu-18127722463610)
