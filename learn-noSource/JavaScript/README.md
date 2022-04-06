@@ -108,8 +108,76 @@ const findImage = (imageSrc) => {
 ## 이미지 lazy 로딩 - IntersectionObserver API
 #### https://pks2974.medium.com/intersection-observer-%EA%B0%84%EB%8B%A8-%EC%A0%95%EB%A6%AC%ED%95%98%EA%B8%B0-fc24789799a3
 #### https://been.tistory.com/25?category=517363
+#### https://helloinyong.tistory.com/297
 
 IntersectionObserver API는 많은 브라우저에서 지원하지는 않기 때문에
 Polyfill 라이브러리와 함께 사용해야한다.
 
+커스텀 훅으로 IntersectionObserver 객체 생성해서 사용
+```
+// useIntersectionObserver.js
+// 화면에 보이지 않는 컴포넌트 로딩 지연
+const useIntersectionObserver = () => {
+    
+    // 컴포넌트가 20% 정도 화면에 보일때 로딩
+    const options = { threshold: 0.1 };
+
+    const callback = (entries, observer) => {
+
+        entries.forEach(entry => {
+
+            // 뷰 포트 안에 컴포넌트가 들어온 경우
+            if (entry.isIntersecting) {
+
+                // 이미지 data-src를 src로 변경
+                entry.target.src = entry.target.dataset.src;
+
+                // 로딩이 시작 됐으니 컴포넌트 관찰 제거
+                observer.unobserve(entry.target);
+            }
+            else { };
+        });
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+
+    return observer;
+
+}
+
+export default useIntersectionObserver;
+
+// domain.js
+// 이미지 지연로딩에 사용할 intersectionObserver 객체
+const observer = useIntersectionObserver();
+return (
+    <Image imgSrc={"/images/download/" + item.thumNailSrc} observer={observer} index={index} />
+);
+
+// Image.js
+// Image 컴포넌트에 observer 객체 전달해서 해당 컴포넌트 구독
+const Image = ({imgSrc, observer, index}) => {
+
+    const imgRef = useRef();
+    const placeholderSrc = "https://ik.imagekit.io/demo/img/image5.jpeg?tr=w-1,h-1:w-400,h-300";
+    const [src, setSrc] = useState(imgSrc);
+
+    useEffect(() => {
+        
+        // 5개 이상 이미지는 placeholder 이미지 이용
+        if(index > 3) {
+            // imgTag 관찰 - 스크롤 내리면 이미지 로딩
+            observer.observe(imgRef.current);
+            setSrc(prev => placeholderSrc);
+        };
+    }, [index, imgSrc, observer]);
+
+    return ( 
+        <img src={src} data-src={imgSrc} ref={imgRef} alt="" />
+     );
+}
+ 
+export default Image;
+
+```
 P.S. [커스텀훅으로 사용](https://ichi.pro/ko/reacteseo-jeomjinjeog-eulo-imijilodeu-18127722463610)
