@@ -109,6 +109,7 @@ const findImage = (imageSrc) => {
 #### https://pks2974.medium.com/intersection-observer-%EA%B0%84%EB%8B%A8-%EC%A0%95%EB%A6%AC%ED%95%98%EA%B8%B0-fc24789799a3
 #### https://been.tistory.com/25?category=517363
 #### https://helloinyong.tistory.com/297
+#### https://velog.io/@meganatc7/Intersection-Observer-%EB%9E%80#1-%ED%98%B8%EC%B6%9C-%EC%88%98-%EC%A0%9C%ED%95%9C-%EB%B0%A9%EB%B2%95%EC%9C%BC%EB%A1%9C-debounce-throttle%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%A7%80-%EC%95%8A%EC%95%84%EB%8F%84-%EB%90%9C%EB%8B%A4
 
 IntersectionObserver API는 많은 브라우저에서 지원하지는 않기 때문에
 Polyfill 라이브러리와 함께 사용해야한다.
@@ -181,3 +182,9 @@ export default Image;
 
 ```
 P.S. [커스텀훅으로 사용](https://ichi.pro/ko/reacteseo-jeomjinjeog-eulo-imijilodeu-18127722463610)
+
+## PC / 모바일 구분하는 법
+#### https://studyhardgogo.tistory.com/139
+지금까지 찾은 방법으로는 이 방법이 최선!! (단, Linux는 구분하지 못한다)
+
+P.S. (모바일 기종으로 구분 - Nest Hub Max는 포함 X)[https://nm-it-diary.tistory.com/73]
