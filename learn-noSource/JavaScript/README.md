@@ -188,3 +188,25 @@ P.S. [커스텀훅으로 사용](https://ichi.pro/ko/reacteseo-jeomjinjeog-eulo-
 지금까지 찾은 방법으로는 이 방법이 최선!! (단, Linux는 구분하지 못한다)
 
 P.S. (모바일 기종으로 구분 - Nest Hub Max는 포함 X)[https://nm-it-diary.tistory.com/73]
+
+## 구글 태그 매니저 && gtag
+#### https://www.datachef.co.kr/post_ga_tip/?idx=7438407&bmode=view
+
+글로벌 사이트 태그(gtag)는 방문자 데이터를 수집하기 위해 자바스크립트로 된 추적코드를 사용하는 방식이다.
+구글 태그 매니저와는 다른 개념으로 구글 태그 매니저는 구글 애널리틱스 또는 다른 제품의 태그를 관리하기 위한 웹 소프트웨어이다.
+
+의문점: 
+회사에서 사용한 코드는 구글 태그 매니저를 이용해서 gtag를 사용한 것 처럼 보였다. >> GTM으로 gtag를 관리하는 방식이지 않을까 예상된다.
+```
+<!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-{발급 받은 Key}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+
+      gtag('config', {발급 받은 Key});
+    </script>
+```
+
+결론 >> 구글 태그 매니저(GTM)은 관리 소프트웨어이고, gtag는 라이브러리이다.
