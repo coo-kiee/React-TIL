@@ -1,70 +1,22 @@
-# Getting Started with Create React App
+# practice-naver-map
+작업하기전 index.html에 api script 추가 >> 해당 화면 body에 script 추가하는 방식으로 변경
+#### http://daplus.net/javascript-%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%EA%B0%80%EB%A1%9C%EB%93%9C-%EB%90%9C-%ED%9B%84-%EC%9E%90%EB%B0%94-%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%ED%95%A8%EC%88%98-%ED%98%B8%EC%B6%9C/
+#### https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[Todos - customHooks 만들기(실패ing)](https://stackoverflow.com/questions/34424845/adding-script-tag-to-react-jsx)   
+이 사이트를 참고하면 해결책이 보일듯 (https://rangen.medium.com/dynamically-load-google-scripts-with-react-and-the-useeffect-hook-3700b908e50f)
 
-## Available Scripts
+## Naver API Jquery To JS
+[$.getScript](https://navermaps.github.io/maps.js.ncp/docs/tutorial-4-Submodules.html)   
+`$.getScript > src/utils/getScript.js 로 구현`
 
-In the project directory, you can run:
+## Error 모음
+[맵 랜더링 오류: naver map annot read properties of null (reading 'style ~](https://ideveloper2.tistory.com/90)   
+useEffect를 사용해서 마운트 후 map api 호출
 
-### `npm start`
+[Geolocation PC 위치 오류](https://devtalk.kakao.com/t/topic/71972?source_topic_id=101154)   
+모바일의 경우 자체 GPS가 있어서 gelocation API를 사용하는게 정확함, PC의 경우 정확하지 않기 때문에 카카오의 경우 IP 타겟팅 방식을 사용   
+IP 타겟팅 방식이란? - 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[Warning - parser-blocking](https://studyingpingu.tistory.com/46)   
+index.html에 script 추가 시 리소스 소모가 크기 때문에 스크립트 블락이 일어날 수 있다는 이야기 인것 같다. => 해결방법: 해당 페이지에서만 script를 호출하는 방식을 사용

@@ -21,3 +21,16 @@ does not have a commit checked out 에러 해결방법
 
 ## Info 및 READ ME 꾸미기
 #### https://velog.io/@seondal/Github-Readme-%EA%BE%B8%EB%AF%B8%EA%B8%B0-%EC%B4%9D%EC%A0%95%EB%A6%AC)
+
+## git merge 되돌리기
+#### https://hacktiming.tistory.com/56
+소스트리에서 커밋 되돌리기를 하면 개인 브런치에서는 바로 되돌아가지만 master의 경우 브런치가 여러개라서 실패할 때가 있다.
+그런 경우 소스트리 터미널 기능을 이용해서 git bash로 커밋하면 되는데
+
+Step 1. 커밋 고유번호 파악
+커밋을 하면 커밋의 고유번호가 생긴다.
+그 고유번호를 파악해서 revert 명령어를 수행하면 된다.
+
+Step 2. revert
+git revert [커밋번호] -m 1   명령어를 입력하면 commit 메세지로 이동하고 ESC랑 :wq! 를 입력하면 revert가 완료된다.
+(-m 1으로 하면 master 브런치에서 merge 직전 소스로, -m 2는 개인 브런치 merge 직전 소스로 돌아간다.)

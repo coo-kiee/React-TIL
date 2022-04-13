@@ -22,6 +22,8 @@
 
 ## [React-Query - learn-react-query](https://github.com/Jowen0/React-TIL/tree/main/learn-react-query)
 
+## [Naver Map API](https://github.com/Jowen0/React-TIL/tree/main/practice-naver-map)
+
 ## ToDos
 ToDo React - [CRA에 Next.js 적용](https://23life.tistory.com/147)
 ToDo JS - [Clean Code - 변수 재할당 지양](https://www.zigae.com/avoid-reassigning/)
