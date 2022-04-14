@@ -58,6 +58,7 @@ features/clientState와 features/example이 마운트 된 후 console.log를 찍
 https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve   
 결론: 실패!!! - react-query store에 담는건 성공했지만 이벤트핸들러 안에 useQuery가 담기지 않는다.(Hook의 규칙 위반)   
 (https://ko.reactjs.org/docs/hooks-rules.html)
+[P.S. localStorage 이용한 전역관리](https://daily-dev-tips.com/posts/react-query-as-a-persistent-state-manager/)
 
 ## Error
 ### Error: Missing queryFn   
@@ -93,3 +94,21 @@ useMutate = () => {};
 export default useMutate;
 import 할 때 이렇게 사용 - import useMutate from "../../utills/useMutate");
 ```
+
+### Next.Js SSR 개발시 발생한 문제점
+https://codesandbox.io/s/goofy-swirles-xzpir?file=/pages/_app.js <<< 이 코드에서 문제점 발생   
+- App 컴포넌트 내부에서 QueryClient 생성해서 쿼리가 저장되지 않는 현상 발생
+
+App 컴포넌트 외부에 QueryClient 생성시 기존 사용자의 정보가 다른 사용자에게 사용될 수 있다.   
+때문에 App 컴포넌트 내부에 QueryClient 객체를 생성하고 useRef를 사용해서 재생성 조건을 구성한다.   
+https://github.com/tannerlinsley/react-query/issues/2072   
+https://github.com/tannerlinsley/react-query/commit/862bb2be3a7c6161b70a2310f4661859adb6d943?diff=split
+
+의문점: Next.JS가 아니어도 발생할 문제이지 않을까?? 때문에 App.js 코드를 useRef를 사용하도록 변경!
+
+P.S.   
+https://stackoverflow.com/questions/67126550/react-query-cache-doesnt-persist-on-page-refresh   
+쿼리로 영속성을 유지하려면 local storage를 이용한다. (react-query에서는 persistQueryClient plugin을 사용한다.)   
+하지만 이는 다른 사람이 해당 컴퓨터를 사용하면 데이터를 볼 수 있기 때문에 암호화가 필요하다.   
+이를 위해서 Crypto API를 사용한다.   
+[P.S. localStorage 이용한 전역관리](https://daily-dev-tips.com/posts/react-query-as-a-persistent-state-manager/)
