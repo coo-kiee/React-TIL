@@ -210,3 +210,25 @@ P.S. (모바일 기종으로 구분 - Nest Hub Max는 포함 X)[https://nm-it-di
 ```
 
 결론 >> 구글 태그 매니저(GTM)은 관리 소프트웨어이고, gtag는 라이브러리이다.
+
+## callback 함수 내부 값을 외부로 꺼내는 방법 - 제목을 어떻게 지을지 모르겠음
+여러 가지 공부를 하다보니 callback 함수 내부에 있는 값을 꺼내는 방법을 생각하게 됐는데
+아무리 해도 callback 함수 내부에서만 값을 사용할 수 있었다.
+그러다가 이미지 파일 존재 여부 때 공부했던 Promise 반환 방법이 생각나서 활용해보았다.
+
+ex) geolocation API 이용 시
+```
+const successGetPositon = async (positon, naver) => {
+
+    return new Promise(resolve => {
+        const positionObj = {lat: positon.coords.latitude, lng: positon.coords.longitude};
+        resolve(positionObj);
+    });
+};
+
+const testFn = async () => {
+    const location = await navigator.geolocation.getCurrentPosition( async (posion) => await successGetPositon(posion));
+};
+```
+
+이렇게 하면 callback 함수에 있는 값을 스코프 밖으로 빼내서 사용할 수 있다.(단, 보안에 취약해질 수 도 있다?)
