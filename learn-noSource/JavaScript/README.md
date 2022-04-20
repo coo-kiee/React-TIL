@@ -7,6 +7,9 @@
 선택자   
 (https://www.zerocho.com/category/jQuery/post/57a9a371e4bc011500624ba3)
 
+## await vs return vs return await: 비동기 이해하기
+#### https://ooeunz.tistory.com/47
+
 ## 옵셔널 체이닝(optional chaining) '?.'
 #### https://ko.javascript.info/optional-chaining
 ?. - 앞의 평가 대상이 undefined나 null이면 평가를 멈추고 undefined를 반환 // ?.는 존재하지 않아도 괜찮은 대상에만 사용해야 합니다.   
@@ -87,7 +90,7 @@ const calendarData = response.map( (resObj, idx) => ({...calendarInfos[idx], use
 
 ```
 
-방법 3. require   
+방법 3. require - Only node  
 나의 경우 클라이언트 서버에 이미지 파일이 있었기 때문에 이미지 파일이 있는지만 파악하기 위해서 require를 사용했다.
 ```
 // 이미지 존재여부 확인
@@ -218,17 +221,26 @@ P.S. (모바일 기종으로 구분 - Nest Hub Max는 포함 X)[https://nm-it-di
 
 ex) geolocation API 이용 시
 ```
-const successGetPositon = async (positon, naver) => {
+const successGetPositon = async (positon) => {
+    const positionObj = {lat: positon.coords.latitude, lng: positon.coords.longitude};
+    return positionObj;
+};
+
+const getLocation = () => {
 
     return new Promise(resolve => {
-        const positionObj = {lat: positon.coords.latitude, lng: positon.coords.longitude};
-        resolve(positionObj);
+        navigator.geolocation.getCurrentPosition( (posion) => resolve(successGetPositon(posion)));
     });
 };
 
 const testFn = async () => {
-    const location = await navigator.geolocation.getCurrentPosition( async (posion) => await successGetPositon(posion));
+    const currentLocation = await getLocation();
+    console.log(currentLocation);
 };
 ```
 
-이렇게 하면 callback 함수에 있는 값을 스코프 밖으로 빼내서 사용할 수 있다.(단, 보안에 취약해질 수 도 있다?)
+이렇게 하면 callback 함수에 있는 값을 스코프 밖으로 빼내서 사용할 수 있다.   
+단점: 보안에 취약해질 수 도 있다? // 보일러 플레이트가 발생한다.
+
+## Closure
+#### https://unikys.tistory.com/309

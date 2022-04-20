@@ -5,25 +5,31 @@ import naverMapService from "./service/naverMapService";
 function App() {
 
   const [naver, setNaver] = useState();
-  // const mapRef = useRef();
-
+  const mapRef = useRef();
+  
   // 페이지가 렌더링 되기 전에 Naver Map API가 먼저 실행되서 map을 찾을 수 없다는 오류가 발생
   // 해결책: useEffect를 사용해서 마운트 시 initMap 함수 호출을 한다.
   useEffect(() => {
-
+    
     const getNaverMap = async () => {
-
+      
       try {
-
+        
         // 네이버 지도 API 비동기 호출
         await getScript("https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=my4y6x6w9j&submodules=geocoder");
-
-        // naver 객체 변수 할당
+        
+        // 네이버 객체
         const naverObj = window.naver;
-
+        
         // onJSContentLoaded는 submodules이 로드 된 후에 실행하는 이벤트 핸들러이다.
-        naverObj.maps.onJSContentLoaded = () => {
-          naverMapService.initMap(naverObj);
+        naverObj.maps.onJSContentLoaded = async () => {
+
+          naverMapService.setNaver(naverObj);
+          mapRef.current = await naverMapService.initMap();
+          console.log(mapRef);
+          mapRef.current.setOptions({
+            zoomControl: false,
+          });
           setNaver(prev => naverObj);
         };
 

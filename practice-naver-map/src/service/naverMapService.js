@@ -1,28 +1,38 @@
-const { naver } = window;
-
+let naver;
 let map;
 
-const setMap = (mapObj) => {
-    map = mapObj;
+const setNaver = (naverObj) => {
+    naver = naverObj;
 };
 
-const getMap = () => {
-    return map;
-}
+// 현재 위치 가져오기
+const getLocation = () => {
 
-const initMap = (naver) => {
-
-    // 모바일의 경우 단말의 GPS가 있기 때문에 위치가 정확함, PC의 경우 geolocation 위치가 정확하지 않음 - 카카오의 경우 IP 타겟팅 사용
-    navigator.geolocation.getCurrentPosition((posion) => successGetPositon(posion, naver));
+    return new Promise(resolve => {
+        // 모바일의 경우 단말의 GPS가 있기 때문에 위치가 정확함, PC의 경우 geolocation 위치가 정확하지 않음 - 카카오의 경우 IP 타겟팅 사용
+        navigator.geolocation.getCurrentPosition( (posion) => {
+           resolve(successGetPositon(posion))
+        });
+    });
 };
 
-const successGetPositon = async (positon, naver) => {
+// 위치 가져오기 성공 시 callback Fn
+const successGetPositon = (positon) => {
 
     const currentPosition = new naver.maps.LatLng(positon.coords.latitude, positon.coords.longitude);
+    return currentPosition;
+};
+
+// 네이버 지도 그리기
+const initMap = async () => {
+
+    // 현재 위치
+    const currentLocation = await getLocation();
 
     const mapOptions = {
-        center: currentPosition,
+        center: currentLocation,
         zoom: 17,
+        zoomControl: true,
     };
 
     const map = new naver.maps.Map('map', mapOptions);
@@ -32,15 +42,16 @@ const successGetPositon = async (positon, naver) => {
 
     // 지도에 마커 표시
     let marker = new naver.maps.Marker({
-        position: currentPosition,
+        position: currentLocation,
         map: map,
     });
 
     // 지도에 인포윈도우 표시
     let infowindow = new naver.maps.InfoWindow();
-    infowindow.setContent('<div style="padding:20px;">현재 위치 </div>');
-    infowindow.open(map, currentPosition);
+    infowindow.setContent('<div style="padding:10px;">현재 위치 </div>');
+    infowindow.open(map, currentLocation);
 
+    return map;
 };
 
 const initGeocoder = () => {
@@ -162,8 +173,7 @@ const searchAddressToCoordinate = (infoWindow, address) => {
 
 
 const naverMapService = {
-    getMap,
-    setMap,
+    setNaver,
     initMap,
     initGeocoder,
     searchAddressToCoordinate,

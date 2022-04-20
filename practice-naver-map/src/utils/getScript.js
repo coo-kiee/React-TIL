@@ -6,7 +6,7 @@ const getScript = (url) => new Promise((resolve, reject) => {
     script.async = true
 
     script.onerror = (e) => reject(e);
-    script.onload = async () => {
+    script.onload = () => {
         resolve();
     };
     

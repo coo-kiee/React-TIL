@@ -9,6 +9,9 @@ Redux ToolKit을 이용한 features/common/style/app/routes 형식의 구조
 (https://javascript.plainenglish.io/redux-toolkit-the-standard-way-to-write-redux-dcfb372202b8)   
 (https://javascript.plainenglish.io/how-to-structure-your-react-redux-app-83d523851137)
 
+## Hooks와 Closure
+#### https://www.rinae.dev/posts/getting-closure-on-react-hooks-summary
+
 ## async/await와 setState 함수
 #### https://codingapple.com/unit/react-setstate-async-problems/
 
@@ -169,6 +172,60 @@ React CSS display none 사용시 발생하는 현상
 
 조건부 렌더링 vs display none   
 (https://ssangq.netlify.app/posts/conditional-rendering-vs-diplay-none)
+
+## Script 동적 로딩
+#### http://daplus.net/javascript-%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%EA%B0%80%EB%A1%9C%EB%93%9C-%EB%90%9C-%ED%9B%84-%EC%9E%90%EB%B0%94-%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%ED%95%A8%EC%88%98-%ED%98%B8%EC%B6%9C/
+#### #### https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+
+```
+const getScript = (url) => new Promise((resolve, reject) => {
+
+    const script = document.createElement('script')
+    script.type = "text/javascript";
+    script.src = url
+    script.async = true
+
+    script.onerror = (e) => reject(e);
+    script.onload = () => {
+        resolve();
+    };
+    
+    document.body.appendChild(script);
+});
+
+// App.js
+useEffect(() => {
+
+    const getNaverMap = async () => {
+
+      try {
+
+        // 네이버 지도 API 비동기 호출
+        await getScript("https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId={클라이언트 ID}&submodules=geocoder");
+        
+        // naver 객체 변수 할당
+        const naverObj = window.naver;
+
+        // onJSContentLoaded는 submodules이 로드 된 후에 실행하는 이벤트 핸들러이다.
+        naverObj.maps.onJSContentLoaded = () => {
+          naverMapService.initMap(naverObj);
+          setNaver(prev => naverObj);
+        };
+
+      }
+      catch (error) {
+        console.log(error);
+      };
+    }; // end getNaverMap()
+
+    if (!naver) {
+      // naver 지도 세팅
+      getNaverMap();
+    };
+
+}, []);
+
+```
 
 ## Error 모음
 Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
