@@ -26,13 +26,18 @@ export const useMutate = ( (url, querykey, mutateValue, extraKey, initialFn) => 
             // 입력란 초기화
             initialFn();
 
-            return previousValue;
+            // return 값은 내부적으로 Context API를 이용해서 useMutation의 context로 들어간다.
+            return { previousValue };
         },
 
         // 서버 업데이트 실패 시 이전 값으로 롤백
-        onError: (error, variables, previousValue) => {
+        onError: (error, variables, context) => {
+            console.log(context);
+            console.log(context?.previousValue); // onMutate의 return 값이 context에 들어간다.
             console.log('Error: ',error,' variables: ', variables);
-            queryClient.setQueriesData(querykey, previousValue);
+            if (context?.previousValue) {
+                queryClient.setQueriesData(querykey, previousValue);
+            };
         },
 
         // 성공, 실패 하던 'todos' Query refetch

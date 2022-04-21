@@ -42,6 +42,26 @@
 ```
 2. Custom Mutation Hooks 인자 리팩토링 필요
 
+## QueryClient Default Options
+QueryClient Default 되어있는 Options을 알아두고 나중에 커스터마이징 할 때 수정할 부분을 알아둔다.
+```
+enabled: false // 쿼리 자동 시작 방지 (Dependent Queries - 해당 의존성 변수 존재하면 쿼리 실행하지 않음)
+ex) enabled: !!variable - (https://react-query.tanstack.com/guides/dependent-queries)
+
+retry: 3 // 쿼리 실패시 재시도 횟수(false - 재시도 안함, true - 무한 재시도)
+
+retryOnMount: true // 컴포넌트 마운트 후 Error일때 재시도 (false - 재시도 안함)
+
+staleTime: 0 // 정해진 시간 지나면 오래된 데이터로 간주하고 refetch(Infinity - 데이터가 refetch 되지 않음)
+
+cacheTime: 5 * 60 * 1000 // 정해진 시간이 지나면 캐시 가비지 컬렉터로 삭제(Infinity 캐시 삭제되지 않음)
+
+refetchOnMount: true // 컴포넌트가 마운트 되고, 데이터가 stale 상태면 refetch(false - refetch 되지 않음, always - stale 상관없이 refetch)
+
+refetchOnWindowFocus: true // 브라우저 창이 포커싱 되고, 데이터가 stale 상태면 refetch((false - refetch 되지 않음, always - stale 상관없이 refetch)
+
+refetchOnReconnect: true // 브라우저가 재연결 되고, 데이터가 stale 상태면 refetch(false - refetch 되지 않음, always - stale 상관없이 refetch)
+```
 
 ## Pagination
 #### https://react-query.tanstack.com/examples/pagination
