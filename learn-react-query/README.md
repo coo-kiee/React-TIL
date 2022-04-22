@@ -9,6 +9,9 @@
 ## React Query VS SWR
 #### https://tech.madup.com/react-query-vs-swr/
 
+## React Query에 TypeScript 적용
+#### https://gusrb3164.github.io/web/2022/01/23/react-query-typescript/
+
 ## queryKey 관리
 #### https://www.zigae.com/react-query-key/
 
@@ -41,6 +44,8 @@
 'Accept': "application/json, text/plain, */*"
 ```
 2. Custom Mutation Hooks 인자 리팩토링 필요
+
+ [P.S. Mutation Custom Hook](https://velog.io/@kimhyo_0218/React-Query-%EB%A6%AC%EC%95%A1%ED%8A%B8-%EC%BF%BC%EB%A6%AC-useMutation-%EC%8B%A4%EC%9A%A9-%ED%8E%B8custom-hook-%EC%9C%BC%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EC%9E%90#%EA%B8%B0%EB%B3%B8-%ED%98%95%ED%83%9C%EC%9D%98-%EC%BB%A4%EC%8A%A4%ED%85%80-%ED%9B%852)
 
 ## QueryClient Default Options
 QueryClient Default 되어있는 Options을 알아두고 나중에 커스터마이징 할 때 수정할 부분을 알아둔다.
