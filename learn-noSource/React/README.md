@@ -227,5 +227,17 @@ useEffect(() => {
 
 ```
 
+## 웹서버(Apache) 설정으로 응답속도 줄이는 방법 - GZIP
+#### https://taetaetae.github.io/2018/04/01/apache-gzip/
+
+[서버의 설정 없이 웹 페이지의 응답속도를 줄일 수 있는 '일반적인' 방법들 - 웹사이트 최적화 기법](https://book.naver.com/bookdb/book_detail.nhn?bid=4587095)
+
+gzip이란? - 파일 압축에 쓰이는 응용 소프트웨어 // [지원브라우저 확인](https://caniuse.com/#search=gzip)
+
+서버에서 Clinet에게 보낼 Response를 압축해서 보내기 때문에 네트워크 리소스 비용을 줄일 수 있어 응답속도를 빠르게 할 수 있다.
+
+but, 서버에서 압축을 하여 보냈기 때문에 압축을 해체하는 과정이 추가적으로 필요하고, 브라우저에서 CPU 리소스를 사용하면서 오히려 랜더링이 느려질 수 있다.
+
+
 ## Error 모음
 Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
