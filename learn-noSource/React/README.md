@@ -238,6 +238,34 @@ gzip이란? - 파일 압축에 쓰이는 응용 소프트웨어 // [지원브라
 
 but, 서버에서 압축을 하여 보냈기 때문에 압축을 해체하는 과정이 추가적으로 필요하고, 브라우저에서 CPU 리소스를 사용하면서 오히려 랜더링이 느려질 수 있다.
 
+## REST API
+#### https://hyothorhyo.tistory.com/5?category=993136
+
+REST API는 프론트엔드에서 URI와 HTTP method를 조합해서 서버에 요청 하는 형식의 API 이다.
+RESTful 하게 만든 API는 요청 형식만 보아도 대략적으로 무엇을 요청하는지 파악이 가능하다.
+
+REST API의 단점은 필요가 없는 정보까지 받게 되는 점인데 이에 비해 GraphQL은 내가 원하는 정보만 골라서 요청할 수 있다.
+
+## GraphQL
+GraphQL은 POST만을 사용해서 정보 요청을 한다.
+body에 담긴 요청에 따라 필요한 정보만 가져올 수 있다.
+URI는 (도메인)/graphql 형식으로 이루어져 있다.
+
+GraphQl의 단점 - 요청형식이 복잡하다.
+
+## ESLint
+#### https://tech.kakao.com/2019/12/05/make-better-use-of-eslint/
+ESLint는 자바스크립트, JSX의 정적 분석 도구로 일관된 코드 스타일을 작성하도록 도와준다.
+
+배포된 공유 설정 사용하기
+- npm i -D eslint-config-[설정 이름] or npm add -D eslint-config-[설정 이름]
+
+ESLint를 실행하면 Parser가 자바스크립트 코드를 분석하여 AST를 만들고, 사용할 Parser로 babel-eslint, Esprima 등 선택할 수 있다.(default. Espree)
+
+AST는 컴파일러에서 널리 사용되는 자료구조로 소스코드의 구조를 트리 형태로 표현한 것이다.
+
+[eslint-plugin-import](https://seohyun0120.tistory.com/entry/ESLint-importsexports-%EA%B5%AC%EB%AC%B8%EC%9D%98-%EC%88%9C%EC%84%9C-%EC%9E%90%EB%8F%99-%EC%A0%95%EB%A0%AC%ED%95%98%EA%B8%B0)
+
 
 ## Error 모음
 Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
