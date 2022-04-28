@@ -151,6 +151,7 @@ const now = value; // now = 0
 5. Class 컴포넌트 내부에 선언하면 안된다.
 
 ## 브라우저 렌더링 성능 최적화
+#### https://velog.io/@jhyj0521/FE-%EC%84%B1%EB%8A%A5-%EC%B5%9C%EC%A0%81%ED%99%94-feat.-Shall-We-Trip-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8
 #### https://abcdqbbq.tistory.com/45
 
 ### 리플로우/리페인트
@@ -253,7 +254,7 @@ URI는 (도메인)/graphql 형식으로 이루어져 있다.
 
 GraphQl의 단점 - 요청형식이 복잡하다.
 
-## ESLint
+## ESLint / Prettier
 #### https://tech.kakao.com/2019/12/05/make-better-use-of-eslint/
 ESLint는 자바스크립트, JSX의 정적 분석 도구로 일관된 코드 스타일을 작성하도록 도와준다.
 
@@ -266,6 +267,14 @@ AST는 컴파일러에서 널리 사용되는 자료구조로 소스코드의 �
 
 [eslint-plugin-import](https://seohyun0120.tistory.com/entry/ESLint-importsexports-%EA%B5%AC%EB%AC%B8%EC%9D%98-%EC%88%9C%EC%84%9C-%EC%9E%90%EB%8F%99-%EC%A0%95%EB%A0%AC%ED%95%98%EA%B8%B0)
 
+[ESLint, Prettier 구성 및 작동 원리](https://helloinyong.tistory.com/325)
+ESLint는 코드 퀄리티를 보장하도록 도와주고, Prettier는 코드 스타일을 깔끔하게 혹은 통일되도록 도와준다.
+
+[ESLint, Prettier 설정](https://velog.io/@devstone/Next.js-Typescript-%EC%B4%88%EA%B8%B0%EC%84%B8%ED%8C%85-%ED%95%98%EA%B8%B0)
+
+[CNA - Typescript, ESLint, Prettier 설정1](https://velog.io/@devstone/Next.js-Typescript-%EC%B4%88%EA%B8%B0%EC%84%B8%ED%8C%85-%ED%95%98%EA%B8%B0)
+
+[CNA - Typescript, ESLint, Prettier 설정2](https://wiki.jjagu.com/?p=479)
 
 ## Error 모음
 Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
