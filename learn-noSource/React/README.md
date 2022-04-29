@@ -290,5 +290,158 @@ Build시 souremap을 제거해야 한다.
 방법 2.
 package.json > "build": "GENERATE_SOURCEMAP=false react-scripts build" 로 수정
 
+## Code Spliting
+#### https://bamtory29.tistory.com/entry/React-%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%EC%BD%94%EB%93%9C-%EC%8A%A4%ED%94%8C%EB%A6%AC%ED%8C%85
+
+브라우저 최적화에 사용되는 Code Spliting 방법 3가지
+
+1. 코드 비동기 로딩 - dynamic import(동적 import)
+import 구문은 Promise를 반환하기 때문에 함수 안에서 import를 사용한다.(따라서, async/await 사용 가능)
+```
+// App.js
+const importFn = () => {
+    import('./dynamic').then(result => result.dynamic());
+};
+
+return (
+    <div onClick={importFn}>dynamic import!!!</div>
+);
+
+// dynamic.js
+const dynamic = () => {
+    alert('import suceess!!');
+};
+
+export default dynamic;
+```
+
+2. React.Lazy, Suspense를 사용한 코드 스플리팅
+React v16.6부터 추가된 기능(이전에는 비동기 로딩으로 await와 로딩된 컴포넌트를 담는 state를 매번 선언했다.)
+```
+// App.js
+const [dynamic, setDynamic] = useState(null);
+const handleDynamic = async () => {
+
+    const dynamicModule = await import('./dynamic');
+    setUseDynamic(() => dynamicModule);
+};  
+
+return (
+    <div onClick={handleDynamic}>Use Dynamic!!!</div>
+    {dynamic && <dynamic/>}
+);
+
+// dynamic.js
+const Dynamic = () => {
+    return (
+        <div>Lazy, Suspense Code!!!</div>
+    );
+};
+
+export default Dynamic;
+```
+
+Suspense는 Lazy 로딩되는 컴포먼트를 감싸주고 state 선언하는 작업을 없애준다.
+```
+// App.js
+const [useDynamic, setUseDynamic] = useState(false);
+const Dynamic = React.lazy(() => import('./dynamic'));
+const handleDynamic = () => {
+    setUseDynamic(() => true);
+};  
+
+return (
+    <div onClick={handleDynamic}>Use Dynamic!!!</div>
+
+    // fallback은 로딩중일 때 보여주는 코드이다.
+    <Suspense fallback={<div>Loading...</div>}>
+        {useDynamic && <Dynamic/>}
+    </Suspense>
+);
+
+// dynamic.js
+const Dynamic = () => {
+    return (
+        <div>Lazy, Suspense Code!!!</div>
+    );
+};
+
+export default Dynamic;
+```
+
+3. Loadable Components 라이브러리
+Loadable Components 라이브러리는 코드 스플리팅과 SSR을 가능하게 해준다.
+리액트 공식 문서에서는 SSR을 할 경우 위 라이브러리 사용을 권고하고 있다.
+
+npm 설치: npm add @loadable/component
+
+React.lazy와 Suspense가 빠진 형태로 코드량이 줄어든다.
+```
+// App.js
+import loadable from '@loadable/component';
+
+const Dynamic = loadable(() => import('./dynamic'), {
+    // Suspense fallback 역할
+    fallback: <div>Loading...</div>
+});
+
+const [useDynamic, setUseDynamic] = useState(false);
+
+const handleDynamic = () => {
+    setUseDynamic(() => true);
+};  
+
+return (
+    <div onClick={handleDynamic}>Use Dynamic!!!</div>
+    {useDynamic && <Dynamic/>}
+);
+
+// dynamic.js
+const Dynamic = () => {
+    return (
+        <div>Loadable Component  Code!!!</div>
+    );
+};
+
+export default Dynamic;
+```
+
+P.S. 더 좋은 UX를 위해 Preload 방식 추가
+// 마우스 클릭하기 전에 마우스 커서가 올라가는 순간부터 로딩 시작
+
+
+```
+// App.js
+import loadable from '@loadable/component';
+
+const Dynamic = loadable(() => import('./dynamic'), {
+    // Suspense fallback 역할
+    fallback: <div>Loading...</div>
+});
+
+const [useDynamic, setUseDynamic] = useState(false);
+
+const handleDynamic = () => {
+    setUseDynamic(() => true);
+};  
+
+const onMouseOver = () => {
+    Dynamic.preload();
+};
+
+return (
+    <div onClick={handleDynamic} onMouseOver={onMouseOver}>Use Dynamic!!!</div>
+    {useDynamic && <Dynamic/>}
+);
+
+// dynamic.js
+const Dynamic = () => {
+    return (
+        <div>Preload Loadable Component Code!!!</div>
+    );
+};
+
+export default Dynamic;
+```
 ## Error 모음
 Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
