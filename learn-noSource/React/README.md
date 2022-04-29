@@ -276,5 +276,19 @@ ESLint는 코드 퀄리티를 보장하도록 도와주고, Prettier는 코드 �
 
 [CNA - Typescript, ESLint, Prettier 설정2](https://wiki.jjagu.com/?p=479)
 
+## 브라우저 개발자도구에서 소스 감추기
+#### https://velog.io/@racoon/React-build-%EC%8B%9C-sourcemap-%EC%A0%9C%EA%B1%B0%ED%95%98%EA%B8%B0
+Build시 souremap을 제거해야 한다.
+이유:
+1. 내부코드 노출
+2. CI에서 docker 등을 이용해서 build할 때 메모리 부족 현상 발생   
+(에러메세지: Creating an optimized production build… )
+
+방법 1.
+.env에 GENERATE_SOURCEMAP=false 설정 추가
+
+방법 2.
+package.json > "build": "GENERATE_SOURCEMAP=false react-scripts build" 로 수정
+
 ## Error 모음
 Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
