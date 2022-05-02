@@ -50,8 +50,8 @@ image 객체를 이용해서 onload, onerror에 따라 Promise 객체 반환
 const findImage = (imageSrc) => {
 
     return new Promise(resolve => {
-        const img = new Image()
-        img.src = imageSrc
+        const img = new Image();
+        img.src = imageSrc;
         img.onload = () => {
             resolve({ useImage: true });
         }
@@ -89,9 +89,9 @@ const calendarData = response.map( (resObj, idx) => ({...calendarInfos[idx], use
 
 
 ```
-
 방법 3. require - Only node  
-나의 경우 클라이언트 서버에 이미지 파일이 있었기 때문에 이미지 파일이 있는지만 파악하기 위해서 require를 사용했다.
+※ Deprecated!! - require는 로컬을 확인하기 때문에 서버에 있는 이미지 존재 여부를 파악하는게 아니다.(서버에서 배포한다고 해도 배포 소스 내부에서 존재여부를 확인하는 것!)
+[해결방법?: PUBLIC_URL](https://wonblog.tistory.com/22)
 ```
 // 이미지 존재여부 확인
 const findImage = (imageSrc) => {
