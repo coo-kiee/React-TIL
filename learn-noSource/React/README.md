@@ -154,30 +154,11 @@ const now = value; // now = 0
 #### https://velog.io/@jhyj0521/FE-%EC%84%B1%EB%8A%A5-%EC%B5%9C%EC%A0%81%ED%99%94-feat.-Shall-We-Trip-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8
 #### https://abcdqbbq.tistory.com/45
 
-### 리플로우/리페인트
-리플로우(Reflow) - DOM이 추가/삭제 되거나 DOM 요소에 높이, 너비, 위치 등의 기하학적인 영향을 주는 CSS 내용이 변경될 경우 렌더링 트리가 재구성 되는 현상
-
-리페인트(Fepaint) - 기하학적인 영향을 주지 않는 CSS 속성이 변경 되었을 경우 Paint 과정부터 수행하는 현상
-
-리플로우는 부하가 크지만 리페인트는 부하가 적다.
-
-P.S. 리플로우/리페인트 최소화 하는 방법   
-(https://12bme.tistory.com/140)
-
-P.S. 렌더링 트리(Critical Rendering Tree)   
-(https://breathtaking-life.tistory.com/25)
-
-### display none
-React CSS display none 사용시 발생하는 현상  
-(https://lovemewithoutall.github.io/it/at-css-display-change-what-happen-in-react/)
-
-조건부 렌더링 vs display none   
-(https://ssangq.netlify.app/posts/conditional-rendering-vs-diplay-none)
-
 ## Script 동적 로딩
 #### http://daplus.net/javascript-%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%EA%B0%80%EB%A1%9C%EB%93%9C-%EB%90%9C-%ED%9B%84-%EC%9E%90%EB%B0%94-%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%ED%95%A8%EC%88%98-%ED%98%B8%EC%B6%9C/
 #### #### https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
 
+[practice-naver-map 코드](https://github.com/Jowen0/React-TIL/tree/main/practice-naver-map)
 ```
 const getScript = (url) => new Promise((resolve, reject) => {
 
@@ -443,5 +424,12 @@ const Dynamic = () => {
 
 export default Dynamic;
 ```
+
+## DOMContentLoaded VS ComponentDidMount(feat.useEffect)
+#### https://stackoverflow.com/questions/40104350/react-js-is-domcontentloaded-equal-with-componentdidmount
+
+리액트 컴포넌트 내부에서 DOMContentLoaded 이벤트를 작성하면 작동되지 않는다.
+이유 : DOMContentLoaded 이벤트는 전체 HTML 페이지가 로드되는 경우에만 발생한다. 반면에 ComponentDidMount는 React 컴포넌트가 렌더링 될 때 호출된다. 따라서, ComponentDidMount 이벤트가 호출될 때 DOM은 이미 'DOMContentLoaded' 상태이다.
+
 ## Error 모음
 Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
