@@ -53,4 +53,26 @@ css 파일을 불러온 것이다.
 
 css파일과 font 모두를 미리 로드한 후 css파일이 로드되면 stylesheet를 변경했더니 페이지가 로딩되면서 font가 잘 적용됐다.
 
+[P.S. - 웹 폰트 로딩을 더 빠르게 하는 방법](https://yceffort.kr/2021/06/ways-to-faster-web-fonts)
+
+## 리플로우/리페인트
+리플로우(Reflow) - DOM이 추가/삭제 되거나 DOM 요소에 높이, 너비, 위치 등의 기하학적인 영향을 주는 CSS 내용이 변경될 경우 렌더링 트리가 재구성 되는 현상
+
+리페인트(Fepaint) - 기하학적인 영향을 주지 않는 CSS 속성이 변경 되었을 경우 Paint 과정부터 수행하는 현상
+
+리플로우는 부하가 크지만 리페인트는 부하가 적다.
+
+P.S. 리플로우/리페인트 최소화 하는 방법   
+(https://12bme.tistory.com/140)
+
+P.S. 렌더링 트리(Critical Rendering Tree)   
+(https://breathtaking-life.tistory.com/25)
+
+### display none
+React CSS display none 사용시 발생하는 현상  
+(https://lovemewithoutall.github.io/it/at-css-display-change-what-happen-in-react/)
+
+조건부 렌더링 vs display none   
+(https://ssangq.netlify.app/posts/conditional-rendering-vs-diplay-none)
+
 **주의사항 - preload가 지원되지 않는 브라우저도 있기 때문에 일반 link tag도 추가해두어야 한다.**

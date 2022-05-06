@@ -9,3 +9,5 @@
 
 - npm i axios
 - npm install react-bootstrap bootstrap
+
+[formdata 객체로 이미지 업로드 하기](https://www.zerocho.com/category/HTML/post/59465380f2c7fb0018a1a263)
