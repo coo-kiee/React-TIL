@@ -184,7 +184,8 @@ const Image = ({imgSrc, observer, index}) => {
 export default Image;
 
 ```
-P.S. [커스텀훅으로 사용](https://ichi.pro/ko/reacteseo-jeomjinjeog-eulo-imijilodeu-18127722463610)
+[P.S.커스텀훅으로 사용](https://ichi.pro/ko/reacteseo-jeomjinjeog-eulo-imijilodeu-18127722463610)
+[P.S. 이미지 최적화 - IntersectionObserver API 예제](https://velog.io/@hustle-dev/%EC%9B%B9-%EC%84%B1%EB%8A%A5%EC%9D%84-%EC%9C%84%ED%95%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%B5%9C%EC%A0%81%ED%99%94#css-sprite)
 
 ## PC / 모바일 구분하는 법
 #### https://studyhardgogo.tistory.com/139

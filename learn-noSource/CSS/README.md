@@ -62,17 +62,73 @@ css파일과 font 모두를 미리 로드한 후 css파일이 로드되면 style
 
 리플로우는 부하가 크지만 리페인트는 부하가 적다.
 
-P.S. 리플로우/리페인트 최소화 하는 방법   
-(https://12bme.tistory.com/140)
+[P.S. 리플로우/리페인트 최소화 하는 방법](https://12bme.tistory.com/140)
 
-P.S. 렌더링 트리(Critical Rendering Tree)   
-(https://breathtaking-life.tistory.com/25)
+[P.S. 렌더링 트리(Critical Rendering Tree)](https://breathtaking-life.tistory.com/25)
 
 ### display none
-React CSS display none 사용시 발생하는 현상  
-(https://lovemewithoutall.github.io/it/at-css-display-change-what-happen-in-react/)
-
-조건부 렌더링 vs display none   
-(https://ssangq.netlify.app/posts/conditional-rendering-vs-diplay-none)
+display 속성은 렌더트리에 영향을 주기 때문에 리플로우/리페인트를 발생시킨다. 하지만 invisibile 속성은 렌더트리에는
+[React CSS display none 사용시 발생하는 현상](https://lovemewithoutall.github.io/it/at-css-display-change-what-happen-in-react/)
 
 **주의사항 - preload가 지원되지 않는 브라우저도 있기 때문에 일반 link tag도 추가해두어야 한다.**
+
+## 이미지 최적화
+#### https://velog.io/@hustle-dev/%EC%9B%B9-%EC%84%B1%EB%8A%A5%EC%9D%84-%EC%9C%84%ED%95%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%B5%9C%EC%A0%81%ED%99%94#css-sprite
+
+**FE에서 할 수 있는 방법**
+1. 이미지 고정값을 주어 Reflow 방지
+- 반응형 웹 디자인의 경우 - aspect-ratio 속성 사용하면 Reflow가 발생하지 않는다.
+[aspect-ratio](https://inpa.tistory.com/entry/CSS-%F0%9F%93%9A-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%B9%84%EC%9C%A8-%EA%B3%A0%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95-aspect-ratio)
+[aspect-ratio - 새로운 웹페이지 성능 측정 지표 CLS](https://wit.nts-corp.com/2020/12/28/6240)
+
+2. 여러 버전의 이미지 제공
+- 여러 이미지 버전을 지정하면 브라우저에서 사용하기에 적합한 버전을 선택한다.
+- srcset 속성 사용(브라우저가 scrset 속성을 지원하지 않으면 fall back으로 src 속성이 동작한다.)
+
+### srcset 속성
+srcset 속성은 이미지 파일명과 width 또는 density 설명을 쉼표로 구분한다.
+
+### size 속성
+size 속성은 이미지가 표시될 때의 이미지 너비를 브라우저에게 알려준다.   
+display 크기에 영향을 주지 않는다.
+
+```
+# Before
+<img src="flower-large.jpg" />
+
+# After
+<img
+  src="flower-large.jpg"
+  srcset="flower-small.jpg 480w, flower-large.jpg 1080w" // 480w는 480px를 브라우저에게 알려준다.
+  sizes="50vw"
+/>
+```
+
+일반적으로 3 ~ 5개의 서로 다른 크기의 이미지를 제공한다.
+
+3. Css Sprite
+서버로의 요청 횟수를 최소화 하여 페이지 첫 로딩 속도를 줄여준다.   
+웹 페이지에 필수적으로 자주 사용되는 아이콘, 버튼 같은 이미지들을 쓸 때마다 불러오는 것이 아니라, 한 이미지 파일로 통합한 후 배경 이미지로 만들어 놓고, position 값으로 각각의 이미지를 불러오는 기법이다.
+```
+div#sprite {
+  background: url(/images/sprite.png) no-repeat;
+} //한 이미지를 불러옴
+
+// position으로 각 이미지를 불러옴
+div#sprite > .first {
+  background-position: 0 0;
+}
+div#sprite > .second {
+  background-position: 0 -15px;
+}
+div#sprite > .third {
+  backg
+```
+
+4. Lazy loading
+페이지를 로딩할 때 당장 필요 없는 자원의 경우 지연 로딩하는 기법
+
+- 모던 브라우저의 경우 img 태그 내의 loading="lazy" 사용
+
+그외 Intersaction Observer API 또는 React.lazy로 구현 가능
+[React - Observer API 사용](https://github.com/Jowen0/React-TIL/tree/main/learn-noSource/React)
