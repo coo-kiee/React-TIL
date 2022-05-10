@@ -11,6 +11,7 @@ Redux ToolKit을 이용한 features/common/style/app/routes 형식의 구조
 
 ## Hooks와 Closure
 #### https://www.rinae.dev/posts/getting-closure-on-react-hooks-summary
+[useState가 const로 선언되는 이유](https://dudghsx.tistory.com/18)
 
 ## async/await와 setState 함수
 #### https://codingapple.com/unit/react-setstate-async-problems/
@@ -351,6 +352,8 @@ export default Dynamic;
 ```
 
 3. Loadable Components 라이브러리
+#### https://basemenks.tistory.com/247?category=1027041
+
 Loadable Components 라이브러리는 코드 스플리팅과 SSR을 가능하게 해준다.
 리액트 공식 문서에서는 SSR을 할 경우 위 라이브러리 사용을 권고하고 있다.
 
@@ -433,3 +436,4 @@ export default Dynamic;
 
 ## Error 모음
 Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
+[리액트로 프로젝트 빌드 후 - React-Uncaught SyntaxError: Unexpected token <](https://yoon-dumbo.tistory.com/entry/Error-%EC%A0%95%EB%A6%AC-React-Uncaught-SyntaxError-Unexpected-token)

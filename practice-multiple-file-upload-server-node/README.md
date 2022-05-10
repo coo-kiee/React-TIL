@@ -4,4 +4,4 @@
 
 - npm i express multer cors
 
-[이미지 업로드하기 한글 설명](https://www.zerocho.com/category/NodeJS/post/5950a6c4f7934c001894ea83)
+[multer를 사용해서 이미지 업로드하기](https://www.zerocho.com/category/NodeJS/post/5950a6c4f7934c001894ea83)

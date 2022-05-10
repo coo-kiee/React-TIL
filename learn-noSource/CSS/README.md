@@ -66,8 +66,9 @@ css파일과 font 모두를 미리 로드한 후 css파일이 로드되면 style
 
 [P.S. 렌더링 트리(Critical Rendering Tree)](https://breathtaking-life.tistory.com/25)
 
-### display none
-display 속성은 렌더트리에 영향을 주기 때문에 리플로우/리페인트를 발생시킨다. 하지만 invisibile 속성은 렌더트리에는
+### display vs visibile
+display 속성은 렌더트리에 영향을 주기 때문에 리플로우/리페인트를 발생시킨다. 하지만 invisibile 속성은 렌더 트리에 영향을 주지 않아 리페인트만 발생한다.
+
 [React CSS display none 사용시 발생하는 현상](https://lovemewithoutall.github.io/it/at-css-display-change-what-happen-in-react/)
 
 **주의사항 - preload가 지원되지 않는 브라우저도 있기 때문에 일반 link tag도 추가해두어야 한다.**
@@ -80,6 +81,7 @@ display 속성은 렌더트리에 영향을 주기 때문에 리플로우/리페
 - 반응형 웹 디자인의 경우 - aspect-ratio 속성 사용하면 Reflow가 발생하지 않는다.
 [aspect-ratio](https://inpa.tistory.com/entry/CSS-%F0%9F%93%9A-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%B9%84%EC%9C%A8-%EA%B3%A0%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95-aspect-ratio)
 [aspect-ratio - 새로운 웹페이지 성능 측정 지표 CLS](https://wit.nts-corp.com/2020/12/28/6240)
+[apsect-ration 속성 없이 구현하기 Reflow 방지](https://localcoder.org/responsive-images-without-layout-reflow-when-they-load)
 
 2. 여러 버전의 이미지 제공
 - 여러 이미지 버전을 지정하면 브라우저에서 사용하기에 적합한 버전을 선택한다.
@@ -132,3 +134,17 @@ div#sprite > .third {
 
 그외 Intersaction Observer API 또는 React.lazy로 구현 가능
 [React - Observer API 사용](https://github.com/Jowen0/React-TIL/tree/main/learn-noSource/React)
+
+## position - relative vs absolute
+#### https://nonipc.com/entry/CSS-position-relative-%EC%99%80-absolute-%EC%B0%A8%EC%9D%B4#footnote_link_273_1
+#### https://creamilk88.tistory.com/197
+position은 html 요소의 배치 방법을 결정한다.
+
+position의 속성 5가지
+1. static: static은 기본값으로((배치 불가능), 일반적인 문서 흐름에 따라 요소를 배치
+2. relative: 일반적 흐름에 따라 배치하고, 원래 위치에서 offset을 적용(요소 자기 자신을 기준으로 배치)
+3. absolute: 일반적 문서 흐름에서 배제되고, 상위 요소 중 가장 가까운 position으로부터 지정하는 양만큼 상대적 offset을 적용
+4. fixed: 일반 문서 흐름에서 배제되고, 지정하는 위치에 고정(뷰포트 기준으로 배치)
+5. sticky: 일반적 문서 흐름에서 배제디고, 스크롤 되는 가장 가까운 요소에 offset 적용(스크롤 영역 기준으로 배치)
+
+※ offset이란? - 원래 문서 위치를 off한 후 이동시킴
