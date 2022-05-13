@@ -3,50 +3,66 @@ import { AppService } from './AppService';
 
 function App() {
 
-  // 0: 개인회원 / 1: 제휴사
-  const [userType, setUserType] = useState(0);
+  // 제휴사 여부 확인 - useQuery로 대체 예정
+  const [isCompany, setIsCompany] = useState(true);
+  
+  // 검색메뉴 - 지급방식
+  const [pay, setPay] = useState({ 
+    menu: ['전체', '선불', '착불', '카드', '송금'],
+    val: ['전체', '선불', '착불', '카드', '송금'],
+  });
+
   // 제휴사 여부 확인
   useEffect(() => {
-    setUserType(prev => 1);
-  },[]);
 
-  // 검색 메뉴
+    if(isCompany) {
+      setIsCompany(prev => true);
+      setPay(prev => ({
+        menu: ['전체', '계약', '선불', '착불', '카드', '송금'],
+        val: ['전체', '계약', '선불', '착불', '카드', '송금'],
+      }));
+    };
+  },[isCompany]);
+
+  // 검색메뉴
   const defaultPageInfo = {
-    tableTitles: [{ menuType: 0, name: '조회기간', isUserType: false }, { menuType: 1, name: '조회구분', isUserType: false }, { menuType: 2, name: '지급방식', isUserType: true }],
-    tableDatas: [
-      ['오늘', '어제', '최근7일', '당월', '전월'],
-      ['전체', '완료', '취소', '진행중', '예약'],
-      [['전체', '선불', '착불', '카드', '송금'], ['전체', '계약', '선불', '착불', '카드', '송금']],
-    ],
-    selectTypes: ['전체', '완료', '취소', '진행중', '예약'],
-    payTypes: [['전체', '선불', '착불', '카드', '송금'], ['전체', '계약', '선불', '착불', '카드', '송금']],
+    tableTitles: [{ menuType: 'date', name: '조회기간' }, { menuType: 'state', name: '조회구분' }, { menuType: 'pay', name: '지급방식' }],
+    tableDatas: {
+      date: { 
+        menu: ['오늘', '어제', '최근7일', '당월', '전월'],
+      },
+      state: { 
+        menu: ['전체', '완료', '취소', '진행중', '예약'], 
+        val: ['전체', '완료', '취소', '진행중', '예약'],
+      },
+      pay: pay
+    },
   };
 
-  // 검색 조건
+  // 검색조건
   const [pageInfo, setPageInfo] = useState({
     stDate: AppService.getDate('0'),
     endDate: AppService.getDate('0'),
-    selectType: 0,
-    payTypes: 0,
+    state: 0,
+    payVal: 0,
     searchText: '',
   });
   
   // 검색조건 선택
   const handleSearchCondition = (e) => {
 
+    const idx = e.currentTarget.getAttribute('data-idx');
     const menuType = e.currentTarget.getAttribute('data-menutype');
-    const idx = e.currentTarget.getAttribute('data-id');
     
-    // 0:조회기간 / 1:조회구분 / 2:지급방식
     switch (menuType) {
-      case '0':
+      case 'date':
         setPageInfo(prev => ({ ...prev, stDate: AppService.getDate(idx) }));
         break;
-      case '1':
-        setPageInfo(prev => ({...prev, selectType: defaultPageInfo.selectTypes[idx]}))
+      case 'state':
+        setPageInfo(prev => ({...prev, state: defaultPageInfo.tableDatas[menuType].val[idx]}))
         break;
-      case '2':
-        setPageInfo(prev => ({...prev, selectType: defaultPageInfo.payTypes[userType][idx]}))
+      case 'pay':
+        setPageInfo(prev => ({...prev, state: defaultPageInfo.tableDatas[menuType].val[idx]}))
         break;
       default:
         break;
@@ -58,21 +74,17 @@ function App() {
 
     const type = e.currentTarget.getAttribute('data-name');
     const selectedValue = e.target.value;
-    console.log(selectedValue);
-    console.log(new Date(selectedValue));
-    console.log(AppService.getDate('5'));
-    console.log(new Date(AppService.getDate('5')));
-    console.log(new Date(AppService.getDate('5') - new Date(selectedValue)) );
-    console.log(new Date(selectedValue) - new Date(AppService.getDate('5')) );
-    if (type === 'stDate') {
+
+    // type 구분 && 날짜 유효성 검사
+    if (type === 'stDate' && AppService.validateDate(selectedValue, pageInfo.endDate)) {
       setPageInfo(prev => ({ ...prev, stDate: selectedValue }));
     }
-    else {
+    else if (type === 'endDate' && AppService.validateDate(pageInfo.stDate, selectedValue)) {
       setPageInfo(prev => ({ ...prev, endDate: selectedValue }));
+    }
+    else {
+      alert('날짜를 확인해주세요.');
     };
-
-    // 날짜 유효성 검사(6개월)
-    
   };
 
   // 제휴사 선택버튼 클릭
@@ -83,22 +95,25 @@ function App() {
   return (
     <div className="App">
       {
-        userType? <div><p>제휴사 {'>'} 올바로</p><button onClick={handleCompany}>제휴사 선택{'→'}</button></div> : null
+        isCompany? <div><p>제휴사 {'>'} 올바로</p><button onClick={handleCompany}>제휴사 선택{'→'}</button></div> : null
       }
       <table >
         <tbody >
           {
-            defaultPageInfo.tableTitles.map((tableTitle, idx) => (
+            defaultPageInfo.tableTitles.map((tableTitle) => (
               <tr key={tableTitle.name}>
                 <td>{tableTitle.name}</td>
                 {
-                  // isUserType? defaultPageInfo.tableDatas[idx][userType] : defaultPageInfo.tableDatas[idx]
-                  tableTitle.isUserType? defaultPageInfo.tableDatas[idx][userType].map((data, id) => <td onClick={handleSearchCondition} data-id={id} data-menutype={tableTitle.menuType} key={data}>{data}</td>)
-                  : defaultPageInfo.tableDatas[idx].map((data, id) => <td onClick={handleSearchCondition} data-id={id} data-menutype={tableTitle.menuType} key={data}>{data}</td>)
+                  // 검색메뉴 목록
+                  defaultPageInfo.tableDatas[tableTitle.menuType].menu.map((data, idx) => <td onClick={handleSearchCondition} data-idx={idx} data-menutype={tableTitle.menuType} key={data}>{data}</td>)
                 }
                 {
                   // 조회기간 달력추가
-                  idx === 0 ? <td><input data-name="stDate" onChange={handleCalendar} type='date' value={pageInfo.stDate} /> ~ <input data-name="endDate" onChange={handleCalendar} type='date' value={pageInfo.endDate} /></td> : null
+                  tableTitle.menuType === 'date' && (
+                    <td>
+                      <input data-name="stDate" onChange={handleCalendar} type='date' value={pageInfo.stDate} /> ~ <input data-name="endDate" onChange={handleCalendar} type='date' value={pageInfo.endDate} />
+                    </td>
+                  )
                 }
               </tr>
             ))
