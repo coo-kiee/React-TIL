@@ -1,5 +1,25 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { AppService } from './AppService';
+
+interface defaultPageInfo {
+  tableTitles : Array<tableTitles>,
+  tableDatas : tableDatas
+};
+
+interface tableTitles {
+  menuType: string,
+  name: string,
+};
+
+interface tableDatas {
+  [key: string]: tableData,
+};
+
+interface tableData {
+  menu: Array<string>,
+  val: Array<string>,
+};
+
 
 function App() {
 
@@ -25,11 +45,12 @@ function App() {
   },[isCompany]);
 
   // 검색메뉴
-  const defaultPageInfo = {
+  const defaultPageInfo:defaultPageInfo = {
     tableTitles: [{ menuType: 'date', name: '조회기간' }, { menuType: 'state', name: '조회구분' }, { menuType: 'pay', name: '지급방식' }],
     tableDatas: {
       date: { 
         menu: ['오늘', '어제', '최근7일', '당월', '전월'],
+        val: ['0', '1', '2', '3', '4'],
       },
       state: { 
         menu: ['전체', '완료', '취소', '진행중', '예약'], 
@@ -43,37 +64,39 @@ function App() {
   const [pageInfo, setPageInfo] = useState({
     stDate: AppService.getDate('0'),
     endDate: AppService.getDate('0'),
-    state: 0,
-    payVal: 0,
+    stateVal: '',
+    payVal: '',
     searchText: '',
   });
   
   // 검색조건 선택
-  const handleSearchCondition = (e) => {
+  const handleSearchCondition = (e:MouseEvent) => {
 
-    const idx = e.currentTarget.getAttribute('data-idx');
-    const menuType = e.currentTarget.getAttribute('data-menutype');
+    const idx = e.currentTarget.getAttribute('data-idx') as string;
+    const menuType = e.currentTarget.getAttribute('data-menutype') as string;
     
     switch (menuType) {
       case 'date':
         setPageInfo(prev => ({ ...prev, stDate: AppService.getDate(idx) }));
         break;
       case 'state':
-        setPageInfo(prev => ({...prev, state: defaultPageInfo.tableDatas[menuType].val[idx]}))
+        setPageInfo(prev => ({...prev, stateVal: defaultPageInfo.tableDatas[menuType].val[idx as unknown as number]}))
         break;
       case 'pay':
-        setPageInfo(prev => ({...prev, state: defaultPageInfo.tableDatas[menuType].val[idx]}))
+        setPageInfo(prev => ({...prev, payVal: defaultPageInfo.tableDatas[menuType].val[idx as unknown as number]}))
         break;
       default:
         break;
     };
   };
 
+  console.log(pageInfo);
+
   // 달력날짜 변경
-  const handleCalendar = (e) => {
+  const handleCalendar = (e:ChangeEvent<HTMLInputElement>) => {
 
     const type = e.currentTarget.getAttribute('data-name');
-    const selectedValue = e.target.value;
+    const selectedValue = (e.target as HTMLInputElement).value;
 
     // type 구분 && 날짜 유효성 검사
     if (type === 'stDate' && AppService.validateDate(selectedValue, pageInfo.endDate)) {
@@ -88,7 +111,7 @@ function App() {
   };
 
   // 제휴사 선택버튼 클릭
-  const handleCompany = (e) => {
+  const handleCompany = (e:MouseEvent<HTMLButtonElement>) => {
     console.log('제휴사 선택');
   };
 
@@ -105,7 +128,7 @@ function App() {
                 <td>{tableTitle.name}</td>
                 {
                   // 검색메뉴 목록
-                  defaultPageInfo.tableDatas[tableTitle.menuType].menu.map((data, idx) => <td onClick={handleSearchCondition} data-idx={idx} data-menutype={tableTitle.menuType} key={data}>{data}</td>)
+                  defaultPageInfo.tableDatas[tableTitle.menuType].menu.map((data: string, idx:number) => <td onClick={handleSearchCondition} data-idx={idx} data-menutype={tableTitle.menuType} key={data}>{data}</td>)
                 }
                 {
                   // 조회기간 달력추가

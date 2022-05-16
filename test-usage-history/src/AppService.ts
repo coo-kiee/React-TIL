@@ -1,5 +1,5 @@
 // 날짜 구하기
-const getDate = (idx) => {
+const getDate = (idx: string | null) => {
 
     const now = new Date();
     const year = now.getFullYear();
@@ -23,12 +23,12 @@ const getDate = (idx) => {
         case '4':
             return year + '-' + ("0" + (month)).slice(-2) + "-01"
         default:
-            break;
+            return "";
     };
 };
 
 // 날짜 유효성 검사
-const validateDate = (stDate, endDate) => {
+const validateDate = (stDate: string, endDate: string) => {
     
     const fromDate = new Date(stDate);
     const toDate = new Date(endDate);

@@ -54,3 +54,19 @@ npm i -g typescript // React 등 다른 프레임워크는 설치 방법이 다�
 ## TypeScript Spread type
 #### https://bobbyhadz.com/blog/typescript-spread-types-may-only-be-created-from-object-types
 
+## 중첩 된 객체에 대한 인터페이스 정의
+#### http://daplus.net/typescript-typescript-%EC%A4%91%EC%B2%A9-%EB%90%9C-%EA%B0%9C%EC%B2%B4%EC%97%90-%EB%8C%80%ED%95%9C-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%EB%A5%BC-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%A0%95/
+
+## is와 as의 차이
+#### https://velog.io/@dltjdwls100/TIL-Typescript-is%EC%99%80-as-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90
+
+[as: 타입 단언/표명(Type Assertion)](https://radlohead.gitbook.io/typescript-deep-dive/type-system/type-assertion#as-foo-vs.-less-than-foo-greater-than)
+굳이 개발자가 타입 지정을 하지 않아도 TS 컴파일러가 추론이 가능한 타입 추론 기능
+
+2가지 타입 단언 방식
+1. <Animal> foo // 런타임, 컴파일 단계 모두 돌아간다.
+2. (foo as Animal) // 컴파일 단계에만 돌아간다.
+※ 리액트로 개발할 시 꺽쇠(<>)를 사용 하는 것은 TSX 태그 문법이랑 헷갈리기 때문에 as를 추천한다.
+
+is: 타입 가드
+typeof/instanceof 로 타입을 따져서 분기 처리하는 역할을 한다.
