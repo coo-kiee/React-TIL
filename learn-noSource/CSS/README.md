@@ -1,4 +1,21 @@
 # CSS
+## CSS 기본 개념 / 기초
+#### https://dinfree.com/lecture/frontend/122_css_3.html
+
+## 하이브리드앱 / 네이티브앱 / 웹앱 / 모바일웹 / 반응형 웹 / 적응형 웹 차이점
+#### https://hasudoki.tistory.com/entry/%EC%95%B1-%EA%B0%9C%EB%B0%9C-%EB%B0%A9%EC%8B%9D-%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C-%EC%95%B1-%EB%AA%A8%EB%B0%94%EC%9D%BC-%EC%9B%B9-%EB%AA%A8%EB%B0%94%EC%9D%BC-%EC%9B%B9%EC%95%B1-%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C-%EC%95%B1-%EC%9B%B9%EC%95%B1%EC%9D%B4%EB%9E%80
+
+하이브리드앱 - 모바일웹앱과 네이티브앱의 장점을 합친 것으로 iOS, Android, Windows 등 다양한 운영체제에 맞춰져 있다.
+
+네이티브앱 - 모바일에 설치되어 있는 앱, 웹 개발자 없이 순수 앱 개발로 제작된다.(Android, iOS 각각 따로 개발)
+
+웹앱 - HTML로 만든 웹 페이지를(모바일웹) 네이티브 앱에서 보여주는 방식
+
+모바일웹 - HTML 기반으로 작업된 사이트를 모바일 뷰포트에 맞게 표현되고 보이는 웹
+
+반응형웹 - 하나의 HTML 코드 기반으로 뷰포트에 맞게 보이는 웹(보통 CSS 미디어 쿼리 이용)
+
+적응형 웹 - 서버, 클라이언트에서 사용자 기기를 체크해서 PC, MOBILE 용 소스를 구분해서 보여준다. (대표적인 예: Naver)
 
 ## Margin / Padding 차이
 #### https://bangu4.tistory.com/25
