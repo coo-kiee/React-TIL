@@ -27,3 +27,23 @@ Step 1. 커밋 고유번호 파악
 Step 2. revert
 git revert [커밋번호] -m 1   명령어를 입력하면 commit 메세지로 이동하고 ESC랑 :wq! 를 입력하면 revert가 완료된다.
 (-m 1으로 하면 master 브런치에서 merge 직전 소스로, -m 2는 개인 브런치 merge 직전 소스로 돌아간다.)
+
+## git rebase vs merge
+#### https://hajoung56.tistory.com/5
+
+회사에서 소스 관리를 위해 svn 대신 git을 사용하기로 했다.
+
+git에서 커밋을 관리하는 방법이 2가지 있는데 rebase와 merge 방법이다.
+
+이전까지는 merge 방식으로 개인/팀 프로젝트 관리를 했었는데 이번엔 rebase 방식을 채택했다.
+
+merge 방식 - Feature 브런치의 커밋과 Main 브런치의 
+
+rebase 방식 - Feature 브랜치의 커밋이 Main 브랜치가 가지고 있던 기존의 커밋 뒤에 위치하게 된다.
+
+// 보완점
+단점: 이미 push까지 한 커밋이라면, 변경한 커밋들은 원격 저장소에 push 되지 않을 것이다
+
+커밋 히스토리를 공유하면 히스토리의 불일치가 발생할 수 있다는데 무슨 말인지 이해를 못하겠다...
+
+이 문제는 업무를 하면서 파악해서 내용을 수정하도록 해야겠다.
