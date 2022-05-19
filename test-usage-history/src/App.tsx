@@ -1,7 +1,7 @@
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { AppService } from './AppService';
 
-interface defaultPageInfo {
+interface defaultInfo {
   tableTitles : Array<tableTitles>,
   tableDatas : tableDatas
 };
@@ -20,6 +20,13 @@ interface tableData {
   val: Array<string>,
 };
 
+interface searchInfo {
+  stDate: string,
+  endDate: string,
+  stateVal: Array<string>,
+  payVal: Array<string>,
+  searchText: string,
+};
 
 function App() {
 
@@ -45,7 +52,7 @@ function App() {
   },[isCompany]);
 
   // 검색메뉴
-  const defaultPageInfo:defaultPageInfo = {
+  const defaultInfo:defaultInfo = {
     tableTitles: [{ menuType: 'date', name: '조회기간' }, { menuType: 'state', name: '조회구분' }, { menuType: 'pay', name: '지급방식' }],
     tableDatas: {
       date: { 
@@ -61,11 +68,11 @@ function App() {
   };
 
   // 검색조건
-  const [pageInfo, setPageInfo] = useState({
+  const [searchInfo, setSearchInfo] = useState<searchInfo>({
     stDate: AppService.getDate('0'),
     endDate: AppService.getDate('0'),
-    stateVal: '',
-    payVal: '',
+    stateVal: [],
+    payVal: [],
     searchText: '',
   });
   
@@ -77,20 +84,20 @@ function App() {
     
     switch (menuType) {
       case 'date':
-        setPageInfo(prev => ({ ...prev, stDate: AppService.getDate(idx) }));
+        setSearchInfo(prev => ({ ...prev, stDate: AppService.getDate(idx) }));
         break;
       case 'state':
-        setPageInfo(prev => ({...prev, stateVal: defaultPageInfo.tableDatas[menuType].val[idx as unknown as number]}))
+        setSearchInfo(prev => ({...prev, stateVal: [...prev.stateVal, defaultInfo.tableDatas[menuType].val[idx as unknown as number]]}));
         break;
       case 'pay':
-        setPageInfo(prev => ({...prev, payVal: defaultPageInfo.tableDatas[menuType].val[idx as unknown as number]}))
+        setSearchInfo(prev => ({...prev, payVal: [...prev.payVal, defaultInfo.tableDatas[menuType].val[idx as unknown as number]]}));
         break;
       default:
         break;
     };
   };
 
-  console.log(pageInfo);
+  console.log(searchInfo);
 
   // 달력날짜 변경
   const handleCalendar = (e:ChangeEvent<HTMLInputElement>) => {
@@ -99,11 +106,11 @@ function App() {
     const selectedValue = (e.target as HTMLInputElement).value;
 
     // type 구분 && 날짜 유효성 검사
-    if (type === 'stDate' && AppService.validateDate(selectedValue, pageInfo.endDate)) {
-      setPageInfo(prev => ({ ...prev, stDate: selectedValue }));
+    if (type === 'stDate' && AppService.validateDate(selectedValue, searchInfo.endDate)) {
+      setSearchInfo(prev => ({ ...prev, stDate: selectedValue }));
     }
-    else if (type === 'endDate' && AppService.validateDate(pageInfo.stDate, selectedValue)) {
-      setPageInfo(prev => ({ ...prev, endDate: selectedValue }));
+    else if (type === 'endDate' && AppService.validateDate(searchInfo.stDate, selectedValue)) {
+      setSearchInfo(prev => ({ ...prev, endDate: selectedValue }));
     }
     else {
       alert('날짜를 확인해주세요.');
@@ -113,6 +120,9 @@ function App() {
   // 제휴사 선택버튼 클릭
   const handleCompany = (e:MouseEvent<HTMLButtonElement>) => {
     console.log('제휴사 선택');
+    // 조회구분 css / 지급방식 css 컨트롤 필요 - searchInfo
+    setSearchInfo(prev => ({...prev, stateVal: [...prev.stateVal, defaultInfo.tableDatas.state.val[0]]}));
+    setSearchInfo(prev => ({...prev, payVal: [...prev.payVal, defaultInfo.tableDatas.pay.val[0], defaultInfo.tableDatas.pay.val[1]]}));
   };
 
   return (
@@ -123,18 +133,18 @@ function App() {
       <table >
         <tbody >
           {
-            defaultPageInfo.tableTitles.map((tableTitle) => (
+            defaultInfo.tableTitles.map((tableTitle) => (
               <tr key={tableTitle.name}>
                 <td>{tableTitle.name}</td>
                 {
                   // 검색메뉴 목록
-                  defaultPageInfo.tableDatas[tableTitle.menuType].menu.map((data: string, idx:number) => <td onClick={handleSearchCondition} data-idx={idx} data-menutype={tableTitle.menuType} key={data}>{data}</td>)
+                  defaultInfo.tableDatas[tableTitle.menuType].menu.map((data: string, idx:number) => <td onClick={handleSearchCondition} data-idx={idx} data-menutype={tableTitle.menuType} key={data}>{data}</td>)
                 }
                 {
                   // 조회기간 달력추가
                   tableTitle.menuType === 'date' && (
                     <td>
-                      <input data-name="stDate" onChange={handleCalendar} type='date' value={pageInfo.stDate} /> ~ <input data-name="endDate" onChange={handleCalendar} type='date' value={pageInfo.endDate} />
+                      <input data-name="stDate" onChange={handleCalendar} type='date' value={searchInfo.stDate} /> ~ <input data-name="endDate" onChange={handleCalendar} type='date' value={searchInfo.endDate} />
                     </td>
                   )
                 }
