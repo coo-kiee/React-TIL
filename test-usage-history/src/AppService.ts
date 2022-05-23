@@ -1,5 +1,5 @@
 // 날짜 구하기
-const getDate = (idx: string | null) => {
+const getDate = (idx: number) => {
 
     const now = new Date();
     const year = now.getFullYear();
@@ -8,21 +8,22 @@ const getDate = (idx: string | null) => {
 
     switch (idx) {
         // 오늘
-        case '0':
+        case 0:
             return year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + date).slice(-2)
         // 어제
-        case '1':
+        case 1:
             return year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + (date - 1)).slice(-2)
         // 최근7일
-        case '2':
+        case 2:
             return year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + (date - 7)).slice(-2)
         // 당월
-        case '3':
+        case 3:
             return year + '-' + ("0" + (1 + month)).slice(-2) + "-01"
         // 전월
-        case '4':
+        case 4:
             return year + '-' + ("0" + (month)).slice(-2) + "-01"
         default:
+            console.log('default');
             return "";
     };
 };
@@ -41,7 +42,6 @@ const validateDate = (stDate: string, endDate: string) => {
     };
 
     return false;
-    
 };
 
 export const AppService = {

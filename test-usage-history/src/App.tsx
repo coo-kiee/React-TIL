@@ -1,150 +1,114 @@
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { AppService } from './AppService';
+import { defaultInfo2, searchInfo } from './type';
 
-interface defaultInfo {
-  tableTitles: Array<tableTitle>,
-  tableDatas: tableDatas
-};
 
-interface tableTitle {
-  menuType: string,
-  name: string,
-};
-
-interface tableDatas {
-  [key: string]: tableData,
-};
-
-interface tableData {
-  menu: Array<string>,
-  val: Array<string>,
-  isSelected: Array<boolean>,
-};
-
-interface searchInfo {
-  // [key: string]: string | Array<string>,
-  stDate: string,
-  endDate: string,
-  stateVal: Array<string>,
-  payVal: Array<string>,
-  searchText: string,
+const active = {
+  background: 'yellow'
 };
 
 function App() {
 
-  // 제휴사 여부 확인 - useQuery로 대체 예정
+  // 제휴사 여부 - useQuery로 로그인 유저정보로 대체 예정
+  // const loginUser = queryClient.getData('user');
   const [isCompany, setIsCompany] = useState(true);
-
-  // 검색메뉴 - 지급방식
-  // const [pay, setPay] = useState({ 
-  //   menu: ['전체', '선불', '착불', '카드', '송금'],
-  //   val: ['전체', '선불', '착불', '카드', '송금'],
-  //   isSelected: [false, false, false, false, false],
-  // });
-
+  
   // 제휴사 여부 확인
   useEffect(() => {
-
+    
+    // if (loginUser.isCompany)
     if (isCompany) {
       setIsCompany(prev => true);
-      setDefaultInfo(prev => ({
-        ...prev,
-        tableDatas: {
-          ...prev.tableDatas,
-          pay: {
-            ...prev.tableDatas.pay,
-            menu: ['전체', '계약', '선불', '착불', '카드', '송금'],
-            val: ['전체', '계약', '선불', '착불', '카드', '송금'],
-            isSelected: [false, false, false, false, false, false],
-          },
-        }
 
-      }));
+      let updateArray = defaultInfo2;
+      updateArray[2] = {
+        ...defaultInfo2[2],
+        menu: ['전체', '계약', '선불', '착불', '카드', '송금'],
+        val: ['전체', '계약', '선불', '착불', '카드', '송금'],
+        isSelected: [false, false, false, false, false, false],
+      }
+      setDefaultInfo2(prev => updateArray);
     };
+
   }, [isCompany]);
 
-  // 검색메뉴
-  const [defaultInfo, setDefaultInfo] = useState<defaultInfo>({
-    tableTitles: [{ menuType: 'date', name: '조회기간' }, { menuType: 'state', name: '조회구분' }, { menuType: 'pay', name: '지급방식' }],
-    tableDatas: {
-      date: {
-        menu: ['오늘', '어제', '최근7일', '당월', '전월'],
-        val: ['0', '1', '2', '3', '4'],
-        isSelected: [true, false, false, false, false],
-      },
-      state: {
-        menu: ['전체', '완료', '취소', '진행중', '예약'],
-        val: ['전체', '완료', '취소', '진행중', '예약'],
-        isSelected: [false, false, false, false, false],
-      },
-      pay: {
-        menu: ['전체', '선불', '착불', '카드', '송금'],
-        val: ['전체', '선불', '착불', '카드', '송금'],
-        isSelected: [false, false, false, false, false],
-      },
+  // 검색메뉴2
+  const [defaultInfo2, setDefaultInfo2] = useState<Array<defaultInfo2>>([
+    {
+      id: 0,
+      menuType: 'date',
+      name: '조회기간',
+      menu: ['오늘', '어제', '최근7일', '당월', '전월'],
+      val: ['0', '1', '2', '3', '4'],
+      isSelected: [true, false, false, false, false],
     },
-  });
+    {
+      id: 1,
+      menuType: 'state',
+      name: '조회구분',
+      menu: ['전체', '완료', '취소', '진행중', '예약'],
+      val: ['전체', '완료', '취소', '진행중', '예약'],
+      isSelected: [false, false, false, false, false],
+    },
+    {
+      id: 2,
+      menuType: 'pay',
+      name: '지급방식',
+      menu: ['전체', '선불', '착불', '카드', '송금'],
+      val: ['전체', '선불', '착불', '카드', '송금'],
+      isSelected: [false, false, false, false, false],
+    },
+  ]);
 
   // 검색조건
   const [searchInfo, setSearchInfo] = useState<searchInfo>({
-    stDate: AppService.getDate('0'),
-    endDate: AppService.getDate('0'),
-    stateVal: [],
-    payVal: [],
+    stDate: AppService.getDate(0),
+    endDate: AppService.getDate(0),
+    state: [],
+    pay: [],
     searchText: '',
   });
 
-  // 검색조건 선택
-  const handleSearchCondition = (e: MouseEvent) => {
+  // 검색조건 선택2
+  const handleSearchCondition2 = (e: MouseEvent) => {
 
-    const idx = e.currentTarget.getAttribute('data-idx') as string;
-    const menuType = e.currentTarget.getAttribute('data-menutype') as string;
-    const isSelected = defaultInfo.tableDatas[menuType].isSelected;
-    console.log('isSelected', isSelected);
+    const index = parseInt(e.currentTarget.getAttribute('data-index') as string);
+    const id = parseInt(e.currentTarget.getAttribute('data-id') as string);
+    let isSelected = defaultInfo2[id].isSelected;
     
-    console.log('isSelected', isSelected);
+    if (id === 0 || index === 0) {
+      isSelected.fill(false);
+    } else {
+      isSelected[0] = false;
+    };
+    
+    isSelected[index] = !isSelected[index];
+    let updateData = [...defaultInfo2];
+    updateData[id] = { ...updateData[id], isSelected }
+    
+    setDefaultInfo2(prev => ({ ...updateData }));
 
-    switch (menuType) {
-      case 'date':
-        setSearchInfo(prev => ({ ...prev, stDate: AppService.getDate(idx), endDate: AppService.getDate('0') }));
-        break;
-      case 'state':
-        setSearchInfo(prev => ({ ...prev, stateVal: [...prev.stateVal, defaultInfo.tableDatas[menuType].val[idx as unknown as number]] }));
-        break;
-      case 'pay':
-        setSearchInfo(prev => ({ ...prev, payVal: [...prev.payVal, defaultInfo.tableDatas[menuType].val[idx as unknown as number]] }));
-        break;
-      default:
-        break;
+    if(id === 0) {
+      setSearchInfo(prev => ({ ...prev, stDate: AppService.getDate(index), endDate: AppService.getDate(0) }));
     };
 
-    isSelected[idx as unknown as number] = !isSelected[idx as unknown as number];
-    setDefaultInfo(prev => ({
-      ...prev,
-      tableDatas: {
-        ...prev.tableDatas,
-        [menuType]: {
-          ...prev.tableDatas[menuType],
-          isSelected: isSelected,
-        }
-      },
-    }));
   };
 
-  console.log(defaultInfo);
-  // console.log(searchInfo);
+  // console.log('defaultInfo', defaultInfo);
+  // console.log('defaultInfo2', defaultInfo2);
+  // console.log('searchInfo', searchInfo);
 
   // 달력날짜 변경
   const handleCalendar = (e: ChangeEvent<HTMLInputElement>) => {
 
-    const type = e.currentTarget.getAttribute('data-name');
+    const name = e.currentTarget.getAttribute('data-name');
     const selectedValue = (e.target as HTMLInputElement).value;
 
     // type 구분 && 날짜 유효성 검사
-    if (type === 'stDate' && AppService.validateDate(selectedValue, searchInfo.endDate as string)) {
+    if (name === 'stDate' && AppService.validateDate(selectedValue, searchInfo.endDate as string)) {
       setSearchInfo(prev => ({ ...prev, stDate: selectedValue }));
     }
-    else if (type === 'endDate' && AppService.validateDate(searchInfo.stDate as string, selectedValue)) {
+    else if (name === 'endDate' && AppService.validateDate(searchInfo.stDate as string, selectedValue)) {
       setSearchInfo(prev => ({ ...prev, endDate: selectedValue }));
     }
     else {
@@ -152,32 +116,62 @@ function App() {
     };
   };
 
-  // 제휴사 선택버튼 클릭
+  // 제휴사 선택
   const handleCompany = (e: MouseEvent<HTMLButtonElement>) => {
+
     console.log('제휴사 선택');
-    // 조회구분 css / 지급방식 css 컨트롤 필요 - searchInfo
-    setSearchInfo(prev => ({ ...prev, stateVal: [...prev.stateVal, defaultInfo.tableDatas.state.val[0]] }));
-    setSearchInfo(prev => ({ ...prev, payVal: [...prev.payVal, defaultInfo.tableDatas.pay.val[0], defaultInfo.tableDatas.pay.val[1]] }));
+    let updateDate = defaultInfo2;
+    updateDate[1].isSelected.fill(false);
+    updateDate[1].isSelected[0] = true;
+
+    updateDate[2].isSelected.fill(false);
+    updateDate[2].isSelected[1] = true;
+    updateDate[2].isSelected[2] = true;
+
+    setDefaultInfo2(prev => [...updateDate]);
   };
 
+  // 조회하기
+  const handleSearch = () => {
+
+    console.log('조회하기');
+    let updateData = searchInfo;
+
+    defaultInfo2.forEach((item) => {
+
+      let arr:string[] = [];
+
+      item.isSelected.forEach((selected, index) => {
+        selected && arr.push(item.val[index]);
+      });
+
+      const menuType = item.menuType;
+      updateData[menuType] = arr;
+    });
+
+    setSearchInfo(prev => ({ ...updateData }));
+  };
+  
   return (
     <div className="App">
       {
         isCompany ? <div><p>제휴사 {'>'} 올바로</p><button onClick={handleCompany}>제휴사 선택{'→'}</button></div> : null
       }
+      <br/>
       <table >
         <tbody >
+        <tr><td><br></br></td></tr>
           {
-            defaultInfo.tableTitles.map((tableTitle) => (
-              <tr key={tableTitle.name}>
-                <td>{tableTitle.name}</td>
+            defaultInfo2.map((defaultInfo2Data) => (
+              <tr key={defaultInfo2Data.name}>
+                <td>{defaultInfo2Data.name}</td>
                 {
                   // 검색메뉴 목록
-                  defaultInfo.tableDatas[tableTitle.menuType].menu.map((item: string, idx: number) => <td className={defaultInfo.tableDatas[tableTitle.menuType].isSelected[idx] ? "active" : ""} onClick={handleSearchCondition} data-idx={idx} data-menutype={tableTitle.menuType} key={item}>{item}</td>)
+                  defaultInfo2Data.menu.map((item: string, index: number) => <td style={defaultInfo2Data.isSelected[index] ? active : undefined} onClick={handleSearchCondition2} data-index={index} data-id={defaultInfo2Data.id} key={item}>{item}</td>)
                 }
                 {
                   // 조회기간 달력추가
-                  tableTitle.menuType === 'date' && (
+                  defaultInfo2Data.menuType === 'date' && (
                     <td>
                       <input data-name="stDate" onChange={handleCalendar} type='date' value={searchInfo.stDate} /> ~ <input data-name="endDate" onChange={handleCalendar} type='date' value={searchInfo.endDate} />
                     </td>
@@ -188,6 +182,8 @@ function App() {
           }
         </tbody>
       </table>
+      <br/>
+      <button onClick={handleSearch}>조회하기</button>
     </div>
   );
 }
