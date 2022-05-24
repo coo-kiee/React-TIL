@@ -9,16 +9,15 @@ const active = {
 
 function App() {
 
-  // 제휴사 여부 - useQuery로 로그인 유저정보로 대체 예정
+  // 제휴사 여부 - queryClient.getData로 대체 예정
   // const loginUser = queryClient.getData('user');
-  const [isCompany, setIsCompany] = useState(true);
+  const isCompany = true;
   
   // 제휴사 여부 확인
   useEffect(() => {
     
     // if (loginUser.isCompany)
-    if (isCompany) {
-      setIsCompany(prev => true);
+    if (!isCompany) {
 
       let updateArray = defaultInfo2;
       updateArray[2] = {
@@ -69,7 +68,7 @@ function App() {
     searchText: '',
   });
 
-  // 검색조건 선택2
+  // 검색조건 선택
   const handleSearchCondition2 = (e: MouseEvent) => {
 
     const index = parseInt(e.currentTarget.getAttribute('data-index') as string);
@@ -116,6 +115,14 @@ function App() {
     };
   };
 
+  // 검색
+  const handleInputText = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInfo(prev => ({
+        ...prev,
+        searchText: e.currentTarget.value,
+    }));
+};
+
   // 제휴사 선택
   const handleCompany = (e: MouseEvent<HTMLButtonElement>) => {
 
@@ -129,6 +136,8 @@ function App() {
     updateDate[2].isSelected[2] = true;
 
     setDefaultInfo2(prev => [...updateDate]);
+
+    handleSearch();
   };
 
   // 조회하기
@@ -157,10 +166,10 @@ function App() {
       {
         isCompany ? <div><p>제휴사 {'>'} 올바로</p><button onClick={handleCompany}>제휴사 선택{'→'}</button></div> : null
       }
-      <br/>
+      <p>검색 <input onChange={handleInputText} value={searchInfo.searchText} /></p>
       <table >
         <tbody >
-        <tr><td><br></br></td></tr>
+        <tr></tr>
           {
             defaultInfo2.map((defaultInfo2Data) => (
               <tr key={defaultInfo2Data.name}>
