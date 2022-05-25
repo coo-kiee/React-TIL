@@ -1,3 +1,5 @@
+import * as xlsx from 'xlsx';
+
 // 날짜 구하기
 const getDate = (idx: number) => {
 
@@ -39,7 +41,18 @@ const validateDate = (stDate: string, endDate: string) => {
     return fromDate < toDate && toDate < maxPeriod;
 };
 
+//
+const excelDownload = (table: HTMLElement) => {
+    const book = xlsx.utils.book_new();
+    const data = xlsx.utils.table_to_sheet(table);
+
+    xlsx.utils.book_append_sheet(book, data);
+
+    xlsx.writeFile(book, '이용내역.xlsx');
+};
+
 export const AppService = {
     getDate,
     validateDate,
+    excelDownload,
 };
