@@ -59,14 +59,22 @@ npm i -g typescript // React 등 다른 프레임워크는 설치 방법이 다�
 
 ## is와 as의 차이
 #### https://velog.io/@dltjdwls100/TIL-Typescript-is%EC%99%80-as-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90
+as: 타입 단언/표명
+is: 타입 가드
 
-[as: 타입 단언/표명(Type Assertion)](https://radlohead.gitbook.io/typescript-deep-dive/type-system/type-assertion#as-foo-vs.-less-than-foo-greater-than)
+### 타입 표명(Type Assertion)
+[타입 표명 && 이중 표명](https://radlohead.gitbook.io/typescript-deep-dive/type-system/type-assertion#as-foo-vs.-less-than-foo-greater-than)
+
 굳이 개발자가 타입 지정을 하지 않아도 TS 컴파일러가 추론이 가능한 타입 추론 기능
 
 2가지 타입 단언 방식
 1. <Animal> foo // 런타임, 컴파일 단계 모두 돌아간다.
 2. (foo as Animal) // 컴파일 단계에만 돌아간다.
 ※ 리액트로 개발할 시 꺽쇠(<>)를 사용 하는 것은 TSX 태그 문법이랑 헷갈리기 때문에 as를 추천한다.
+※ 이중 표명 
 
-is: 타입 가드
+### 타입 가드(Type Guard)
+[타입 가드](https://radlohead.gitbook.io/typescript-deep-dive/type-system/typeguard)
 typeof/instanceof 로 타입을 따져서 분기 처리하는 역할을 한다.
+
+TypeScript에서 if문으로 타입을 좁혀내면 else문 안의 변수타입은 if문으로 좁혀낸 타입이 될 수 없음을 인지합니다.

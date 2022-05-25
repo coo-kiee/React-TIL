@@ -23,7 +23,6 @@ const getDate = (idx: number) => {
         case 4:
             return year + '-' + ("0" + (month)).slice(-2) + "-01"
         default:
-            console.log('default');
             return "";
     };
 };
@@ -34,14 +33,10 @@ const validateDate = (stDate: string, endDate: string) => {
     const fromDate = new Date(stDate);
     const toDate = new Date(endDate);
     const maxPeriod = new Date(stDate);
+    // 시작일로부터 6개월
     maxPeriod.setMonth(maxPeriod.getMonth() + 6);
 
-    // 시작날짜 < 마지막날짜 && 6개월 이내 확인
-    if(fromDate < toDate && toDate < maxPeriod) {
-        return true;
-    };
-
-    return false;
+    return fromDate < toDate && toDate < maxPeriod;
 };
 
 export const AppService = {

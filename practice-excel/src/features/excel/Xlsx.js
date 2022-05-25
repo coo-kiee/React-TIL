@@ -33,6 +33,7 @@ const Xlsx = () => {
         return "." + x;
     }).join(",");
 
+    // 선택한 파일 데이터 엑셀 데이터 형식으로 변경
     const loadExcel = (e) => {
 
         const file = e.target.files[0];
@@ -80,30 +81,37 @@ const Xlsx = () => {
     // 배열 배열 데이터 저장
     const saveExcel1 = (file1) => {
         const excel1 = xlsx.utils.aoa_to_sheet(file1);
+
+        // excel1['!cols']는 엑셀 파일의 행 사이즈를 조절
         excel1["!cols"] = [
             {wpx: 130}, // A열
             {wpx: 100}, // B열
             {wpx: 80},  // C열
             {wch: 80},  // D열
         ];
+
+        // workbook에 워크시트 추가(workbook 객체, 행 사이즈, Sheet명)
         xlsx.utils.book_append_sheet(book, excel1, "excel1");
     }
     
     // 배열 객체 데이터 저장
     const saveExcel2 = (file2) => {
-        const excel2 = xlsx.utils.json_to_sheet(file2, {header:["A","B","C","D"], skipHeader:true});
+        const excel2 = xlsx.utils.json_to_sheet(file2, {header:["A","B","C","D"], skipHeader:false});
         excel2["!cols"] = [
             {wpx: 130}, // A열
             {wpx: 100}, // B열
             {wpx: 80},  // C열
             {wch: 80},  // D열
         ];
+        // workbook에 워크시트 추가(workbook 객체, 행 사이즈, Sheet명)
         xlsx.utils.book_append_sheet(book, excel2, "excel2");
     }
     
     const handleSaveExcel = () => {
         saveExcel1(file1);
         saveExcel2(file2);
+        
+        // 엑셀 파일 다운로드
         xlsx.writeFile(book, "saveXlsx.xlsx");
     }
 

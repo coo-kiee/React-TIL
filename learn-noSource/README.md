@@ -1,6 +1,6 @@
 # leran-noSource
-도움이 되는 정보가 많은 Git
-#### https://github.com/positiveko
+[프론트엔드 기본 공부 자료 모음](https://poiemaweb.com/)
+[도움이 되는 정보가 많은 Git](https://github.com/positiveko)
 
 ## [Asynchronous](https://github.com/Jowen0/React-TIL/tree/main/learn-noSource/Asynchronous)
 
