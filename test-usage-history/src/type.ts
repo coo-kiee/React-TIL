@@ -37,6 +37,45 @@ interface searchInfo {
     searchText: string,
 };
 
+interface searchInfo3 {
+    // [key: string]: string | number
+    dtStart: string,
+    dtEnd: string,
+    nType: number,
+    bAll: number,
+    nCompany: number,
+    nCno: number,
+    nPayType0: number,
+    nPayType1: number,
+    nPayType2: number,
+    nPayType3: number,
+    nPayType7: number,
+    sSearch: string,
+    nResult: number,
+};
+
+interface test {
+    // [key: string]: Array<string | boolean> | undefined,
+    data: Array<string>,
+    type?: Array<string>,
+    isSelected?: Array<boolean>,
+}
+
+interface menu {
+    // [key: string]: test,
+    date: {
+        data: Array<string>,
+        isSelected: Array<boolean>,
+    },
+    nType: {
+        data: Array<string>,
+    },
+    nPayType: {
+        data: Array<string>,
+        type: Array<string>,
+    },
+};
+
 export type {
     defaultInfo,
     defaultInfo2,
@@ -44,4 +83,6 @@ export type {
     tableDatas,
     tableData,
     searchInfo,
+    searchInfo3,
+    menu,
 };

@@ -7,25 +7,34 @@ const getDate = (idx: number) => {
     const year = now.getFullYear();
     const month = now.getMonth();
     const date = now.getDate();
+    let dtStart = '';
+    let dtEnd = year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + date).slice(-2);
 
     switch (idx) {
         // 오늘
         case 0:
-            return year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + date).slice(-2)
+            dtStart = year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + date).slice(-2);
+            return { dtStart, dtEnd };
         // 어제
         case 1:
-            return year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + (date - 1)).slice(-2)
+            dtStart = year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + (date - 1)).slice(-2);
+            return { dtStart, dtEnd };
         // 최근7일
         case 2:
-            return year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + (date - 7)).slice(-2)
+            dtStart = year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + (date - 7)).slice(-2);
+            return { dtStart, dtEnd };
         // 당월
         case 3:
-            return year + '-' + ("0" + (1 + month)).slice(-2) + "-01"
+            dtStart = year + '-' + ("0" + (1 + month)).slice(-2) + "-01";
+            return { dtStart, dtEnd };
         // 전월
         case 4:
-            return year + '-' + ("0" + (month)).slice(-2) + "-01"
+            dtStart = year + '-' + ("0" + (month)).slice(-2) + "-01";
+            const prevMonthDate = new Date(year, month, 0);
+            dtEnd = year + '-' + ("0" + (month)).slice(-2) + '-' + prevMonthDate.getDate();
+            return { dtStart, dtEnd };
         default:
-            return "";
+            return { dtStart, dtEnd };
     };
 };
 

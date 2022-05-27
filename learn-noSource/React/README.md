@@ -437,3 +437,31 @@ export default Dynamic;
 ## Error 모음
 Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
 [리액트로 프로젝트 빌드 후 - React-Uncaught SyntaxError: Unexpected token <](https://yoon-dumbo.tistory.com/entry/Error-%EC%A0%95%EB%A6%AC-React-Uncaught-SyntaxError-Unexpected-token)
+
+### CurrentTarget null 에러
+아래와 같이 코딩했을 때 currentTarget is null 오류 발생했다.
+```
+// 검색
+    const handleInputText = (e: ChangeEvent<HTMLInputElement>) => {
+
+        setSearchInfo(prev => ({
+            ...prev,
+            sSearch: e.currentTarget.value
+        }));
+    };
+```
+
+그 이유는 setState 안에 currentTarget은 리랜더링 되면서 함수가 재호출되지 않아 null이 되기 때문이다.
+
+아래와 같이 수정해주면 정상 작동한다.
+```
+// 검색
+    const handleInputText = (e: ChangeEvent<HTMLInputElement>) => {
+
+        const sSearch = e.currentTarget.value;
+        setSearchInfo(prev => ({
+            ...prev,
+            sSearch
+        }));
+    };
+```

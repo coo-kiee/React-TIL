@@ -58,8 +58,8 @@ function App2() {
 
   // 검색조건
   const [searchInfo, setSearchInfo] = useState<searchInfo>({
-    stDate: AppService.getDate(0),
-    endDate: AppService.getDate(0),
+    stDate: AppService.getDate(0).dtStart,
+    endDate: AppService.getDate(0).dtEnd,
     state: [],
     pay: [],
     searchText: '',
@@ -91,7 +91,7 @@ function App2() {
     }));
     
     if(menuType === 'date') {
-      setSearchInfo(prev => ({ ...prev, stDate: AppService.getDate(index), endDate: AppService.getDate(0) }));
+      setSearchInfo(prev => ({ ...prev, ...AppService.getDate(index)}));
     };
   };
 
