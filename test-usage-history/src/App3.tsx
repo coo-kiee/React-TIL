@@ -1,6 +1,7 @@
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { AppService } from './AppService';
 import { menu, searchInfo3 } from './type';
+import DatePicker from "react-datepicker";
 
 const example = {
     minWidth: '1080px',
@@ -127,10 +128,8 @@ function App3() {
 
     // 검색
     const handleInputText = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target);
-        console.log(e.currentTarget);
-        const sSearch = e.currentTarget.value;
 
+        const sSearch = e.currentTarget.value;
         setSearchInfo(prev => ({
             ...prev,
             sSearch
@@ -177,6 +176,7 @@ function App3() {
                     <tr>
                         <td>조회기간</td>
                         {menu.date.data.map((item, index) => <td key={item} style={menu.date.isSelected[index] ? active : undefined} onClick={handleSearchCondition} data-index={index} data-menutype="date" >{item}</td>)}
+                        <td><DatePicker onChange={(date) => handleCalendar} data-name="dtStart" dateFormat="yyyy-MM-dd" selected={new Date()} startDate={new Date()} endDate={new Date()}/></td><td>~</td><td><DatePicker onChange={(date) => handleCalendar} data-name="dtStart" selected={new Date()} startDate={new Date()} endDate={new Date()}/></td>
                         <td><input onChange={handleCalendar} data-name="dtStart" type="date" value={searchInfo.dtStart} /> ~ <input onChange={handleCalendar} data-name="dtEnd" type="date" value={searchInfo.dtEnd} /></td>
                     </tr>
                     <tr>
@@ -213,6 +213,32 @@ function App3() {
                 <tbody>
                     <tr className="odd">
                         {/* rowSpan에 따라 엑셀 다운로드시 차지하는 row 수가 달라짐, colSpan도 마찬가지 */}
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                    </tr>
+                    <tr className="odd">
+                        {/* rowSpan에 따라 엑셀 다운로드시 차지하는 row 수가 달라짐, colSpan도 마찬가지 */}
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
+                        <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
                         <td valign="top" rowSpan={1} className="dataTables_empty">검색된 결과값이 없습니다.</td>
                     </tr>
                 </tbody>
