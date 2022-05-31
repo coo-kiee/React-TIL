@@ -38,6 +38,41 @@ const getDate = (idx: number) => {
     };
 };
 
+// 날짜 구하기2
+const getDate2 = (idx: number) => {
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const date = now.getDate();
+    let dtStart = now;
+
+    switch (idx) {
+        // 오늘
+        case 0:
+            return { dtStart: now, dtEnd: now };
+        // 어제
+        case 1:
+            dtStart = new Date(year, month , date - 1);
+            return { dtStart, dtEnd: now };
+        // 최근7일
+        case 2:
+            dtStart = new Date(year, month , date - 1);
+            return { dtStart, dtEnd: now };
+        // 당월
+        case 3:
+            dtStart = new Date(year, month, 1);
+            return { dtStart, dtEnd: now };
+        // 전월
+        case 4:
+            dtStart = new Date(year, month - 1, 1);
+            const dtEnd = new Date(year, month, 0);
+            return { dtStart, dtEnd };
+        default:
+            return { };
+    };
+};
+
 // 날짜 유효성 검사
 const validateDate = (stDate: string, endDate: string) => {
     
@@ -62,6 +97,7 @@ const excelDownload = (table: HTMLElement) => {
 
 export const AppService = {
     getDate,
+    getDate2,
     validateDate,
     excelDownload,
 };

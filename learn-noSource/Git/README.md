@@ -47,3 +47,43 @@ rebase 방식 - Feature 브랜치의 커밋이 Main 브랜치가 가지고 있�
 커밋 히스토리를 공유하면 히스토리의 불일치가 발생할 수 있다는데 무슨 말인지 이해를 못하겠다...
 
 이 문제는 업무를 하면서 파악해서 내용을 수정하도록 해야겠다.
+
+```
+*** git Flow 정리 ***
+
+#### 변경내역 stash에 임시 저장
+develop_[name] : git stash
+develop_[name] : git stash list // stash 확인
+develop_[name] : git checkout develop
+
+#### remote 서버 develop 소스 가져오기.
+develop : git pull origin develop 
+develop : git checkout develop_[name]
+
+#### stash 적용 후 본인 브랜치 최신 버전으로 rebase.
+develop_[name] : git stash apply // stash 적용
+develop_[name] : git rebase develop  
+-- 본인이 변경한 부분이 없을 경우.(최신상태로 업데이트 됨.) 
+-- 본인이 변경한 부분이 있는 경우.(error 메세지.)
+develop_[name] : git add {수정파일}
+develop_[name] : git commit -m '{메세지}'
+
+-- 커밋 후 rebase 다시 실행.
+develop_[name] : git rebase develop   
+
+#### 충돌 발생 시 충돌 된 파일 수정 작업 후
+develop_[name] : git add {수정파일}
+develop_[name] : git commit -m '{메세지}'
+develop_[name] : git rebase --continue   
+
+#### 문제없을 시 내 브랜치 merge
+develop : git merge develop_[name]
+
+#### 최종 origin branch에 push [develop]
+develop : git pull origin develop  
+develop : git push origin develop
+develop : git checkout develop_[name]
+
+#### 임시저장한 stash 삭제
+develop_[name] : git stash drop
+```

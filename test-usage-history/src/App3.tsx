@@ -2,6 +2,8 @@ import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { AppService } from './AppService';
 import { menu, searchInfo3 } from './type';
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { ko } from "date-fns/esm/locale";
 
 const example = {
     minWidth: '1080px',
@@ -18,7 +20,7 @@ const active = {
 };
 
 function App3() {
-
+    
     // 선택메뉴
     const [menu, setMenu] = useState<menu>({
         date: {
@@ -89,6 +91,7 @@ function App3() {
                     },
                 }));
                 // 날짜 변경
+                AppService.getDate2(index);
                 setSearchInfo(prev => ({ ...prev, ...AppService.getDate(index) }));
                 break;
             case 'nType':
@@ -176,7 +179,7 @@ function App3() {
                     <tr>
                         <td>조회기간</td>
                         {menu.date.data.map((item, index) => <td key={item} style={menu.date.isSelected[index] ? active : undefined} onClick={handleSearchCondition} data-index={index} data-menutype="date" >{item}</td>)}
-                        <td><DatePicker onChange={(date) => handleCalendar} data-name="dtStart" dateFormat="yyyy-MM-dd" selected={new Date()} startDate={new Date()} endDate={new Date()}/></td><td>~</td><td><DatePicker onChange={(date) => handleCalendar} data-name="dtStart" selected={new Date()} startDate={new Date()} endDate={new Date()}/></td>
+                        <td><DatePicker onChange={(date) => handleCalendar} locale={ko} data-name="dtStart" dateFormat="yyyy-MM-dd" selected={new Date()} /></td><td>~</td><td><DatePicker onChange={(date) => handleCalendar} data-name="dtStart" selected={new Date()}/></td>
                         <td><input onChange={handleCalendar} data-name="dtStart" type="date" value={searchInfo.dtStart} /> ~ <input onChange={handleCalendar} data-name="dtEnd" type="date" value={searchInfo.dtEnd} /></td>
                     </tr>
                     <tr>
