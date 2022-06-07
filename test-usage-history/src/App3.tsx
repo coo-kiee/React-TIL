@@ -1,6 +1,6 @@
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { AppService } from './AppService';
-import { menu, searchInfo3 } from './type';
+import { menu, searchInfo3, searchInfo33 } from './type';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/esm/locale";
@@ -70,6 +70,23 @@ function App3() {
         nResult: 0,
     });
 
+    // 검색조건
+    const [searchInfo2, setSearchInfo2] = useState<searchInfo33>({
+        dtStart: AppService.getDate2(0).dtStart as Date,
+        dtEnd: AppService.getDate2(0).dtEnd  as Date,
+        nCompany: 0,
+        nCno: 0,
+        nType: 0,
+        bAll: 0,
+        nPayType0: 0,
+        nPayType1: 0,
+        nPayType2: 0,
+        nPayType3: 0,
+        nPayType7: 0,
+        sSearch: '',
+        nResult: 0,
+    });
+
     // 검색조건 선택
     const handleSearchCondition = (e: MouseEvent) => {
 
@@ -91,8 +108,8 @@ function App3() {
                     },
                 }));
                 // 날짜 변경
-                AppService.getDate2(index);
-                setSearchInfo(prev => ({ ...prev, ...AppService.getDate(index) }));
+                // setSearchInfo(prev => ({ ...prev, ...AppService.getDate(index) }));
+                setSearchInfo2(prev => ({ ...prev, ...AppService.getDate2(index) }));
                 break;
             case 'nType':
                 setSearchInfo(prev => ({ ...prev, nType: index }));
@@ -123,6 +140,21 @@ function App3() {
         }
         else if (type === 'dtEnd' && AppService.validateDate(searchInfo.dtStart, selectedValue)) {
             setSearchInfo(prev => ({ ...prev, dtEnd: selectedValue }));
+        }
+        else {
+            alert('날짜를 확인해주세요.');
+        };
+    };
+
+    // 달력날짜 변경2
+    const handleCalendar2 = (date:Date, type: string) => {
+        
+        // type 구분 && 날짜 유효성 검사
+        if (type === 'dtStart' && AppService.validateDate2(date, searchInfo2.dtEnd)) {
+            setSearchInfo2(prev => ({ ...prev, dtStart: date }));
+        }
+        else if (type === 'dtEnd' && AppService.validateDate2(searchInfo2.dtStart, date)) {
+            setSearchInfo2(prev => ({ ...prev, dtEnd: date }));
         }
         else {
             alert('날짜를 확인해주세요.');
@@ -179,7 +211,9 @@ function App3() {
                     <tr>
                         <td>조회기간</td>
                         {menu.date.data.map((item, index) => <td key={item} style={menu.date.isSelected[index] ? active : undefined} onClick={handleSearchCondition} data-index={index} data-menutype="date" >{item}</td>)}
-                        <td><DatePicker onChange={(date) => handleCalendar} locale={ko} data-name="dtStart" dateFormat="yyyy-MM-dd" selected={new Date()} /></td><td>~</td><td><DatePicker onChange={(date) => handleCalendar} data-name="dtStart" selected={new Date()}/></td>
+                        <td><DatePicker onChange={(date) => handleCalendar2(date as Date, 'dtStart')} locale={ko} dateFormat="yyyy-MM-dd" selected={searchInfo2.dtStart} /></td>
+                        <td>~</td>
+                        <td><DatePicker onChange={(date) => handleCalendar2(date as Date, 'dtEnd')}  dateFormat="yyyy-MM-dd" selected={searchInfo2.dtEnd}/></td>
                         <td><input onChange={handleCalendar} data-name="dtStart" type="date" value={searchInfo.dtStart} /> ~ <input onChange={handleCalendar} data-name="dtEnd" type="date" value={searchInfo.dtEnd} /></td>
                     </tr>
                     <tr>

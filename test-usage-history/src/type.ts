@@ -54,6 +54,23 @@ interface searchInfo3 {
     nResult: number,
 };
 
+interface searchInfo33 {
+    // [key: string]: string | number
+    dtStart: Date,
+    dtEnd: Date,
+    nType: number,
+    bAll: number,
+    nCompany: number,
+    nCno: number,
+    nPayType0: number,
+    nPayType1: number,
+    nPayType2: number,
+    nPayType3: number,
+    nPayType7: number,
+    sSearch: string,
+    nResult: number,
+};
+
 interface test {
     // [key: string]: Array<string | boolean> | undefined,
     data: Array<string>,
@@ -84,5 +101,6 @@ export type {
     tableData,
     searchInfo,
     searchInfo3,
+    searchInfo33,
     menu,
 };

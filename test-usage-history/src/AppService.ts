@@ -10,6 +10,7 @@ const getDate = (idx: number) => {
     let dtStart = '';
     let dtEnd = year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + date).slice(-2);
 
+    // 어제, 최근 7일의 경우 00일이 설정되는 오류 발생
     switch (idx) {
         // 오늘
         case 0:
@@ -57,7 +58,7 @@ const getDate2 = (idx: number) => {
             return { dtStart, dtEnd: now };
         // 최근7일
         case 2:
-            dtStart = new Date(year, month , date - 1);
+            dtStart = new Date(year, month , date - 7);
             return { dtStart, dtEnd: now };
         // 당월
         case 3:
@@ -85,6 +86,16 @@ const validateDate = (stDate: string, endDate: string) => {
     return fromDate < toDate && toDate < maxPeriod;
 };
 
+// 날짜 유효성 검사2
+const validateDate2 = (stDate: Date, endDate: Date) => {
+    
+    const maxPeriod = new Date(stDate);
+    // 시작일로부터 6개월
+    maxPeriod.setMonth(maxPeriod.getMonth() + 6);
+
+    return stDate < endDate && endDate < maxPeriod;
+};
+
 //
 const excelDownload = (table: HTMLElement) => {
     const book = xlsx.utils.book_new();
@@ -99,5 +110,6 @@ export const AppService = {
     getDate,
     getDate2,
     validateDate,
+    validateDate2,
     excelDownload,
 };
