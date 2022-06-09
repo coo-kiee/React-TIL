@@ -19,7 +19,7 @@ const getDate = (idx: number) => {
         // 어제
         case 1:
             dtStart = year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + (date - 1)).slice(-2);
-            return { dtStart, dtEnd };
+            return { dtStart, dtEnd:dtStart };
         // 최근7일
         case 2:
             dtStart = year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + (date - 7)).slice(-2);
@@ -55,7 +55,7 @@ const getDate2 = (idx: number) => {
         // 어제
         case 1:
             dtStart = new Date(year, month , date - 1);
-            return { dtStart, dtEnd: now };
+            return { dtStart, dtEnd: dtStart };
         // 최근7일
         case 2:
             dtStart = new Date(year, month , date - 7);
@@ -104,6 +104,17 @@ const excelDownload = (table: HTMLElement) => {
     xlsx.utils.book_append_sheet(book, data);
 
     xlsx.writeFile(book, '이용내역.xlsx');
+};
+
+// 날짜 변환
+const convertDate = (prevDate: Date) => {
+
+    const convertDate = new Date(prevDate);
+    const year = convertDate.getFullYear();
+    const month = convertDate.getMonth();
+    const date = convertDate.getDate();
+
+    return year + '-' + ("0" + (1 + month)).slice(-2) + '-' + ("0" + date).slice(-2);
 };
 
 export const AppService = {
