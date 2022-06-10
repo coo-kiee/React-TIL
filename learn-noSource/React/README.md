@@ -434,6 +434,124 @@ export default Dynamic;
 리액트 컴포넌트 내부에서 DOMContentLoaded 이벤트를 작성하면 작동되지 않는다.
 이유 : DOMContentLoaded 이벤트는 전체 HTML 페이지가 로드되는 경우에만 발생한다. 반면에 ComponentDidMount는 React 컴포넌트가 렌더링 될 때 호출된다. 따라서, ComponentDidMount 이벤트가 호출될 때 DOM은 이미 'DOMContentLoaded' 상태이다.
 
+## Fragment
+#### https://velog.io/@dolarge/React-Fragment%EB%9E%80
+
+Fragment는 React v16에 추가된 기능으로 컴포넌트가 하나의 태그로 묶어서 return 해야하는 규칙 때문에 추가된 기능이다.
+하나의 태그로 묶기 위해서 의미없는 div로 묶는 경우가 많은데 그런 경우 div 엘리먼트가 추가되서 원하는 HTML 구조가 이루어지지 않는다.
+```
+ex. Columns 컴포넌트에서 td retrun
+<table>
+    <tr>
+        <Columns />
+    </tr>
+</table>
+
+const Columns = () => {
+
+    return (
+        <div>
+            <td>Hello</td>
+            <td>World</td>
+         </div>
+    );
+};
+
+Want:
+<table>
+    <tr>
+        <td>Hello</td>
+        <td>World</td>
+    </tr>
+</table>
+
+Result: // div Tag가 tr 내부에 추가된다.
+<table>
+    <tr>
+        <div>
+            <td>Hello</td>
+            <td>World</td>
+         </div>
+    </tr>
+</table>
+```
+
+하지만 Fragment 감싸서 반환하면 dom tree에서 자동으로 삭제되기 때문에 원하는 구조를 이룰 수가 있다.
+```
+const Columns = () => {
+
+    return (
+        <React.Fragment>
+            <td>Hello</td>
+            <td>World</td>
+         </React.Fragment>
+    );
+};
+
+Want:
+<table>
+    <tr>
+        <td>Hello</td>
+        <td>World</td>
+    </tr>
+</table>
+
+Result: // 원하는 테이블 구조 완성
+<table>
+    <tr>
+        <td>Hello</td>
+        <td>World</td>
+    </tr>
+</table>
+```
+
+Fragment와 같은 기능으로 short syntax가 있다.
+```
+const Columns = () => {
+
+    return (
+        // short syntax
+        <>
+            <td>Hello</td>
+            <td>World</td>
+         </>
+    );
+};
+
+Want:
+<table>
+    <tr>
+        <td>Hello</td>
+        <td>World</td>
+    </tr>
+</table>
+
+Result: // 원하는 테이블 구조 완성
+<table>
+    <tr>
+        <td>Hello</td>
+        <td>World</td>
+    </tr>
+</table>
+```
+
+## React 이벤트 위임
+#### https://velog.io/@dev-mish-mash/React%EC%97%90%EC%84%9C-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%9C%84%EC%9E%84%EC%9D%84-%ED%86%B5%ED%95%9C-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EB%A6%AC%EC%8A%A4%EB%84%88-%EC%B5%9C%EC%A0%81%ED%99%94
+
+리액트에서는 자체 이벤트 시스템을 갖고 있어서, 이미 document 최상단에서 이벤트를 잡아 처리한다.
+때문에 이벤트 위임을 통한 성능상의 이득은 없다.
+각 돔 노드에 빈 이벤트 리스너가 달려있지만 iOS와 사파리 브라우저를 호환하기 위한 대비책이고, 실제로는 동작하지 않는 함수가 바인딩 되어 있다.
+
+v16 -> v17로 업그레이드하면서 이벤트 처리방식이 변경되었다.
+[React Deep Dive— React Event System (1)](https://blog.mathpresso.com/react-deep-dive-react-event-system-1-759523d90341)
+v17에서는 이벤트 핸들러를 Document가 아닌 리액트 트리가 랜더되는 root DOM container(=root div)에 부착한다고 한다.
+이는, 이벤트 핸들러를 어디에 붙이든 root div에 이벤트가 모인다는 말
+
+root div를 파고들어가보면 리액트는 브라우저 호환성(크로스 브라우징)을 위해 Synthetic Event 객체를 이용해서 NativeEvent들을 감싸고 형태를 이루고 있다.
+그래서 실제로 이벤트가 발생할 때 이벤트 핸들러(onClick, onChange 등)에 전달하는 값은 Synthetic Event 객체이다.
+
+자세한 동작원리는 위 블로그에 설명 참조(아직 이해 못해서 정리하지 못했다) - To do
+
 ## Error 모음
 Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
 [리액트로 프로젝트 빌드 후 - React-Uncaught SyntaxError: Unexpected token <](https://yoon-dumbo.tistory.com/entry/Error-%EC%A0%95%EB%A6%AC-React-Uncaught-SyntaxError-Unexpected-token)
