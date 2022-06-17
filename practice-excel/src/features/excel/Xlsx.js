@@ -96,7 +96,7 @@ const Xlsx = () => {
     
     // 배열 객체 데이터 저장
     const saveExcel2 = (file2) => {
-        const excel2 = xlsx.utils.json_to_sheet(file2, {header:["A","B","C","D"], skipHeader:false});
+        const excel2 = xlsx.utils.json_to_sheet(file2);
         excel2["!cols"] = [
             {wpx: 130}, // A열
             {wpx: 100}, // B열
@@ -108,12 +108,62 @@ const Xlsx = () => {
     }
     
     const handleSaveExcel = () => {
-        saveExcel1(file1);
-        saveExcel2(file2);
-        
-        // 엑셀 파일 다운로드
-        xlsx.writeFile(book, "saveXlsx.xlsx");
+
+        // saveExcel1(file1);
+        // saveExcel2(file2);
+        // // 엑셀 파일 다운로드
+        // xlsx.writeFile(book, "saveXlsx.xlsx");
+
+        // Utils 테스트
+        const option = [
+            { wpx: 130 }, // A열
+            { wpx: 100 }, // B열
+            { wpx: 80 },  // C열
+            { wch: 80 },  // D열
+        ];
+        excelDownload([file1, file2], ['array', 'object'], [option, option], "saveXlsx.xlsx");
+
     }
+
+    // Utils
+    const excelDownload = (downloadDatas, types, options, title) => {
+        const book = xlsx.utils.book_new();
+
+        // 엑셀 워크시트 추가함수
+        const addSheet = (index) => {
+            let exelData; // any
+            const type = index > -1 ? types[index].toLowerCase() : types;
+            const downloadData = index > -1 ? downloadDatas[index] : downloadDatas;
+            console.log(downloadData);
+            switch (type) {
+                case 'table':
+                    exelData = xlsx.utils.table_to_sheet(downloadData);
+                    break;
+                case 'array': // const file1 = [ ["이름", "나이"], ["장민우", "31"], ]
+                    exelData = xlsx.utils.aoa_to_sheet(downloadData);
+                    break;
+                case 'object': // const file2 = [ { A: "학과", B: "직급", C: "이름", D: "나이" }, { A: "흉부외과", B: "의사", C: "장민우", D: "31" }, ]
+                    exelData = xlsx.utils.json_to_sheet(downloadData);
+                    break;
+                default:
+                    return;
+            };
+            exelData["!cols"] = index > -1 ? options[index] : options;
+            const sheetName = index > -1 ? title + index : title;
+            xlsx.utils.book_append_sheet(book, exelData, sheetName);
+        };
+
+        if (downloadDatas.length > 1) {
+            downloadDatas.forEach((downloadData, index) => {
+                addSheet(index);
+            });
+        }
+        else {
+            addSheet();
+        };
+        // title: '이용내역.xlsx'
+        xlsx.writeFile(book, title);
+    };
 
     return ( 
         <div>
