@@ -1,4 +1,6 @@
 import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 // 3자리마다 콤마 금액 표시
 const numberComma = (charge: string | number) => {
@@ -15,6 +17,20 @@ export const Utils = {
     numberComma,
 };
 
+// 날짜 변환(String to Date)
+const convertStringToDateFormat = (str:string, exp:string) => {
+    let timestamp = Date.parse(str)
+    if (isNaN(timestamp) === true) return str
+
+    const strDate = new Date(str)
+    // const localDate = new Date(strDate.getTime() + strDate.getTimezoneOffset() * 60 * 1000)
+
+    const year = strDate.getFullYear()
+    const month = strDate.getMonth() + 1 < 10 ? '0' + (strDate.getMonth() + 1) : '' + (strDate.getMonth() + 1)
+    const date = strDate.getDate() < 10 ? '0' + strDate.getDate() : '' + strDate.getDate()
+    return year + exp + month + exp + date
+};
+
 // 엑셀 저장
 interface excelDownload {
     (
@@ -24,7 +40,7 @@ interface excelDownload {
         title: string
     ): void
 };
-const excelDownload: excelDownload = (downloadDatas, types, options, title) => {
+const excelDownload: excelDownload = (downloadDatas, types, options, fileName) => {
     const book = xlsx.utils.book_new();
 
     // 엑셀 워크시트 추가함수
@@ -46,7 +62,7 @@ const excelDownload: excelDownload = (downloadDatas, types, options, title) => {
                 return;
         };
         (exelData as any)["!cols"] = index ? options[index] : options;
-        const sheetName = index ? title + index : title;
+        const sheetName = index ? fileName + index : fileName;
         xlsx.utils.book_append_sheet(book, exelData, sheetName);
     };
 
@@ -59,8 +75,8 @@ const excelDownload: excelDownload = (downloadDatas, types, options, title) => {
     else {
         addSheet();
     };
-    // title: '이용내역.xlsx'
-    xlsx.writeFile(book, title);
+    // fileName: '이용내역'
+    xlsx.writeFile(book, fileName);
 };
 
 // 날짜 구하기
@@ -106,3 +122,59 @@ const validateDate = (stDate: Date, endDate: Date, period: number) => {
 
     return validation;
 };
+
+// pdf 다운로드
+// https://devlink.tistory.com/242
+// https://www.wake-up-neo.com/ko/javascript/html2canvas%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%EC%88%A8%EA%B2%A8%EC%A7%84-div%EC%9D%98-%EC%8A%A4%ED%81%AC%EB%A6%B0-%EC%83%B7/1044322649/
+interface pdfInfo {
+    orientation?: "portrait" | "p" | "l" | "landscape" | undefined, // 'landscape - 가로, 'portrait - 세로
+    pdfUnit?: "mm" | "pt" | "px" | "in" | "cm" | "ex" | "em" | "pc" | undefined,
+    pdfFormat?: string | number[] | undefined,
+    imgFormat?: 'png',
+};
+interface imgInfo {
+    imgWidth?: number, // imgWidth - 이미지 가로 길이(mm) A4 기준
+    pageHeight?: number, // pageHeight - 출력 페이지 세로 길이 A4 기준
+    margin?: number,
+    imgDataFormat?: 'image/png',
+};
+const downloadPdf = async (element: HTMLElement, fileName: string, pdfInfo?: pdfInfo, imgInfo?: imgInfo, option?: { [key: string]: any }) => {
+    let { orientation = 'portrait', pdfUnit = 'mm', pdfFormat = 'a4', imgFormat = 'jpeg' } = pdfInfo ? pdfInfo : {};
+    let { imgWidth = 210, pageHeight = 270, margin = 10, imgDataFormat = 'image/jpeg' } = imgInfo ? imgInfo : {};
+
+    const canvas = await html2canvas(element, ...option as any)
+    const imgData = canvas.toDataURL(imgDataFormat);
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let totalHeight = imgHeight; // 전체 이미지 크기
+        let position = margin;
+        
+        let pdf = new jsPDF(orientation as pdfInfo['orientation'], pdfUnit as pdfInfo['pdfUnit'], pdfFormat as pdfInfo['pdfFormat']); 
+        pdf.addImage(imgData, imgFormat, margin, position, imgWidth, imgHeight);
+    
+        totalHeight -= pageHeight; // 남은 이미지 크기 계산
+    
+        // 여러 페이지일 경우
+        while(totalHeight >= 20) {
+            position = totalHeight - imgHeight;
+            pdf.addPage()
+            pdf.addImage(imgData, 'jpeg', margin, position, imgWidth, imgHeight);
+            totalHeight -= pageHeight;
+        };
+        pdf.save(fileName);
+};
+
+/* ReactQuery PDF 다운로드 예제
+const pdfRef = useRef(null);
+    useEffect(() => {
+        if (isPDF && isLoading) {
+            const element = pdfRef?.current;
+            const pdfDownload = async (element: HTMLElement) => {
+                await orderListService.downloadPdf(element, '이용내역', { orientation: 'landscape' }, { imgWidth: 270, pageHeight: 210 });
+                handlePDF(false);
+            };
+            return () => {
+                element && pdfDownload(element);
+            };
+        };
+    }, [isLoading]);
+*/
