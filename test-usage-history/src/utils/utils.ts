@@ -135,21 +135,20 @@ interface pdfInfo {
 interface imgInfo {
     imgWidth?: number, // imgWidth - 이미지 가로 길이(mm) A4 기준
     pageHeight?: number, // pageHeight - 출력 페이지 세로 길이 A4 기준
-    margin?: number,
-    imgDataFormat?: 'image/png',
+    xPadding?: number,
 };
 const downloadPdf = async (element: HTMLElement, fileName: string, pdfInfo?: pdfInfo, imgInfo?: imgInfo, option?: { [key: string]: any }) => {
     let { orientation = 'portrait', pdfUnit = 'mm', pdfFormat = 'a4', imgFormat = 'jpeg' } = pdfInfo ? pdfInfo : {};
-    let { imgWidth = 210, pageHeight = 270, margin = 10, imgDataFormat = 'image/jpeg' } = imgInfo ? imgInfo : {};
+    let { imgWidth = 210, pageHeight = 270, xPadding = 10 } = imgInfo ? imgInfo : {};
 
     const canvas = await html2canvas(element, ...option as any)
-    const imgData = canvas.toDataURL(imgDataFormat);
+    const imgData = canvas.toDataURL('image/' + imgFormat);
         const imgHeight = canvas.height * imgWidth / canvas.width;
         let totalHeight = imgHeight; // 전체 이미지 크기
-        let position = margin;
+        let position = xPadding;
         
         let pdf = new jsPDF(orientation as pdfInfo['orientation'], pdfUnit as pdfInfo['pdfUnit'], pdfFormat as pdfInfo['pdfFormat']); 
-        pdf.addImage(imgData, imgFormat, margin, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, imgFormat, xPadding, position, imgWidth, imgHeight);
     
         totalHeight -= pageHeight; // 남은 이미지 크기 계산
     
@@ -157,24 +156,98 @@ const downloadPdf = async (element: HTMLElement, fileName: string, pdfInfo?: pdf
         while(totalHeight >= 20) {
             position = totalHeight - imgHeight;
             pdf.addPage()
-            pdf.addImage(imgData, 'jpeg', margin, position, imgWidth, imgHeight);
+            pdf.addImage(imgData, 'jpeg', xPadding, position, imgWidth, imgHeight);
             totalHeight -= pageHeight;
         };
         pdf.save(fileName);
 };
 
+// PDF 다운로드 여러개까지 이미지 안겹치고 되는거!! 진짜!!
+// https://github.com/parallax/jsPDF/issues/1893
+    /* Parameter
+    interface pdfInfo {
+        orientation?: "portrait" | "p" | "l" | "landscape" | undefined, // 'landscape - 가로, 'portrait - 세로
+        pdfUnit?: "mm" | "pt" | "px" | "in" | "cm" | "ex" | "em" | "pc" | undefined,
+        pdfFormat?: string | number[] | undefined,
+        imgFormat?: 'png',
+    };
+    interface imgInfo {
+        imgWidth?: number, // imgWidth - 이미지 가로 길이(mm) A4 기준 297
+        pageHeight?: number, // pageHeight - 출력 페이지 세로 길이 A4 기준 210
+        margin?: number,
+    };
+    */
+    const downloadPdf2 = async (element: HTMLElement, fileName: string, pdfInfo?: pdfInfo, imgInfo?: imgInfo, option?: { [key: string]: any }) => {
+        let { orientation = 'portrait', pdfUnit = 'mm', pdfFormat = 'a4', imgFormat = 'jpeg' } = pdfInfo ? pdfInfo : {};
+        let { imgWidth = 210, pageHeight = 297, xPadding = 10 } = imgInfo ? imgInfo : {};
+
+        const canvas = await html2canvas(element, option);
+        let innerPageWidth = imgWidth - xPadding * 2;
+        let innerPageHeight = pageHeight - xPadding * 2;
+
+        // Calculate the number of pages.
+        let totalHeight = canvas.height; // 전체 크기
+        let imgHeight = Math.floor(canvas.width * (pageHeight / imgWidth));  // 한 페이지에 담을 canvas 높이
+        let nPages = Math.ceil(totalHeight / imgHeight); 
+
+        // Define pageHeight separately so it can be trimmed on the final page.
+        pageHeight = innerPageHeight;
+
+        // Create a one-page canvas to split up the full image.
+        let pageCanvas = document.createElement('canvas');
+        let pageCtx = pageCanvas.getContext('2d') as CanvasRenderingContext2D;
+        pageCanvas.width = canvas.width;
+        pageCanvas.height = imgHeight;
+
+        // Initialize the PDF.
+        let pdf = new jsPDF(orientation as pdfInfo['orientation'], pdfUnit as pdfInfo['pdfUnit'], pdfFormat as pdfInfo['pdfFormat']); 
+
+        for (let page = 0; page < nPages; page++) {
+            // Trim the final page to reduce file size.
+            if (page === nPages - 1 && totalHeight % imgHeight !== 0) {
+                pageCanvas.height = totalHeight % imgHeight;
+                pageHeight = (pageCanvas.height * innerPageWidth) / pageCanvas.width;
+            }
+
+            // Display the page.
+            let w = pageCanvas.width;
+            let h = pageCanvas.height;
+            pageCtx.fillStyle = 'white';
+            pageCtx.fillRect(0, 0, w, h);
+            pageCtx.drawImage(canvas, 0, page * imgHeight, w, h, 0, 0, w, h);
+
+            // Add the page to the PDF.
+            if (page > 0) pdf.addPage();
+            const imgData = pageCanvas.toDataURL('image/' + imgFormat);
+            pdf.addImage(imgData, imgFormat, xPadding, xPadding, innerPageWidth, pageHeight);
+        }
+        pdf.save(fileName);
+    };
+
 /* ReactQuery PDF 다운로드 예제
 const pdfRef = useRef(null);
+    
+    // 1 영수증 다운로드
     useEffect(() => {
-        if (isPDF && isLoading) {
+        if (!isLoading) {
             const element = pdfRef?.current;
             const pdfDownload = async (element: HTMLElement) => {
-                await orderListService.downloadPdf(element, '이용내역', { orientation: 'landscape' }, { imgWidth: 270, pageHeight: 210 });
+                await Utils.downloadPdf(element, 'test', {}, { imgWidth: 135, pageHeight: 270 });
+                handleRecipt(false);
+            };
+            element && pdfDownload(element);
+        };
+    }, [isLoading]);
+
+    // 2 테이블 다운로드
+    useEffect(() => {
+        if (isPDF && !isLoading) { //isPDF - 페이지네이션용 / PDF용 구분
+            const element = pdfRef?.current;
+            const pdfDownload = async (element: HTMLElement) => {
+                await Utils.downloadPdf(element, '이용내역', { orientation: 'landscape' }, { imgWidth: 297, pageHeight: 210 });
                 handlePDF(false);
             };
-            return () => {
-                element && pdfDownload(element);
-            };
+            element && pdfDownload(element);
         };
     }, [isLoading]);
 */
