@@ -36,34 +36,48 @@ interface excelDownload {
     (
         downloadDatas: HTMLElement | object | Array<any> | Array<HTMLElement | object | Array<any>>,
         types: string | Array<string>,
-        options: xlsx.ColInfo[] | Array<xlsx.ColInfo[]>,
-        title: string
+        options?:optios | Array<optios>,
+        fileName?: string,
+        sheetName?: string
     ): void
 };
-const excelDownload: excelDownload = (downloadDatas, types, options, fileName) => {
+
+interface optios {
+    sheet?: xlsx.Table2SheetOpts | xlsx.JSON2SheetOpts | xlsx.AOA2SheetOpts | Array<xlsx.Table2SheetOpts | xlsx.JSON2SheetOpts | xlsx.AOA2SheetOpts>,
+    colspan?: xlsx.ColInfo[] | Array<xlsx.ColInfo[]>,
+    merges?: number | string | xlsx.CellAddress | xlsx.Range[],
+};
+
+const excelDownload: excelDownload = (downloadDatas, types, options, fileName, sheetName = '') => {
     const book = xlsx.utils.book_new();
 
     // 엑셀 워크시트 추가함수
     const addSheet = (index?: number) => {
-        let exelData; // any
+        let workSheet; // any
+        let [downloadData, sheetOption, colspan, workSheetName] = [downloadDatas, (options as optios).sheet, (options as optios).colspan, ''];
+            
+            // 워크시트 여러개인 경우
+        if (index) [downloadData, sheetOption, colspan, workSheetName] = [(downloadDatas  as Array<object | any[] | HTMLElement>)[index], (options as Array<optios>)[index].sheet, (options as Array<optios>)[index].colspan, sheetName? sheetName + (index + 1).toString() : (index + 1).toString()];
         const type = index ? types[index].toLowerCase() : types;
-        const downloadData = index ? (downloadDatas as Array<object | any[] | HTMLElement>)[index] : downloadDatas;
         switch (type) {
             case 'table':
-                exelData = xlsx.utils.table_to_sheet(downloadData as HTMLTableElement);
+                workSheet = xlsx.utils.table_to_sheet(downloadData as HTMLTableElement, sheetOption as xlsx.Table2SheetOpts);
                 break;
             case 'array': // const file1 = [ ["이름", "나이"], ["장민우", "31"], ]
-                exelData = xlsx.utils.aoa_to_sheet(downloadData as Array<Array<any>>);
+                workSheet = xlsx.utils.aoa_to_sheet(downloadData as Array<Array<any>>, sheetOption as xlsx.AOA2SheetOpts);
                 break;
             case 'object': // const file2 = [ { A: "학과", B: "직급", C: "이름", D: "나이" }, { A: "흉부외과", B: "의사", C: "장민우", D: "31" }, ]
-                exelData = xlsx.utils.json_to_sheet(downloadData as Array<object>);
+                workSheet = xlsx.utils.json_to_sheet(downloadData as Array<object>, sheetOption as xlsx.JSON2SheetOpts);
                 break;
             default:
                 return;
         };
-        (exelData as any)["!cols"] = index ? options[index] : options;
-        const sheetName = index ? fileName + index : fileName;
-        xlsx.utils.book_append_sheet(book, exelData, sheetName);
+        // 병합할 셀 영역 설정
+        // if (options?.merges) workSheet['!merges'] = options.merges as xlsx.Range[]; 타입 수정 필요
+        workSheet['!cols'] = colspan as xlsx.ColInfo[];
+        // (workSheet as any)["!cols"] = index ? options[index] : options;
+        sheetName = index as number > -1 ? sheetName + (index as number + 1) : sheetName
+        xlsx.utils.book_append_sheet(book, workSheet, sheetName);
     };
 
     // 워크시트 추가
@@ -78,6 +92,88 @@ const excelDownload: excelDownload = (downloadDatas, types, options, fileName) =
     // fileName: '이용내역'
     xlsx.writeFile(book, fileName);
 };
+
+// 엑셀 저장 예시
+// const hadleExcel = () => {
+//     // 엑셀 헤더값, 키값
+//     const exlcelInfo = {
+//         headers: [
+//             '순번', '주문일', '의뢰지', '부서 담당자', '출발지',
+//             '출발동', '도착지', '도착동', '차량', '결제',
+//             '기본요금', '할증요금', '대납요금', '합계요금', '완료일',
+//             '운행기사', '주문타입', '비고', '진행상태'
+//         ],
+//         keys: [
+//             'index', 'dt1', 'sODepart', 'sOManager', 'sSName',
+//             'sStartDong', 'sDName', 'sDestDong', 'sCarType', 'sPayType',
+//             'nChargeBasic', 'nChargeAdd', 'nChargeTrans', 'nChargeSum', 'dtFinal',
+//             'sRName', 'sRcpType', 'sEtcMsg', 'sState'
+//         ],
+//     };
+
+//     // 파일 이름
+//     const dtStart = Utils.converDateFormat(searchInfo.dtStart, '-');
+//     const dtEnd = Utils.converDateFormat(searchInfo.dtEnd, '-');
+//     let userName = document.getElementsByClassName('member_nav')[0].getElementsByTagName('strong')[0].textContent as string;
+//     if (userName.indexOf('(') > 0) userName = userName.slice(0, userName.indexOf('('));
+//     const fileName = `${dtStart}_${dtEnd}_${userName ? userName : ''} 고객님`;
+
+//     // 제목 Row
+//     const titleRows = [[{ v: `${fileName} ${auth.info.account_owner} 이용내역서`, t: 's', s: { font: { bold: true, sz: 15 }, alignment: { vertical: "center", horizontal: "center" } } }], [''], ['']]; // 2 Rows 병합 예정
+
+//     // 카테고리 Row
+//     const headerRow: Array<any> = exlcelInfo.headers.map(header => {
+//         // v: value, t: type, s: style
+//         const headerData = { v: header, t: 's', s: { fill: { fgColor: { rgb: '808080' } }, alignment: { vertical: "center", horizontal: "center" } }, }
+//         return headerData;
+//     });
+
+//     // 데이터 Row
+//     const dataRows: Array<Array<string>> = (data as Array<object>).map((item: item, index) => {
+//         const dataRow = exlcelInfo.keys.map(key => {
+//             if (key === 'index') return (index + 1).toString();
+//             else if (['dt1', 'dtFinal'].find(element => element === key)) return convertOrderDate(item[key]).join(' ');
+//             else if (['nChargeBasic', 'nChargeAdd', 'nChargeTrans', 'nChargeSum'].find(element => element === key)) return Utils.numberComma(item[key]).toString();
+//             else return item[key];
+//         });
+//         return dataRow;
+//     });
+
+//     // sheet, 셀 크기, 셀 병합 옵션
+//     const options = {
+//         sheet: { origin: "A3" }, // 해당 셀부터 표시
+//         colspan: [
+//             { wpx: 40 }, { wpx: 120 }, { wpx: 120 }, { wpx: 80 }, { wpx: 150 }, // A열, B열, C열, D열, E열
+//             { wpx: 100 }, { wpx: 150 }, {wpx: 100}, { wpx: 80 }, { wpx: 50 }, // F열, G열, H열, I열, J열
+//             { wpx: 60 }, { wpx: 80 }, { wpx: 60 }, {wpx: 80}, { wpx: 100 }, // K열, L열, M열, N열, O열
+//             {wpx: 100}, {wpx: 60}, { wpx: 600 }, { wpx: 80 }, // P열, Q열, R열, S열
+//         ],
+//         merges: [{ s: { r: 2, c: 0 }, e: { r: 3, c: exlcelInfo.headers.length - 1 } }], // s = start, r = row, c=col, e= end
+//     };
+//     const totalRow = [...titleRows, headerRow, ...dataRows];
+//     // 엑셀 파일 생성
+//     dataRows.length > 0 && Utils.excelDownload(totalRow, 'array', options, fileName);
+// };
+
+// https://www.npmjs.com/package/xlsx-js-style
+
+// let row1 = ["a", "b", "c"];
+// let row2 = [1, 2, 3];
+// let row3 = [
+//     { v: 'Courier: 24', t: 's', s: { font: { name: 'Courier', sz: 24 }, fill: { fgColor: { rgb: 'E9E9E9' } } } },
+//     { v: 'bold & color', t: 's', s: { font: { bold: true, color: { rgb: 'FF0000' } } } },
+//     { v: 'fill: color', t: 's', s: { fill: { fgColor: { rgb: 'E9E9E9' } } } },
+//     { v: 'line\nbreak', t: 's', s: { alignment: { wrapText: true } } },
+// ]
+
+// 셀 병합
+// const merge = [
+//     { s: { r: 1, c: 0 }, e: { r: 2, c: 0 } },{ s: { r: 3, c: 0 }, e: { r: 4, c: 0 } },
+//   ];
+//   ws["!merges"] = merge;
+//   Use this code for merge A2:A3 ({ s: { r: 1, c: 0 }, e: { r: 2, c: 0 } }) and A4:A5 ({ s: { r: 3, c: 0 }, e: { r: 4, c: 0 } })
+  
+//   Here s = start, r = row, c=col, e= end
 
 // 날짜 구하기
 const getDate = (idx: number) => {
@@ -174,52 +270,50 @@ const downloadPdf = async (element: HTMLElement, fileName: string, pdfInfo?: pdf
     interface imgInfo {
         imgWidth?: number, // imgWidth - 이미지 가로 길이(mm) A4 기준 297
         pageHeight?: number, // pageHeight - 출력 페이지 세로 길이 A4 기준 210
-        margin?: number,
+        xPadding?: number,
     };
     */
     const downloadPdf2 = async (element: HTMLElement, fileName: string, pdfInfo?: pdfInfo, imgInfo?: imgInfo, option?: { [key: string]: any }) => {
         let { orientation = 'portrait', pdfUnit = 'mm', pdfFormat = 'a4', imgFormat = 'jpeg' } = pdfInfo ? pdfInfo : {};
         let { imgWidth = 210, pageHeight = 297, xPadding = 10 } = imgInfo ? imgInfo : {};
 
-        const canvas = await html2canvas(element, option);
-        let innerPageWidth = imgWidth - xPadding * 2;
-        let innerPageHeight = pageHeight - xPadding * 2;
+        const canvas = await html2canvas(element, option = { useCORS: true });
 
         // Calculate the number of pages.
-        let totalHeight = canvas.height; // 전체 크기
-        let imgHeight = Math.floor(canvas.width * (pageHeight / imgWidth));  // 한 페이지에 담을 canvas 높이
-        let nPages = Math.ceil(totalHeight / imgHeight); 
+        let totalHeight = canvas.height;   // 전체 이미지 높이
+        let imgHeight = Math.floor(canvas.width * (pageHeight / imgWidth));   // 한 페이지에 담을 이미지 높이
+        let nPages = Math.ceil(totalHeight / imgHeight);   // 페이지 개수 계산
 
-        // Define pageHeight separately so it can be trimmed on the final page.
-        pageHeight = innerPageHeight;
-
-        // Create a one-page canvas to split up the full image.
+        // Create a one-page canvas to split up the full image.   // 한 페이지용 캔버스 생성
         let pageCanvas = document.createElement('canvas');
         let pageCtx = pageCanvas.getContext('2d') as CanvasRenderingContext2D;
-        pageCanvas.width = canvas.width;
-        pageCanvas.height = imgHeight;
+        pageCanvas.width = canvas.width;   // 기존 이미지 너비
+        pageCanvas.height = imgHeight;   // 계산한 한 페이지 높이
 
-        // Initialize the PDF.
-        let pdf = new jsPDF(orientation as pdfInfo['orientation'], pdfUnit as pdfInfo['pdfUnit'], pdfFormat as pdfInfo['pdfFormat']); 
+        // Initialize the PDF.   // 한 페이지용 캔버스 생성
+        let pdf = new jsPDF(orientation as pdfInfo['orientation'], pdfUnit as pdfInfo['pdfUnit'], pdfFormat as pdfInfo['pdfFormat']);
+        let yPadding = xPadding;
+        let innerPageWidth = imgWidth - xPadding * 2;
+        let innerPageHeight = pageHeight - yPadding * 2;
 
         for (let page = 0; page < nPages; page++) {
-            // Trim the final page to reduce file size.
+            // Trim the final page to reduce file size.   // 여러 페이지의 경우 마지막 페이지 캔버스 크기 수정
             if (page === nPages - 1 && totalHeight % imgHeight !== 0) {
                 pageCanvas.height = totalHeight % imgHeight;
-                pageHeight = (pageCanvas.height * innerPageWidth) / pageCanvas.width;
+                innerPageHeight = (pageCanvas.height * innerPageWidth) / pageCanvas.width;
             }
 
-            // Display the page.
+            // Display the page.   // 한 페이지 크기만 페이지용 캔버스에 그리기
             let w = pageCanvas.width;
             let h = pageCanvas.height;
             pageCtx.fillStyle = 'white';
             pageCtx.fillRect(0, 0, w, h);
             pageCtx.drawImage(canvas, 0, page * imgHeight, w, h, 0, 0, w, h);
 
-            // Add the page to the PDF.
+            // Add the page to the PDF.   // PDF에 페이지 추가
             if (page > 0) pdf.addPage();
             const imgData = pageCanvas.toDataURL('image/' + imgFormat);
-            pdf.addImage(imgData, imgFormat, xPadding, xPadding, innerPageWidth, pageHeight);
+            pdf.addImage(imgData, imgFormat, xPadding, xPadding, innerPageWidth, innerPageHeight);
         }
         pdf.save(fileName);
     };
@@ -251,3 +345,33 @@ const pdfRef = useRef(null);
         };
     }, [isLoading]);
 */
+
+// 전화번호 형식 변경 (ex. 01012345678 => 010-1234-5678)
+const convertTelFormat = (x: any, exp:string) => {
+    // 전화번호 체크 정규식
+    const telRegExp = /^\d{8,12}$/;
+    if(!telRegExp.test(x.toString())) return;
+
+    // 휴대전화 && 인터넷전화 등 체크 정규식
+    const phoneRegExp = /^0([1-9])([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/
+    const str = x.toString();
+
+    switch (str.length) {
+        case 8: {
+            return [str.slice(0, 4), exp, str.slice(4, 8)].join('');
+        }
+        case 9: {
+            return [str.slice(0, 2), exp, str.slice(2, 5), exp, str.slice(5)].join('');
+        }
+        case 10: {
+            if(phoneRegExp.test(x.toString)) return [str.slice(0, 3), exp, str.slice(3, 6), exp, str.slice(6)].join('');
+            return [str.slice(0, 2), exp, str.slice(2, 6), exp, str.slice(6)].join('');
+        }
+        case 11: {
+            return [str.slice(0, 3), exp, str.slice(3, 7), exp, str.slice(7)].join('');
+        }
+        case 12: {
+            return [str.slice(0, 4), exp, str.slice(4, 8), exp, str.slice(8)].join('');
+        }
+    };
+};
