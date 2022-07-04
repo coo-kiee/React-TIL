@@ -90,7 +90,7 @@ const excelDownload: excelDownload = (downloadDatas, types, options, fileName, s
         addSheet();
     };
     // fileName: '이용내역'
-    xlsx.writeFile(book, fileName);
+    // xlsx.writeFile(book, fileName);
 };
 
 // 엑셀 저장 예시
@@ -119,38 +119,86 @@ const excelDownload: excelDownload = (downloadDatas, types, options, fileName, s
 //     const fileName = `${dtStart}_${dtEnd}_${userName ? userName : ''} 고객님`;
 
 //     // 제목 Row
-//     const titleRows = [[{ v: `${fileName} ${auth.info.account_owner} 이용내역서`, t: 's', s: { font: { bold: true, sz: 15 }, alignment: { vertical: "center", horizontal: "center" } } }], [''], ['']]; // 2 Rows 병합 예정
+//     const titleRows = [
+//         [
+//             {
+//                 // v: value, t: type, s: style
+//                 v: `${fileName} ${auth.info.account_owner} 이용내역서`,
+//                 t: 's',
+//                 s: {
+//                     font: { bold: true, sz: 15 },
+//                     alignment: { vertical: "center", horizontal: "center" }
+//                 },
+//             },
+//         ], // 제목 Row
+//         [''], // 병합할 Row
+//         [''], // 데이터 Row와 줄 간격을 위한 Row
+//     ];
 
-//     // 카테고리 Row
+//     // 헤더 카테고리 Row
 //     const headerRow: Array<any> = exlcelInfo.headers.map(header => {
 //         // v: value, t: type, s: style
-//         const headerData = { v: header, t: 's', s: { fill: { fgColor: { rgb: '808080' } }, alignment: { vertical: "center", horizontal: "center" } }, }
+//         const headerData = {
+//             v: header,
+//             t: 's',
+//             s: {
+//                 fill: { fgColor: { rgb: '808080' } },
+//                 alignment: { vertical: "center", horizontal: "center" }
+//             },
+//         };
 //         return headerData;
 //     });
 
 //     // 데이터 Row
-//     const dataRows: Array<Array<string>> = (data as Array<object>).map((item: item, index) => {
+//     const dataRows: Array<Array<string>> = [];
+//     (data as Array<object>).forEach((item: item, index, array) => {
+//         let totalCharge = 0;
 //         const dataRow = exlcelInfo.keys.map(key => {
-//             if (key === 'index') return (index + 1).toString();
-//             else if (['dt1', 'dtFinal'].find(element => element === key)) return convertOrderDate(item[key]).join(' ');
-//             else if (['nChargeBasic', 'nChargeAdd', 'nChargeTrans', 'nChargeSum'].find(element => element === key)) return Utils.numberComma(item[key]).toString();
+//             if ('index' === key) return (index + 1).toString();
+//             else if ('dt1' === key || 'dtFinal' === key) return convertOrderDate(item[key]).join(' ');
+//             else if ('nChargeBasic' === key || 'nChargeAdd' === key || 'nChargeTrans' === key) return Utils.numberComma(item[key]).toString();
+//             else if ('nChargeSum' === key) {
+//                 totalCharge += item[key] ;
+//                 return Utils.numberComma(item[key]).toString();
+//             }
 //             else return item[key];
 //         });
-//         return dataRow;
+
+//         // 통계 Row 추가
+//         if (data?.length === index + 1) {
+//             const statisticsRow = [
+//                 dataRow,
+//                 [''], // 데이터 Row와 줄 간격을 위한 Row
+//                 [''], // 데이터 Row와 줄 간격을 위한 Row
+//                 [
+//                     '', '', '', '', '', '', '', '', '', '', '총 건수', `${index + 1}`, '운임 합계', `${totalCharge}`,
+//                 ], // 통계 Row
+//             ];
+//             return dataRows.push(...statisticsRow);
+//         };
+//         dataRows.push(dataRow);
 //     });
 
-//     // sheet, 셀 크기, 셀 병합 옵션
+//     const totalRow = [...titleRows, headerRow, ...dataRows];
+
+//     // sheet options, 셀 크기, 셀 병합 옵션
 //     const options = {
 //         sheet: { origin: "A3" }, // 해당 셀부터 표시
 //         colspan: [
 //             { wpx: 40 }, { wpx: 120 }, { wpx: 120 }, { wpx: 80 }, { wpx: 150 }, // A열, B열, C열, D열, E열
-//             { wpx: 100 }, { wpx: 150 }, {wpx: 100}, { wpx: 80 }, { wpx: 50 }, // F열, G열, H열, I열, J열
-//             { wpx: 60 }, { wpx: 80 }, { wpx: 60 }, {wpx: 80}, { wpx: 100 }, // K열, L열, M열, N열, O열
-//             {wpx: 100}, {wpx: 60}, { wpx: 600 }, { wpx: 80 }, // P열, Q열, R열, S열
+//             { wpx: 100 }, { wpx: 150 }, { wpx: 100 }, { wpx: 100 }, { wpx: 50 }, // F열, G열, H열, I열, J열
+//             { wpx: 60 }, { wpx: 60 }, { wpx: 60 }, { wpx: 60 }, { wpx: 120 }, // K열, L열, M열, N열, O열
+//             { wpx: 80 }, { wpx: 60 }, { wpx: 400 }, { wpx: 80 }, // P열, Q열, R열, S열
 //         ],
-//         merges: [{ s: { r: 2, c: 0 }, e: { r: 3, c: exlcelInfo.headers.length - 1 } }], // s = start, r = row, c=col, e= end
+//         merges: [
+//             {
+//                 // s = start, r = row, c=col, e= end
+//                 s: { r: 2, c: 0 },
+//                 e: { r: 3, c: exlcelInfo.headers.length - 1 },
+//             }, // 병합 조건 여러개 생성 가능
+//         ], 
 //     };
-//     const totalRow = [...titleRows, headerRow, ...dataRows];
+    
 //     // 엑셀 파일 생성
 //     dataRows.length > 0 && Utils.excelDownload(totalRow, 'array', options, fileName);
 // };
