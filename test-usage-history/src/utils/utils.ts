@@ -48,16 +48,17 @@ interface optios {
     merges?: number | string | xlsx.CellAddress | xlsx.Range[],
 };
 
-const excelDownload: excelDownload = (downloadDatas, types, options, fileName, sheetName = '') => {
+const excelDownload: excelDownload = (downloadDatas, types, options, fileName = 'excelDownload', sheetName = '') => {
+    // 엑셀 워크북 생성
     const book = xlsx.utils.book_new();
 
     // 엑셀 워크시트 추가함수
     const addSheet = (index?: number) => {
         let workSheet; // any
-        let [downloadData, sheetOption, colspan, workSheetName] = [downloadDatas, (options as optios).sheet, (options as optios).colspan, ''];
+        let [downloadData, sheetOption, colspan, workSheetName] = [downloadDatas, (options as optios).sheet, (options as optios).colspan, sheetName];
             
-            // 워크시트 여러개인 경우
-        if (index) [downloadData, sheetOption, colspan, workSheetName] = [(downloadDatas  as Array<object | any[] | HTMLElement>)[index], (options as Array<optios>)[index].sheet, (options as Array<optios>)[index].colspan, sheetName? sheetName + (index + 1).toString() : (index + 1).toString()];
+        // 워크시트 여러개인 경우
+        if (index) [downloadData, sheetOption, colspan, workSheetName] = [(downloadDatas  as Array<object | any[] | HTMLElement>)[index], (options as Array<optios>)[index].sheet, (options as Array<optios>)[index].colspan, sheetName + (index + 1).toString()];
         const type = index ? types[index].toLowerCase() : types;
         switch (type) {
             case 'table':
@@ -73,11 +74,9 @@ const excelDownload: excelDownload = (downloadDatas, types, options, fileName, s
                 return;
         };
         // 병합할 셀 영역 설정
-        // if (options?.merges) workSheet['!merges'] = options.merges as xlsx.Range[]; 타입 수정 필요
+        if ((options as any)?.merges) workSheet['!merges'] = (options as any).merges as xlsx.Range[]; // 타입 수정 필요
         workSheet['!cols'] = colspan as xlsx.ColInfo[];
-        // (workSheet as any)["!cols"] = index ? options[index] : options;
-        sheetName = index as number > -1 ? sheetName + (index as number + 1) : sheetName
-        xlsx.utils.book_append_sheet(book, workSheet, sheetName);
+        xlsx.utils.book_append_sheet(book, workSheet, workSheetName);
     };
 
     // 워크시트 추가
@@ -89,8 +88,7 @@ const excelDownload: excelDownload = (downloadDatas, types, options, fileName, s
     else {
         addSheet();
     };
-    // fileName: '이용내역'
-    // xlsx.writeFile(book, fileName);
+    xlsx.writeFile(book, fileName);
 };
 
 // 엑셀 저장 예시
@@ -257,13 +255,22 @@ const getDate = (idx: number) => {
     };
 };
 
-// 날짜 유효성 검사
-const validateDate = (stDate: Date, endDate: Date, period: number) => {
-    const maxPeriod = new Date(stDate);
-    // 최대 조회기간
-    maxPeriod.setMonth(maxPeriod.getMonth() + period);
-    const validation = stDate < endDate && endDate < maxPeriod;
+// 최대 검색기간 체크 && 날짜 유효성 검사
+const validateDate = (stDate: string | Date, endDate: string | Date, periodMonth: number) => {
+        
+    if(typeof stDate === 'string' && typeof endDate === 'string') {
+        stDate = new Date(stDate);
+        endDate = new Date(endDate);
+    };
 
+    if (stDate > endDate || endDate > new Date()) {
+        return false;
+    };
+
+    const maxPeriod = new Date(stDate);
+    // 최대 검색기간
+    maxPeriod.setMonth(maxPeriod.getMonth() + periodMonth);
+    const validation: boolean = endDate < maxPeriod;
     return validation;
 };
 
@@ -275,24 +282,26 @@ interface pdfInfo {
     pdfUnit?: "mm" | "pt" | "px" | "in" | "cm" | "ex" | "em" | "pc" | undefined,
     pdfFormat?: string | number[] | undefined,
     imgFormat?: 'png',
+    xPadding?: number,
+    yPadding?: number,
 };
 interface imgInfo {
-    imgWidth?: number, // imgWidth - 이미지 가로 길이(mm) A4 기준
+    pageWidth?: number, // pageWidth - 출력 페이지 가로 길이(mm) A4 기준
     pageHeight?: number, // pageHeight - 출력 페이지 세로 길이 A4 기준
-    xPadding?: number,
+    canvasHeight?: number, // canvasHeight - 출력 페이지 이미지 세로 길이
 };
 const downloadPdf = async (element: HTMLElement, fileName: string, pdfInfo?: pdfInfo, imgInfo?: imgInfo, option?: { [key: string]: any }) => {
-    let { orientation = 'portrait', pdfUnit = 'mm', pdfFormat = 'a4', imgFormat = 'jpeg' } = pdfInfo ? pdfInfo : {};
-    let { imgWidth = 210, pageHeight = 270, xPadding = 10 } = imgInfo ? imgInfo : {};
+    let { orientation = 'portrait', pdfUnit = 'mm', pdfFormat = 'a4', imgFormat = 'jpeg', xPadding = 10 } = pdfInfo ? pdfInfo : {};
+    let { pageWidth = 210, pageHeight = 270 } = imgInfo ? imgInfo : {};
 
     const canvas = await html2canvas(element, ...option as any)
     const imgData = canvas.toDataURL('image/' + imgFormat);
-        const imgHeight = canvas.height * imgWidth / canvas.width;
+        const imgHeight = canvas.height * pageWidth / canvas.width;
         let totalHeight = imgHeight; // 전체 이미지 크기
         let position = xPadding;
         
         let pdf = new jsPDF(orientation as pdfInfo['orientation'], pdfUnit as pdfInfo['pdfUnit'], pdfFormat as pdfInfo['pdfFormat']); 
-        pdf.addImage(imgData, imgFormat, xPadding, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, imgFormat, xPadding, position, pageWidth, imgHeight);
     
         totalHeight -= pageHeight; // 남은 이미지 크기 계산
     
@@ -300,7 +309,7 @@ const downloadPdf = async (element: HTMLElement, fileName: string, pdfInfo?: pdf
         while(totalHeight >= 20) {
             position = totalHeight - imgHeight;
             pdf.addPage()
-            pdf.addImage(imgData, 'jpeg', xPadding, position, imgWidth, imgHeight);
+            pdf.addImage(imgData, 'jpeg', xPadding, position, pageWidth, imgHeight);
             totalHeight -= pageHeight;
         };
         pdf.save(fileName);
@@ -316,20 +325,20 @@ const downloadPdf = async (element: HTMLElement, fileName: string, pdfInfo?: pdf
         imgFormat?: 'png',
     };
     interface imgInfo {
-        imgWidth?: number, // imgWidth - 이미지 가로 길이(mm) A4 기준 297
+        pageWidth?: number, // pageWidth - 이미지 가로 길이(mm) A4 기준 297
         pageHeight?: number, // pageHeight - 출력 페이지 세로 길이 A4 기준 210
         xPadding?: number,
     };
     */
     const downloadPdf2 = async (element: HTMLElement, fileName: string, pdfInfo?: pdfInfo, imgInfo?: imgInfo, option?: { [key: string]: any }) => {
-        let { orientation = 'portrait', pdfUnit = 'mm', pdfFormat = 'a4', imgFormat = 'jpeg' } = pdfInfo ? pdfInfo : {};
-        let { imgWidth = 210, pageHeight = 297, xPadding = 10 } = imgInfo ? imgInfo : {};
+        let { orientation = 'portrait', pdfUnit = 'mm', pdfFormat = 'a4', imgFormat = 'jpeg', xPadding = 10  } = pdfInfo ? pdfInfo : {};
+        let { pageWidth = 210, pageHeight = 297} = imgInfo ? imgInfo : {};
 
         const canvas = await html2canvas(element, option = { useCORS: true });
 
         // Calculate the number of pages.
         let totalHeight = canvas.height;   // 전체 이미지 높이
-        let imgHeight = Math.floor(canvas.width * (pageHeight / imgWidth));   // 한 페이지에 담을 이미지 높이
+        let imgHeight = Math.floor(canvas.width * (pageHeight / pageWidth));   // 한 페이지에 담을 이미지 높이
         let nPages = Math.ceil(totalHeight / imgHeight);   // 페이지 개수 계산
 
         // Create a one-page canvas to split up the full image.   // 한 페이지용 캔버스 생성
@@ -341,7 +350,7 @@ const downloadPdf = async (element: HTMLElement, fileName: string, pdfInfo?: pdf
         // Initialize the PDF.   // 한 페이지용 캔버스 생성
         let pdf = new jsPDF(orientation as pdfInfo['orientation'], pdfUnit as pdfInfo['pdfUnit'], pdfFormat as pdfInfo['pdfFormat']);
         let yPadding = xPadding;
-        let innerPageWidth = imgWidth - xPadding * 2;
+        let innerPageWidth = pageWidth - xPadding * 2;
         let innerPageHeight = pageHeight - yPadding * 2;
 
         for (let page = 0; page < nPages; page++) {
@@ -366,33 +375,125 @@ const downloadPdf = async (element: HTMLElement, fileName: string, pdfInfo?: pdf
         pdf.save(fileName);
     };
 
-/* ReactQuery PDF 다운로드 예제
-const pdfRef = useRef(null);
-    
-    // 1 영수증 다운로드
-    useEffect(() => {
-        if (!isLoading) {
-            const element = pdfRef?.current;
-            const pdfDownload = async (element: HTMLElement) => {
-                await Utils.downloadPdf(element, 'test', {}, { imgWidth: 135, pageHeight: 270 });
-                handleRecipt(false);
-            };
-            element && pdfDownload(element);
-        };
-    }, [isLoading]);
+    // PDF 다운로드
+    /* Parameter
+    interface pdfInfo {
+        orientation?: "portrait" | "p" | "l" | "landscape" | undefined, // 'landscape - 가로, 'portrait - 세로
+        pdfUnit?: "mm" | "pt" | "px" | "in" | "cm" | "ex" | "em" | "pc" | undefined,
+        pdfFormat?: string | number[] | undefined,
+        imgFormat?: 'png',
+        xPadding?: number,
+        yPadding?: number,
+    };
+    interface imgInfo {
+        pageWidth?: number, // 이미지 가로 길이(mm) A4 기준 210
+        pageHeight?: number, // 출력 페이지 세로 길이 A4 기준 297
+        canvasHeight?: number, // 한 페이지에 담을 캔버스 이미지 높이
+    };
+    */
+    interface downloadPdf21Props {
+        element: HTMLElement | HTMLElement[], 
+        fileName?: string, 
+        pdfInfo?: pdfInfo, 
+        imgInfo?: imgInfo, 
+        canvasOption?: { [key: string]: any },
+    }
+    const downloadPdf21 = async ({element, fileName = 'donwloadPDF', pdfInfo, imgInfo, canvasOption = { useCORS: true }}:downloadPdf21Props) => {
+    // const downloadPdf21 = async (element: HTMLElement | HTMLElement[], fileName: string, pdfInfo?: pdfInfo, imgInfo?: imgInfo, canvasOption: { [key: string]: any } = { useCORS: true }) => {
+        let { orientation = 'portrait', pdfUnit = 'mm', pdfFormat = 'a4', imgFormat = 'jpeg', xPadding = 10, yPadding = 10 } = { ...pdfInfo };
+        let { pageWidth = 210, canvasHeight = 0, pageHeight = 297 } = { ...imgInfo };
 
-    // 2 테이블 다운로드
-    useEffect(() => {
-        if (isPDF && !isLoading) { //isPDF - 페이지네이션용 / PDF용 구분
-            const element = pdfRef?.current;
-            const pdfDownload = async (element: HTMLElement) => {
-                await Utils.downloadPdf(element, '이용내역', { orientation: 'landscape' }, { imgWidth: 297, pageHeight: 210 });
-                handlePDF(false);
+        let pdf = new jsPDF(orientation, pdfUnit, pdfFormat, true);
+
+        let innerPageWidth = pageWidth - xPadding * 2;
+        let innerPageHeight = pageHeight - yPadding * 2;
+
+        if (Array.isArray(element)) { // Element n개로 n페이지 생성
+            const standardHeight = element.reduce((acc, cur, index, arr) => { // 마지막 페이지 캔버스 높이 계산에 필요한 평균 캔버스 높이 계산
+                if (index < arr.length - 1) return acc += cur.scrollHeight; // 마지막 페이지 제외하고 높이 더하기
+                else return acc / (arr.length - 1); // 마지막 페이지 제외하고 평균 캔버스 높이 계싼
+            }, 0);
+
+            const makePDF = async (element: HTMLElement[], makePage = false, isFinal = true) => {
+                const canvasArr = await Promise.all(element.map(el => html2canvas(el, canvasOption))); // 캔버스 배열 생성
+                
+                canvasArr.forEach((canvas, page) => { // pdf 페이지 추가
+                    const imgData = canvas.toDataURL('image/' + imgFormat);
+                    
+                    if (page > 0 || makePage) pdf.addPage();
+                    if (isFinal && page === canvasArr.length - 1) innerPageHeight = Math.floor(innerPageHeight * (canvasArr[canvasArr.length - 1].height / standardHeight)); // 마지막 페이지의 높이 계산 
+                    pdf.addImage(imgData, imgFormat, xPadding, yPadding, innerPageWidth, innerPageHeight, undefined, 'FAST');
+                });
             };
-            element && pdfDownload(element);
+
+            const chunkCnt = 5;
+            if (element.length > chunkCnt) { // Element 크기가 chunkCnt 보다 클 때
+                const elementChunks = splitToChunks(element, Math.ceil(element.length / chunkCnt)); // Element 균등 분할
+                let index = 0;
+                // console.log('start', new Date());
+                for(const chunk of elementChunks) {
+                    const makePage = index > 0;
+                    const isFinal = index === elementChunks.length - 1; // 마지막 chunk 여부
+                    await makePDF(chunk, makePage, isFinal);
+                    index++;
+                };
+                // console.log('finish', new Date());
+            } else {
+                await makePDF(element);
+            };
+            
+        }
+        else { // Element 1개로 n페이지 생성
+
+            const canvas = await html2canvas(element, canvasOption); // useCORS: true -> element 내부에 있는 img Tag 같이 저장
+    
+            let totalHeight = canvas.height; // 전체 이미지 높이
+            canvasHeight = !!canvasHeight ? canvasHeight : Math.floor(canvas.width * (pageHeight / pageWidth));  // 한 페이지에 담을 캔버스 이미지 높이
+            let nPages = Math.ceil(totalHeight / canvasHeight); // 페이지 개수 계산
+            
+            // 한 페이지용 캔버스 생성
+            const pageCanvas = document.createElement('canvas');
+            const pageCtx = pageCanvas.getContext('2d') as CanvasRenderingContext2D;
+            pageCanvas.width = canvas.width; // 기존 이미지 너비
+            pageCanvas.height = canvasHeight; // 계산한 한 페이지 높이
+            
+            for (let page = 0; page < nPages; page++) {
+                // 여러 페이지의 경우 마지막 페이지 캔버스 크기 수정
+                if (page === nPages - 1 && totalHeight % canvasHeight !== 0) {
+                    pageCanvas.height = totalHeight % canvasHeight;
+                    innerPageHeight = innerPageWidth * (pageCanvas.height / pageCanvas.width);
+                };
+                
+                // 한 페이지 크기만 페이지용 캔버스에 그리기
+                const w = pageCanvas.width;
+                const h = pageCanvas.height;
+                pageCtx.fillStyle = 'white';
+                pageCtx.fillRect(0, 0, w, h);
+                pageCtx.drawImage(canvas, 0, page * canvasHeight, w, h, 0, 0, w, h);
+                const imgData = pageCanvas.toDataURL('image/' + imgFormat);
+    
+                // PDF에 페이지 추가
+                if (page > 0) pdf.addPage();
+                pdf.addImage(imgData, imgFormat, xPadding, yPadding, innerPageWidth, innerPageHeight);
+            }
         };
-    }, [isLoading]);
+
+        pdf.save(fileName);
+    };
+
+/* ReactQuery PDF 다운로드 예제
+
+// useRef에 Element 배열 추가
+pageArr.map((page, index) => (
+    <div key={page} className="tbl_scroll_wrap" ref={(el) => pdfRef.current[index] = el} style={{ width: '1659px' }}>
+    </div>
+))
+
+const element = pdfRef.current.slice(0, pageArr.length); // 랜더링 후 ref 최신화
+element && pdfDownload(element);
+
 */
+
 
 // 전화번호 형식 변경 (ex. 01012345678 => 010-1234-5678)
 const convertTelFormat = (x: any, exp:string) => {
@@ -423,3 +524,13 @@ const convertTelFormat = (x: any, exp:string) => {
         }
     };
 };
+
+// 배열 균등분할
+const splitToChunks = (array: any[], parts: number) => {
+    let result = [];
+    for (let i = parts; i > 0; i--) {
+        result.push(array.splice(0, Math.ceil(array.length / i)));
+    };
+    // console.log(result);
+    return result;
+}

@@ -15,13 +15,13 @@ const NoLibraryPrint = () => {
             'NoLibraryPrint',
             'width=1350, height=800'
         );
+        windowObj.document.body.append(printContent);
         windowObj.document.writeln(printContent.innerHTML);
         windowObj.document.title = "No-Library-Print";
         windowObj.document.close();
         windowObj.focus();
         windowObj.print();
         windowObj.close();
-
     }
 
     // 방법 2 - 기존 body display none > 새로운 node 추가 > 출력 > 추가한 node 제거 > body display block

@@ -79,6 +79,9 @@ typeof/instanceof 로 타입을 따져서 분기 처리하는 역할을 한다.
 
 TypeScript에서 if문으로 타입을 좁혀내면 else문 안의 변수타입은 if문으로 좁혀낸 타입이 될 수 없음을 인지합니다.
 
+## TypseScript useRef 참고
+#### https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/forward_and_create_ref/
+
 ## Error 모음
 
 ### No index signature with a parameter of type 'string' was found on type

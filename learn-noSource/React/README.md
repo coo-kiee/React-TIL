@@ -552,6 +552,37 @@ root div를 파고들어가보면 리액트는 브라우저 호환성(크로스 
 
 자세한 동작원리는 위 블로그에 설명 참조(아직 이해 못해서 정리하지 못했다) - To do
 
+## React Suspense
+#### https://maxkim-j.github.io/posts/suspense-argibraic-effect
+
+16.6부터 추가된 Suspense의 목적은 Code Splitting 이었습니다.
+
+Code Splitting이란 React.Lazy를 이용해 컴포넌트를 지연로딩 시키는 비동기적인 렌더링 방식입니다.
+
+Suspense에는 fallback prop을 받아 지연되는 동안 대체 컴포넌트를 렌더링하고, 로딩이 완료되면 컴포넌트를 대체합니다.
+
+## useRef - Multiple
+#### https://stackoverflow.com/questions/54633690/how-can-i-use-multiple-refs-for-an-array-of-elements-with-hooks
+```
+const App = props => {
+    const itemsRef = useRef([]);
+    // you can access the elements with itemsRef.current[n]
+
+    useEffect(() => {
+       itemsRef.current = itemsRef.current.slice(0, props.items.length);
+    }, [props.items]);
+
+    return props.items.map((item, i) => (
+      <div 
+          key={i} 
+          ref={el => itemsRef.current[i] = el} 
+          style={{ width: `${(i + 1) * 100}px` }}>
+        ...
+      </div>
+    ));
+}
+```
+
 ## Error 모음
 Unexpected Unicode - 퍼블리싱 작업파일 옮겨서 사용할 때 발생하는 에러 > 새로 js 파일 만들어서 내용 옮겨주면 사라짐
 [리액트로 프로젝트 빌드 후 - React-Uncaught SyntaxError: Unexpected token <](https://yoon-dumbo.tistory.com/entry/Error-%EC%A0%95%EB%A6%AC-React-Uncaught-SyntaxError-Unexpected-token)

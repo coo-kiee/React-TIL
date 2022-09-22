@@ -2,6 +2,12 @@
 ## CSS 기본 개념 / 기초
 #### https://dinfree.com/lecture/frontend/122_css_3.html
 
+## flex 정렬
+#### https://oursmalljoy.com/css-%EA%B8%80%EC%9E%90-%EC%88%98%EC%A7%81-%EA%B0%80%EC%9A%B4%EB%8D%B0-%EC%A0%95%EB%A0%AC-text-vertical-align/
+
+## 리액트 텍스트 줄바꿈 (feat. \n 안먹을때)
+#### https://facerain.club/react-newline/
+
 ## 하이브리드앱 / 네이티브앱 / 웹앱 / 모바일웹 / 반응형 웹 / 적응형 웹 차이점
 #### https://hasudoki.tistory.com/entry/%EC%95%B1-%EA%B0%9C%EB%B0%9C-%EB%B0%A9%EC%8B%9D-%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C-%EC%95%B1-%EB%AA%A8%EB%B0%94%EC%9D%BC-%EC%9B%B9-%EB%AA%A8%EB%B0%94%EC%9D%BC-%EC%9B%B9%EC%95%B1-%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C-%EC%95%B1-%EC%9B%B9%EC%95%B1%EC%9D%B4%EB%9E%80
 
