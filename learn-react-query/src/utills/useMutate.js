@@ -36,7 +36,7 @@ export const useMutate = ( (url, querykey, mutateValue, extraKey, initialFn) => 
             console.log(context?.previousValue); // onMutate의 return 값이 context에 들어간다.
             console.log('Error: ',error,' variables: ', variables);
             if (context?.previousValue) {
-                queryClient.setQueriesData(querykey, previousValue);
+                queryClient.setQueriesData(querykey, context?.previousValue);
             };
         },
 
