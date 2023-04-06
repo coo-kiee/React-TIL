@@ -19,7 +19,7 @@
     "composite": true,
     "declaration": true,
     "declarationMap": true,
-    "baseUrl": "./src"
+    "baseUrl": "src"
   },
   "include": ["src", "./aaa"],
   "references": []
