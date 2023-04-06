@@ -35,8 +35,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", "npm:18.0.33"],\
             ["@types/react-dom", "npm:18.0.11"],\
             ["@types/testing-library__jest-dom", "npm:5.14.5"],\
+            ["customize-cra", "npm:1.0.0"],\
             ["eslint-config-react-app", "virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:7.0.1"],\
             ["react", "npm:18.2.0"],\
+            ["react-app-rewired", "virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:2.2.1"],\
             ["react-dom", "virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:18.2.0"],\
             ["react-scripts", "virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:5.0.1"],\
             ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=ad5954"],\
@@ -7379,6 +7381,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["customize-cra", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/customize-cra-npm-1.0.0-61884f8944-b38c48a607.zip/node_modules/customize-cra/",\
+          "packageDependencies": [\
+            ["customize-cra", "npm:1.0.0"],\
+            ["lodash.flow", "npm:3.5.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["damerau-levenshtein", [\
         ["npm:1.0.8", {\
           "packageLocation": "./.yarn/cache/damerau-levenshtein-npm-1.0.8-bda7311c69-d240b77575.zip/node_modules/damerau-levenshtein/",\
@@ -11781,6 +11793,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["lodash.flow", [\
+        ["npm:3.5.0", {\
+          "packageLocation": "./.yarn/cache/lodash.flow-npm-3.5.0-55cc614c59-a9a62ad344.zip/node_modules/lodash.flow/",\
+          "packageDependencies": [\
+            ["lodash.flow", "npm:3.5.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["lodash.memoize", [\
         ["npm:4.1.2", {\
           "packageLocation": "./.yarn/cache/lodash.memoize-npm-4.1.2-0e6250041f-9ff3942fee.zip/node_modules/lodash.memoize/",\
@@ -14885,10 +14906,30 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["react-app-rewired", [\
+        ["npm:2.2.1", {\
+          "packageLocation": "./.yarn/cache/react-app-rewired-npm-2.2.1-372a52d640-0b330c2b46.zip/node_modules/react-app-rewired/",\
+          "packageDependencies": [\
+            ["react-app-rewired", "npm:2.2.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:2.2.1", {\
+          "packageLocation": "./.yarn/__virtual__/react-app-rewired-virtual-348fb52601/0/cache/react-app-rewired-npm-2.2.1-372a52d640-0b330c2b46.zip/node_modules/react-app-rewired/",\
+          "packageDependencies": [\
+            ["react-app-rewired", "virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:2.2.1"],\
+            ["@types/react-scripts", null],\
+            ["react-scripts", "virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:5.0.1"],\
+            ["semver", "npm:5.7.1"]\
+          ],\
+          "packagePeers": [\
+            "@types/react-scripts",\
+            "react-scripts"\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["workspace:.", {\
           "packageLocation": "./",\
           "packageDependencies": [\
-            ["react-app-rewired", "workspace:."],\
             ["@testing-library/react", "virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:13.4.0"],\
             ["@testing-library/user-event", "virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:13.5.0"],\
             ["@types/jest", "npm:27.5.2"],\
@@ -14896,8 +14937,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", "npm:18.0.33"],\
             ["@types/react-dom", "npm:18.0.11"],\
             ["@types/testing-library__jest-dom", "npm:5.14.5"],\
+            ["customize-cra", "npm:1.0.0"],\
             ["eslint-config-react-app", "virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:7.0.1"],\
             ["react", "npm:18.2.0"],\
+            ["react-app-rewired", "virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:2.2.1"],\
             ["react-dom", "virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:18.2.0"],\
             ["react-scripts", "virtual:89a1c31c8e9bdcc0c5b6b1b5eedb4c1559db14fffcbbe9e88152d669085f3ec6dbf10ec11461706b7d1578f78139b819339e1f23ff23e9b3d5382000d09dcd26#npm:5.0.1"],\
             ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=ad5954"],\
@@ -15634,6 +15677,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["semver", [\
+        ["npm:5.7.1", {\
+          "packageLocation": "./.yarn/cache/semver-npm-5.7.1-40bcea106b-57fd0acfd0.zip/node_modules/semver/",\
+          "packageDependencies": [\
+            ["semver", "npm:5.7.1"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:6.3.0", {\
           "packageLocation": "./.yarn/cache/semver-npm-6.3.0-b3eace8bfd-1b26ecf6db.zip/node_modules/semver/",\
           "packageDependencies": [\
