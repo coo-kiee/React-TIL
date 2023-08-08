@@ -1,4 +1,5 @@
-import * as xlsx from 'xlsx';
+// import * as xlsx from 'xlsx';
+import * as xlsx from 'xlsx-js-style'
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -31,8 +32,158 @@ const convertStringToDateFormat = (str:string, exp:string) => {
     return year + exp + month + exp + date
 };
 
-// 엑셀 저장
-interface excelDownload {
+// 엑셀 저장 - ver.last
+type DownloadDataType = HTMLElement | object | Array<any>;
+type ExcelOptions = {
+    type: 'array' |'table' |'object', // 필수 O
+    sheetOption?: { origin: string }, // 해당 셀부터 데이터 표시, default - A1, 필수 X
+    colspan?: { wpx: number }[], // 셀 너비 설정, 필수 X
+    rowspan?: { hpx: number }[], // 픽셀단위:hpx, 셀 높이 설정, 필수 X 
+    sheetName?: string, // 시트이름, 필수 X
+    addRowColor?: { row: number[], color: string[] }, // ex. { row: [1,2,3], color: ['d3d3d3','d3d3d3','d3d3d3'] } - 색상 넣을 행(rgb #빼고 입력), 필수 X
+    addLineHeader?: string[], // ex.['발행\n일시'] - 줄바꿈 원하는곳에 \n 넣기!! - br Tag 외 \n, p, span 등 줄바꿈 안되는 헤더명 입력, 필수 X
+}
+interface ExcelDownload {
+    (
+        downloadDatas: DownloadDataType & Array<DownloadDataType>,
+        options:ExcelOptions | Array<ExcelOptions>,
+        fileName: string,
+        displayAll?: boolean
+    ): void
+};
+
+const excelDownload:ExcelDownload = (downloadDatas, options, fileName, displayAll = true) => {
+
+    // 엑셀 워크북 생성
+    const book = xlsx.utils.book_new();
+
+    // 엑셀 워크시트 추가함수
+    const addSheet = (index?:number) => {
+        let workSheet; // any
+
+        const option = index ? (options as ExcelOptions[])[index] : options as ExcelOptions;
+        let [downloadData, type, sheetOption = { origin: 'A1'}, colspan = [], rowspan = [], workSheetName = '', addRowColor = { row: [], color: [] }, addLineHeader = []]
+            = [downloadDatas, option.type, option.sheetOption, option.colspan, option.rowspan, option.sheetName, option.addRowColor, option.addLineHeader];
+
+        // // 워크시트 여러개인 경우
+        // if (index) [downloadData, type, sheetOption = {}, colspan = [], rowspan = [], workSheetName = '', addRowColor = { row: [], color: [] }, addLineHeader = []]
+        //     = [downloadDatas[index], options[index].type, options[index].sheetOption, options[index].colspan, options[index].rowspan, options[index].sheetName, options[index].addRowColor, options[index].addLineHeader];
+
+        switch (type.toLowerCase()) {
+            case 'table':
+                workSheet = xlsx.utils.table_to_sheet(downloadData, { ...sheetOption, raw: true }); // raw: 모든 데이터 string으로 취급
+                // console.log('여기1', workSheet);
+                break;
+            case 'array': // const file1 = [ ["이름", "나이"], ["장민우", "31"], ]
+                workSheet = xlsx.utils.aoa_to_sheet(downloadData as any[][]);
+                break;
+            case 'object': // const file2 = [ { A: "학과", B: "직급", C: "이름", D: "나이" }, { A: "흉부외과", B: "의사", C: "장민우", D: "31" }, ]
+                workSheet = xlsx.utils.json_to_sheet(downloadData);
+                break;
+            default:
+                return;
+        }
+
+        // 병합할 셀 영역 설정
+        // if (option.merges) workSheet['!merges'] = { ...workSheet['!merges'], ...option.merges };
+
+        const { origin } = sheetOption;
+        const { c: originCol, r: originRow } = xlsx.utils.decode_cell(origin);
+        // 셀 너비 설정
+        if (!(origin === 'A1')) { // A1 셀에서 시작하지 않을 때 빈 셀 너비 설정 추가
+            for (let index = 0; index < originCol; index++) {
+                (workSheet['!cols'] as xlsx.ColInfo[]).push({ wpx: 40 });
+            };
+        };
+        workSheet['!cols'] = [...(workSheet['!cols'] as xlsx.ColInfo[]), ...colspan];
+
+        // 셀 높이 설정
+        workSheet['!rows'] = displayAll ? [...rowspan] : [...(workSheet['!rows'] as xlsx.RowInfo[]), ...rowspan];
+
+        // 엑셀 테두리 설정 + addRowColorCellGroup 행의 셀 이름 수집
+        const defaultBorderStyle = { style: "thin", color: { rgb: "#000000" } };
+        const border = { top: defaultBorderStyle, bottom: defaultBorderStyle, left: defaultBorderStyle, right: defaultBorderStyle };
+        const cellRange = xlsx.utils.decode_range(workSheet["!ref"] as string);
+
+        const { row: rowNums, color: rowColors } = addRowColor;
+        let addRowColorCellGroup = {} as { [key: number]: any };
+        rowNums?.forEach((row: number) => addRowColorCellGroup[row] = []);
+        for (let row = originRow; row <= cellRange.e.r; row++) {
+            for (let col = originCol; col <= cellRange.e.c; col++) {
+                const cellName = xlsx.utils.encode_cell({ c: col, r: row });
+                // console.log(cellName);
+                workSheet[cellName] = { ...workSheet[cellName], s: { border }, v: workSheet[cellName]?.v || '' }; // 테두리 설정
+                if (rowNums.length > 0 && rowNums.includes((row + 1 - originRow)) && originCol <= col) addRowColorCellGroup[(row + 1 - originRow)].push(cellName); // addRowColorCellGroup 수집
+            };
+        };
+        // console.log(addRowColorCellGroup);
+
+        // 엑셀 스타일 변경
+        const isSellAddress = /[A-Z]{1,3}\d{1,5}/;
+        const isAmount = /^[\+\-]?([0-9]{1,3}(,[0-9]{3})*)$/; // |^\+([0-9]{1,3})(,[0-9]{3})*$|^\-([0-9]{1,3})(,[0-9]{3})*$
+        const checkAddLineHeader = addLineHeader.map(item => item?.replace('\n', ' ')); // 라인 추가할 헤더 체크값 변환
+        Object.entries(workSheet).reduce((res, cur) => {
+            const key = cur[0];
+            const value = cur[1];
+
+            // 숫자 - 3자리마다 ',' 표시 / 숫자 타입으로 변경 / 문자열 ,(콤마) 및 +기호 제거 / 오른쪽 정렬 : 텍스트 - 가운데 정렬
+            // if (value.t && isSellAddress.test(key)) res[key] = value.t !== 'n' ? { ...value, s: { ...value.s, alignment: { vertical: "center", horizontal: "center", wrapText: true } } } : { ...value, z: "#,##0", s: { ...value.s, alignment: { vertical: "center", horizontal: "right" } } };
+            if (value.t && isSellAddress.test(key)) res[key] = isAmount.test(value.v) ?
+                { ...value, z: "#,##0", t: 'n', v: (value.v).replaceAll(/[,\+]/g, ''), s: { ...value.s, alignment: { vertical: "center", horizontal: "right", wrapText: true } } } : { ...value, s: { ...value.s, alignment: { vertical: "center", horizontal: "center", wrapText: true } } };
+
+            // addRowColor 행의 색상 추가
+            rowNums?.forEach((rowNum, index) => {
+                if (addRowColorCellGroup[rowNum].includes(key)) res[key].s = { ...res[key].s, fill: { fgColor: { rgb: rowColors[index] || 'd3d3d3' } } };
+            });
+            if (!value.v && value.t && value.t === 'z') res[key].t = 's'; // 빈 데이터(공백) 타입 문자열로 변경
+            if (checkAddLineHeader.length > 0 && checkAddLineHeader.indexOf(value.v) >= 0) res[key].v = addLineHeader[checkAddLineHeader.indexOf(value.v)];
+            return res;
+        }, workSheet);
+
+        // console.log('final', workSheet);
+        xlsx.utils.book_append_sheet(book, workSheet, workSheetName);
+    }
+
+    try {
+        // 워크시트 여러개 추가
+        if (Object.values(options).length > 1) {
+            downloadDatas.forEach((downloadData, index) => {
+                addSheet(index);
+            })
+        }
+        else {
+            addSheet();
+        };
+
+        xlsx.writeFile(book, fileName + '.xlsx');
+    }
+    catch (error) {
+        console.log(error);
+        // alert('엑셀 다운로드에 실패했습니다.\n관리자에게 문의해주세요');
+    };
+}
+
+// 엑셀 저장 예시
+// const excelDownload = () => {
+//     if (tableRef.current) {
+//         // Excel - sheet options: 셀 시작 위치, 셀 크기
+//         const options = {
+//             type: 'table', // 필수 O
+//             sheetOption: { origin: "B3" }, // 해당 셀부터 데이터 표시, default - A1, 필수 X
+//             colspan: (colspan as []).map(wpx => ((wpx !== '*' ? { wpx: Number(wpx) * 1.2 } : { wpx: 400 }))), // 셀 너비 설정, 필수 X
+//             addRowColor: { row: [1, 2], color: ['d3d3d3', 'd3d3d3'] }, // 색상 넣을 행(rgb #빼고 입력), 필수 X
+//             // addLineHeader: ['발행일시\nTT'], // 줄바꿈 원하는곳에 \n 넣기!! - br Tag 외 \n, p, span 등 줄바꿈 안되는 헤더명 입력, 필수 X
+//             sheetName: '', // 시트이름, 필수 X
+//         };
+
+//         const fileName = `${fCodeName}_${excelFileName}(${titleFrom}~${titleTo})`;
+
+//         Utils.excelDownload(tableRef.current, options, fileName);
+//     };
+// };
+
+// 엑셀 저장 - ver.past
+interface excelDownload2 {
     (
         downloadDatas: HTMLElement | object | Array<any> | Array<HTMLElement | object | Array<any>>,
         types: string | Array<string>,
@@ -48,7 +199,7 @@ interface optios {
     merges?: number | string | xlsx.CellAddress | xlsx.Range[],
 };
 
-const excelDownload: excelDownload = (downloadDatas, types, options, fileName = 'excelDownload', sheetName = '') => {
+const excelDownload2: excelDownload2 = (downloadDatas, types, options, fileName = 'excelDownload', sheetName = '') => {
     // 엑셀 워크북 생성
     const book = xlsx.utils.book_new();
 
